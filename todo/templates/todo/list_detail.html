@@ -1,7 +1,7 @@
 {% extends "todo/base.html" %}
 {% load static %}
 
-{% block title %}Todo List: {{ task_list.name }}{% endblock %}
+{% block title %}Todo List: {{ book_list.name }}{% endblock %}
 
 {% block content %}
 
@@ -20,8 +20,8 @@
     {% if list_slug == "mine" %}
       <h1>Tasks assigned to me (in all groups)</h1>
     {% else %}
-      <h1>{{ view_completed|yesno:"Completed tasks, Tasks" }} in "{{ task_list.name }}"</h1>
-      <p><small><i>In workgroup "{{ task_list.group }}" - drag rows to set priorities.</i></small></p>
+      <h1>{{ view_completed|yesno:"Completed tasks, Tasks" }} in "{{ book_list.name }}"</h1>
+      <p><small><i>In workgroup "{{ book_list.group }}" - drag rows to set priorities.</i></small></p>
     {% endif %}
 
       <table class="table" id="tasktable">

@@ -34,8 +34,8 @@ export_to_csv.short_description = "Export to CSV"
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("title", "task_list", "completed", "priority", "due_date")
-    list_filter = ("task_list",)
+    list_display = ("title", "book_list", "completed", "priority", "due_date")
+    list_filter = ("book_list",)
     ordering = ("priority",)
     search_fields = ("title",)
     actions = [export_to_csv]

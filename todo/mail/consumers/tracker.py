@@ -47,7 +47,7 @@ def format_task_title(format_string, message):
 DJANGO_TODO_THREAD = re.compile(r"<thread-(\d+)@django-todo>")
 
 
-def parse_references(task_list, references):
+def parse_references(book_list, references):
     related_messages = []
     answer_thread = None
     for related_message in references.split():
@@ -58,7 +58,7 @@ def parse_references(task_list, references):
             continue
 
         thread_id = int(match.group(1))
-        new_answer_thread = Task.objects.filter(task_list=task_list, pk=thread_id).first()
+        new_answer_thread = Task.objects.filter(book_list=book_list, pk=thread_id).first()
         if new_answer_thread is not None:
             answer_thread = new_answer_thread
 
@@ -69,7 +69,7 @@ def parse_references(task_list, references):
     return related_messages, answer_thread
 
 
-def insert_message(task_list, message, priority, task_title_format):
+def insert_message(book_list, message, priority, task_title_format):
     if "message-id" not in message:
         logger.warning("missing message id, ignoring message")
         return
@@ -104,13 +104,13 @@ def insert_message(task_list, message, priority, task_title_format):
     message_from = message["from"]
     text = message_text(message)
 
-    related_messages, answer_thread = parse_references(task_list, message.get("references", ""))
+    related_messages, answer_thread = parse_references(book_list, message.get("references", ""))
 
     # find the most relevant task to add a comment on.
     # among tasks in the selected task list, find the task having the
     # most email comments the current message references
     best_task = (
-        Task.objects.filter(task_list=task_list, comment__email_message_id__in=related_messages)
+        Task.objects.filter(book_list=book_list, comment__email_message_id__in=related_messages)
         .annotate(num_comments=Count("comment"))
         .order_by("-num_comments")
         .only("id")
@@ -127,7 +127,7 @@ def insert_message(task_list, message, priority, task_title_format):
             best_task = Task.objects.create(
                 priority=priority,
                 title=format_task_title(task_title_format, message),
-                task_list=task_list,
+                book_list=book_list,
             )
         logger.info("using task: %r", best_task)
 
@@ -140,12 +140,12 @@ def insert_message(task_list, message, priority, task_title_format):
 
 
 def tracker_consumer(
-    producer, group=None, task_list_slug=None, priority=1, task_title_format="[MAIL] {subject}"
+    producer, group=None, book_list_slug=None, priority=1, task_title_format="[MAIL] {subject}"
 ):
-    task_list = Book.objects.get(slug=task_list_slug)
+    book_list = Book.objects.get(slug=book_list_slug)
     for message in producer:
         try:
-            insert_message(task_list, message, priority, task_title_format)
+            insert_message(book_list, message, priority, task_title_format)
         except Exception:
             # ignore exceptions during insertion, in order to avoid
             logger.exception("got exception while inserting message")

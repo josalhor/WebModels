@@ -41,7 +41,7 @@ def external_add(request) -> HttpResponse:
         if form.is_valid():
             current_site = Site.objects.get_current()
             task = form.save(commit=False)
-            task.task_list = Book.objects.get(slug=settings.TODO_DEFAULT_LIST_SLUG)
+            task.book_list = Book.objects.get(slug=settings.TODO_DEFAULT_LIST_SLUG)
             task.created_by = request.user
             if defaults("TODO_DEFAULT_ASSIGNEE"):
                 task.assigned_to = get_user_model().objects.get(username=settings.TODO_DEFAULT_ASSIGNEE)

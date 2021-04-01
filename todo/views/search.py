@@ -37,7 +37,7 @@ def search(request) -> HttpResponse:
 
     # Only include tasks that are in groups of which this user is a member:
     if not request.user.is_superuser:
-        found_tasks = found_tasks.filter(task_list__group__in=request.user.groups.all())
+        found_tasks = found_tasks.filter(book_list__group__in=request.user.groups.all())
 
     context = {"query_string": query_string, "found_tasks": found_tasks}
     return render(request, "todo/search_results.html", context)

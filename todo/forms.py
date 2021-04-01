@@ -7,36 +7,27 @@ from todo.models import Task, Book
 class AddBookForm(ModelForm):
     class Meta:
         model = Book
-        exclude = ["created_date", "slug", "author", "editor"]
+        exclude = ["created_date", "slug", "author", "editor", "completed"]
 
 
 class AddEditTaskForm(ModelForm):
-    """The picklist showing the users to which a new task can be assigned
-    must find other members of the group this Book is attached to."""
-
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        task_list = kwargs.get("initial").get("task_list")
-        members = task_list.group.user_set.all()
-        self.fields["assigned_to"].queryset = members
-        self.fields["assigned_to"].label_from_instance = lambda obj: "%s (%s)" % (
-            obj.get_full_name(),
-            obj.username,
-        )
-        self.fields["assigned_to"].widget.attrs = {
-            "id": "id_assigned_to",
+        self.fields["task_type"].queryset = Task.TYPES_OF_TASK_CHOICES
+        # self.fields["task_type"].label_from_instance = lambda obj: "%s (%s)" % (
+        #     obj.get_full_name(),
+        #     obj.username,
+        # )
+        self.fields["task_type"].widget.attrs = {
+            "id": "id_task_type",
             "class": "custom-select mb-3",
-            "name": "assigned_to",
+            "name": "task_type",
         }
-        self.fields["task_list"].value = kwargs["initial"]["task_list"].id
+        self.fields["book_list"].value = kwargs["initial"]["book_list"].id
 
     due_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}), required=False)
-
     title = forms.CharField(widget=forms.widgets.TextInput())
-
     note = forms.CharField(widget=forms.Textarea(), required=False)
-
-    completed = forms.BooleanField(required=False)
 
     def clean_created_by(self):
         """Keep the existing created_by regardless of anything coming from the submitted form.
@@ -45,7 +36,7 @@ class AddEditTaskForm(ModelForm):
 
     class Meta:
         model = Task
-        exclude = []
+        exclude = ["assigned_to", "created_date"]
 
 
 class AddExternalTaskForm(ModelForm):
@@ -58,7 +49,7 @@ class AddExternalTaskForm(ModelForm):
     class Meta:
         model = Task
         exclude = (
-            "task_list",
+            "book_list",
             "created_date",
             "due_date",
             "created_by",

@@ -9,7 +9,7 @@ from email.message import EmailMessage
 
 def consumer(*args, title_format="[TEST] {subject}", **kwargs):
     return tracker_consumer(
-        group="Workgroup One", task_list_slug="zip", priority=1, task_title_format=title_format
+        group="Workgroup One", book_list_slug="zip", priority=1, task_title_format=title_format
     )(*args, **kwargs)
 
 

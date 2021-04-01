@@ -22,7 +22,7 @@ def remove_attachment(request, attachment_id: int) -> HttpResponse:
 
         # Permissions
         if not (
-            attachment.task.task_list.group in request.user.groups.all()
+            attachment.task.book_list.group in request.user.groups.all()
             or request.user.is_superuser
         ):
             raise PermissionDenied

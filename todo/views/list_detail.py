@@ -18,7 +18,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
     """
 
     # Defaults
-    task_list = None
+    book_list = None
     form = None
 
     # Which tasks to show on this list view?
@@ -27,10 +27,10 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
 
     else:
         # Show a specific list, ensuring permissions.
-        task_list = get_object_or_404(Book, id=list_id)
-        if task_list.group not in request.user.groups.all() and not request.user.is_superuser:
+        book_list = get_object_or_404(Book, id=list_id)
+        if not request.user.is_superuser:
             raise PermissionDenied
-        tasks = Task.objects.filter(task_list=task_list.id)
+        tasks = Task.objects.filter(book_list=book_list.id)
 
     # Additional filtering
     if view_completed:
@@ -44,9 +44,8 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
 
     if request.POST.getlist("add_edit_task"):
         form = AddEditTaskForm(
-            request.user,
             request.POST,
-            initial={"assigned_to": request.user.id, "priority": 999, "task_list": task_list},
+            initial={"priority": 999, "book_list": book_list},
         )
 
         if form.is_valid():
@@ -65,18 +64,22 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
 
             messages.success(request, 'New task "{t}" has been added.'.format(t=new_task.title))
             return redirect(request.path)
+        else:
+            messages.warning(
+                    request,
+                    form.errors 
+                )
     else:
         # Don't allow adding new tasks on some views
         if list_slug not in ["mine", "recent-add", "recent-complete"]:
             form = AddEditTaskForm(
-                request.user,
-                initial={"assigned_to": request.user.id, "priority": 999, "task_list": task_list},
+                initial={"priority": 999, "book_list": book_list},
             )
 
     context = {
         "list_id": list_id,
         "list_slug": list_slug,
-        "task_list": task_list,
+        "book_list": book_list,
         "form": form,
         "tasks": tasks,
         "view_completed": view_completed,

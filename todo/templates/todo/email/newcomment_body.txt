@@ -11,6 +11,6 @@ Comment:
 Task details/comments:
 https://{{ site }}{% url 'todo:task_detail' task.id %}
 
-List {{ task.task_list.name }}:
-https://{{ site }}{% url 'todo:list_detail' task.task_list.id task.task_list.slug %}
+List {{ task.book_list.name }}:
+https://{{ site }}{% url 'todo:list_detail' task.book_list.id task.book_list.slug %}
 

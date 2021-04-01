@@ -108,12 +108,12 @@ def test_view_search(todo_setup, admin_client):
 
 @pytest.mark.django_db
 def test_no_javascript_in_task_note(todo_setup, client):
-    task_list = Book.objects.first()
+    book_list = Book.objects.first()
     user = get_user_model().objects.get(username="u2")
     title = "Some Unique String"
     note = "foo <script>alert('oh noez');</script> bar"
     data = {
-        "task_list": task_list.id,
+        "book_list": book_list.id,
         "created_by": user.id,
         "priority": 10,
         "title": title,
@@ -122,7 +122,7 @@ def test_no_javascript_in_task_note(todo_setup, client):
     }
 
     client.login(username="u2", password="password")
-    url = reverse("todo:list_detail", kwargs={"list_id": task_list.id, "list_slug": task_list.slug})
+    url = reverse("todo:list_detail", kwargs={"list_id": book_list.id, "list_slug": book_list.slug})
 
     response = client.post(url, data)
     assert response.status_code == 302
@@ -136,12 +136,12 @@ def test_no_javascript_in_task_note(todo_setup, client):
 @pytest.mark.django_db
 def test_created_by_unchanged(todo_setup, client):
 
-    task_list = Book.objects.first()
+    book_list = Book.objects.first()
     u2 = get_user_model().objects.get(username="u2")
     title = "Some Unique String with unique chars: ab78539e"
     note = "a note"
     data = {
-        "task_list": task_list.id,
+        "book_list": book_list.id,
         "created_by": u2.id,
         "priority": 10,
         "title": title,
@@ -151,7 +151,7 @@ def test_created_by_unchanged(todo_setup, client):
 
     client.login(username="u2", password="password")
     url_add_task = reverse(
-        "todo:list_detail", kwargs={"list_id": task_list.id, "list_slug": task_list.slug}
+        "todo:list_detail", kwargs={"list_id": book_list.id, "list_slug": book_list.slug}
     )
 
     response = client.post(url_add_task, data)
@@ -170,7 +170,7 @@ def test_created_by_unchanged(todo_setup, client):
     url_edit_task = reverse("todo:task_detail", kwargs={"task_id": task.id})
 
     dataTwo = {
-        "task_list": task.task_list.id,
+        "book_list": task.book_list.id,
         "created_by": extra_g2_user.id,  # this submission is attempting to change created_by
         "priority": 10,
         "title": task.title,
@@ -205,7 +205,7 @@ def test_completed_unchanged(test_input, expected, todo_setup, client):
     url_edit_task = reverse("todo:task_detail", kwargs={"task_id": task.id})
 
     data = {
-        "task_list": task.task_list.id,
+        "book_list": task.book_list.id,
         "title": "Something",
         "note": "the note was changed",
         "add_edit_task": "Submit",
@@ -231,7 +231,7 @@ def test_no_javascript_in_comments(todo_setup, client):
     task.created_by = user
     task.save()
 
-    user.groups.add(task.task_list.group)
+    user.groups.add(task.book_list.group)
 
     comment = "foo <script>alert('oh noez');</script> bar"
     data = {"comment-body": comment, "add_comment": "Submit"}

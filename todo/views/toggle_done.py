@@ -22,7 +22,7 @@ def toggle_done(request, task_id: int) -> HttpResponse:
 
         redir_url = reverse(
             "todo:list_detail",
-            kwargs={"list_id": task.task_list.id, "list_slug": task.task_list.slug},
+            kwargs={"list_id": task.book_list.id, "list_slug": task.book_list.slug},
         )
 
         # Permissions
@@ -30,7 +30,7 @@ def toggle_done(request, task_id: int) -> HttpResponse:
             (task.created_by == request.user)
             or (request.user.is_superuser)
             or (task.assigned_to == request.user)
-            or (task.task_list.group in request.user.groups.all())
+            or (task.book_list.group in request.user.groups.all())
         ):
             raise PermissionDenied
 

@@ -96,10 +96,11 @@ class Reader(models.Model):
     )
 
 class Book(models.Model):
-    name = models.CharField(max_length=60, primary_key=True)
-    slug = models.SlugField(default="")
+    name = models.CharField(max_length=60, unique=True)
+    slug = models.SlugField(default="", unique=True)
     author = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.RESTRICT, related_name='book_author')
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
+    completed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -122,8 +123,8 @@ class Task(models.Model):
     ]
 
     title = models.CharField(max_length=140)
-    task_list = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
-    created_date = models.DateField(default=timezone.now, blank=True, null=True)
+    book_list = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
+    created_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
     completed_date = models.DateField(blank=True, null=True)

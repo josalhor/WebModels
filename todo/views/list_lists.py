@@ -19,17 +19,8 @@ def list_lists(request) -> HttpResponse:
     thedate = datetime.datetime.now()
     searchform = SearchForm(auto_id=False)
 
-    # Make sure user belongs to at least one group.
-    if not request.user.groups.all().exists():
-        messages.warning(
-            request,
-            "You do not yet belong to any groups. Ask your administrator to add you to one.",
-        )
-
     # Superusers see all lists
     lists = Book.objects.all().order_by("name")
-    if not request.user.is_superuser:
-        lists = lists.filter(group__in=request.user.groups.all())
 
     list_count = lists.count()
 
@@ -39,7 +30,6 @@ def list_lists(request) -> HttpResponse:
     else:
         task_count = (
             Task.objects.filter(completed=0)
-            .filter(task_list__group__in=request.user.groups.all())
             .count()
         )
 

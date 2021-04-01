@@ -3,7 +3,7 @@
 
 {% block content %}
   {% if user.is_staff %}
-  <h1>Delete entire list: {{ task_list.name }} ?</h1>
+  <h1>Delete entire list: {{ book_list.name }} ?</h1>
 
   <p>Category tally:</p>
 
@@ -20,9 +20,9 @@
 
   <form action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
-    <input type="hidden" name="task_list" value="{{ task_list.id }}">
+    <input type="hidden" name="book_list" value="{{ book_list.id }}">
     <p>
-      <a href="{% url 'todo:list_detail' task_list.id task_list.slug %}" class="btn btn-success">Return to list: {{ task_list.name }}</a>
+      <a href="{% url 'todo:list_detail' book_list.id book_list.slug %}" class="btn btn-success">Return to list: {{ book_list.name }}</a>
       <input type="submit" name="delete-confirm" value="Do it! &rarr;" class="btn btn-danger">
     </p>
   </form>

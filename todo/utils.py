@@ -28,7 +28,7 @@ def staff_check(user):
 
 
 def user_can_read_task(task, user):
-    return task.task_list.group in user.groups.all() or user.is_superuser
+    return user.is_superuser
 
 
 def todo_get_backend(task):
@@ -37,7 +37,7 @@ def todo_get_backend(task):
     if mail_backends is None:
         return None
 
-    task_backend = mail_backends[task.task_list.slug]
+    task_backend = mail_backends[task.book_list.slug]
     if task_backend is None:
         return None
 

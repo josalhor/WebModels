@@ -89,10 +89,10 @@ def task_detail(request, task_id: int) -> HttpResponse:
 
     # Save task edits
     if not request.POST.get("add_edit_task"):
-        form = AddEditTaskForm(request.user, instance=task, initial={"task_list": task.task_list})
+        form = AddEditTaskForm(instance=task, initial={"book_list": task.book_list})
     else:
         form = AddEditTaskForm(
-            request.user, request.POST, instance=task, initial={"task_list": task.task_list}
+            request.POST, instance=task, initial={"book_list": task.book_list}
         )
 
         if form.is_valid():
@@ -102,7 +102,7 @@ def task_detail(request, task_id: int) -> HttpResponse:
             item.save()
             messages.success(request, "The task has been edited.")
             return redirect(
-                "todo:list_detail", list_id=task.task_list.id, list_slug=task.task_list.slug
+                "todo:list_detail", list_id=task.book_list.id, list_slug=task.book_list.slug
             )
 
     # Mark complete
