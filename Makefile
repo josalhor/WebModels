@@ -1,8 +1,8 @@
 create_superuser:
-	echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'a@g.com', 'TodoPassword')" | python manage.py shell
+	echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin@g.com', 'TodoPassword')" | python manage.py shell
 
 clean:
-	find project/ | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
+	find project/ todo/ | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
 
 clean_db:
 	rm -f db.sqlite3
@@ -10,6 +10,7 @@ clean_db:
 clean_all:
 	make clean
 	make clean_db
+	rm -rf todo/migrations
 
 all_migrations:
 	python manage.py makemigrations

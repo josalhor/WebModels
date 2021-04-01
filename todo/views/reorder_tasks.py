@@ -12,14 +12,14 @@ from todo.utils import staff_check
 def reorder_tasks(request) -> HttpResponse:
     """Handle task re-ordering (priorities) from JQuery drag/drop in list_detail.html
     """
-    newtasklist = request.POST.getlist("tasktable[]")
-    if newtasklist:
+    newBook = request.POST.getlist("tasktable[]")
+    if newBook:
         # First task in received list is always empty - remove it
-        del newtasklist[0]
+        del newBook[0]
 
         # Re-prioritize each task in list
         i = 1
-        for id in newtasklist:
+        for id in newBook:
             try:
                 task = Task.objects.get(pk=id)
                 task.priority = i

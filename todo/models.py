@@ -6,6 +6,8 @@ import textwrap
 
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.contrib.auth import models as auth_models
+from cuser.models import AbstractCUser
 from django.db import DEFAULT_DB_ALIAS, models
 from django.db.transaction import Atomic, get_connection
 from django.urls import reverse
@@ -51,30 +53,85 @@ class LockedAtomicTransaction(Atomic):
                 if cursor and not cursor.closed:
                     cursor.close()
 
+# Does this look repetitive to you?
+# Then great! It looks repetitive to me too!
 
-class TaskList(models.Model):
-    name = models.CharField(max_length=60)
+# The way Django works, this way of building the models
+# is better for form handling
+
+class Writer(models.Model):
+    full_name = models.CharField(max_length=150)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        null=False,
+        on_delete=models.CASCADE
+    )
+
+class Editor(models.Model):
+    full_name = models.CharField(max_length=150)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        null=False,
+        on_delete=models.CASCADE
+    )
+
+class Designer(models.Model):
+    full_name = models.CharField(max_length=150)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        null=False,
+        on_delete=models.CASCADE
+    )
+
+class Reader(models.Model):
+    full_name = models.CharField(max_length=150)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        null=False,
+        on_delete=models.CASCADE
+    )
+
+class Book(models.Model):
+    name = models.CharField(max_length=60, primary_key=True)
     slug = models.SlugField(default="")
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    author = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.RESTRICT, related_name='book_author')
+    editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
 
     def __str__(self):
         return self.name
 
     class Meta:
         ordering = ["name"]
-        verbose_name_plural = "Task Lists"
-
-        # Prevents (at the database level) creation of two lists with the same slug in the same group
-        unique_together = ("group", "slug")
+        verbose_name_plural = "Books"
 
 
 class Task(models.Model):
+
+    WRITING = 'E'
+    ILLUSTRATION = 'I'
+    LAYOUT = 'M'
+
+    TYPES_OF_TASK_CHOICES = [
+        (WRITING, 'Escritura'),
+        (ILLUSTRATION, 'Ilustración'),
+        (LAYOUT, 'Maquetación'),
+    ]
+
     title = models.CharField(max_length=140)
-    task_list = models.ForeignKey(TaskList, on_delete=models.CASCADE, null=True)
+    task_list = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     created_date = models.DateField(default=timezone.now, blank=True, null=True)
     due_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
     completed_date = models.DateField(blank=True, null=True)
+    task_type = models.CharField(
+        max_length=2,
+        choices=TYPES_OF_TASK_CHOICES,
+        default=LAYOUT,
+    )
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         null=True,

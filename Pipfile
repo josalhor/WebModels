@@ -11,6 +11,7 @@ factory-boy = "*"
 titlecase = "*"
 bleach = "*"
 django = ">=3.1"
+django-username-email = "*"
 
 [dev-packages]
 pylint = "*"

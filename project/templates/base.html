@@ -47,9 +47,9 @@
               <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">My Tasks</a></li>
               <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Log Out</a></li>
               {# Simulate external user adding ticket #}
+              <!--
               <li class="nav-item"><a href="{% url 'todo:external_add' %}" class="nav-link">File Ticket</a></li>
-              <li class="nav-item"><a href="{% url 'todo:import_csv' %}" class="nav-link">Import</a></li>
-
+              -->
             {% else %}
               <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Log In</a></li>
             {% endif %}

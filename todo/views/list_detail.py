@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from todo.forms import AddEditTaskForm
-from todo.models import Task, TaskList
+from todo.models import Task, Book
 from todo.utils import send_notify_mail, staff_check
 
 
@@ -27,7 +27,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
 
     else:
         # Show a specific list, ensuring permissions.
-        task_list = get_object_or_404(TaskList, id=list_id)
+        task_list = get_object_or_404(Book, id=list_id)
         if task_list.group not in request.user.groups.all() and not request.user.is_superuser:
             raise PermissionDenied
         tasks = Task.objects.filter(task_list=task_list.id)

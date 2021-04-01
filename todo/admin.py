@@ -4,7 +4,7 @@ import datetime
 from django.contrib import admin
 from django.http import HttpResponse
 
-from todo.models import Attachment, Comment, Task, TaskList
+from todo.models import Attachment, Comment, Task, Book
 
 
 def export_to_csv(modeladmin, request, queryset):
@@ -50,7 +50,7 @@ class AttachmentAdmin(admin.ModelAdmin):
     autocomplete_fields = ["added_by", "task"]
 
 
-admin.site.register(TaskList)
+admin.site.register(Book)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Attachment, AttachmentAdmin)

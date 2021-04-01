@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 
 from todo.defaults import defaults
 from todo.forms import AddExternalTaskForm
-from todo.models import TaskList
+from todo.models import Book
 from todo.utils import staff_check
 
 
@@ -30,9 +30,9 @@ def external_add(request) -> HttpResponse:
             "This feature requires TODO_DEFAULT_LIST_SLUG: in settings. See documentation."
         )
 
-    if not TaskList.objects.filter(slug=settings.TODO_DEFAULT_LIST_SLUG).exists():
+    if not Book.objects.filter(slug=settings.TODO_DEFAULT_LIST_SLUG).exists():
         raise RuntimeError(
-            "There is no TaskList with slug specified for TODO_DEFAULT_LIST_SLUG in settings."
+            "There is no Book with slug specified for TODO_DEFAULT_LIST_SLUG in settings."
         )
 
     if request.POST:
@@ -41,7 +41,7 @@ def external_add(request) -> HttpResponse:
         if form.is_valid():
             current_site = Site.objects.get_current()
             task = form.save(commit=False)
-            task.task_list = TaskList.objects.get(slug=settings.TODO_DEFAULT_LIST_SLUG)
+            task.task_list = Book.objects.get(slug=settings.TODO_DEFAULT_LIST_SLUG)
             task.created_by = request.user
             if defaults("TODO_DEFAULT_ASSIGNEE"):
                 task.assigned_to = get_user_model().objects.get(username=settings.TODO_DEFAULT_ASSIGNEE)

@@ -5,7 +5,7 @@ from email.charset import Charset as EMailCharset
 from django.db import transaction
 from django.db.models import Count
 from html2text import html2text
-from todo.models import Comment, Task, TaskList
+from todo.models import Comment, Task, Book
 
 logger = logging.getLogger(__name__)
 
@@ -142,7 +142,7 @@ def insert_message(task_list, message, priority, task_title_format):
 def tracker_consumer(
     producer, group=None, task_list_slug=None, priority=1, task_title_format="[MAIL] {subject}"
 ):
-    task_list = TaskList.objects.get(group__name=group, slug=task_list_slug)
+    task_list = Book.objects.get(slug=task_list_slug)
     for message in producer:
         try:
             insert_message(task_list, message, priority, task_title_format)

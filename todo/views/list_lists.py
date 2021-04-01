@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from todo.forms import SearchForm
-from todo.models import Task, TaskList
+from todo.models import Task, Book
 from todo.utils import staff_check
 
 
@@ -27,7 +27,7 @@ def list_lists(request) -> HttpResponse:
         )
 
     # Superusers see all lists
-    lists = TaskList.objects.all().order_by("group__name", "name")
+    lists = Book.objects.all().order_by("name")
     if not request.user.is_superuser:
         lists = lists.filter(group__in=request.user.groups.all())
 

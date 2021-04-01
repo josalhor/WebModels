@@ -1,31 +1,18 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-from todo.models import Task, TaskList
+from todo.models import Task, Book
 
 
-class AddTaskListForm(ModelForm):
-    """The picklist showing allowable groups to which a new list can be added
-    determines which groups the user belongs to. This queries the form object
-    to derive that list."""
-
-    def __init__(self, user, *args, **kwargs):
-        super(AddTaskListForm, self).__init__(*args, **kwargs)
-        self.fields["group"].queryset = Group.objects.filter(user=user)
-        self.fields["group"].widget.attrs = {
-            "id": "id_group",
-            "class": "custom-select mb-3",
-            "name": "group",
-        }
-
+class AddBookForm(ModelForm):
     class Meta:
-        model = TaskList
-        exclude = ["created_date", "slug"]
+        model = Book
+        exclude = ["created_date", "slug", "author", "editor"]
 
 
 class AddEditTaskForm(ModelForm):
     """The picklist showing the users to which a new task can be assigned
-    must find other members of the group this TaskList is attached to."""
+    must find other members of the group this Book is attached to."""
 
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)

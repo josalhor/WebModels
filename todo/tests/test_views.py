@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.urls import reverse
 
-from todo.models import Task, TaskList
+from todo.models import Task, Book
 
 """
 First the "smoketests" - do they respond at all for a logged in admin user?
@@ -32,7 +32,7 @@ def test_view_reorder(todo_setup, admin_client):
 
 
 def test_view_external_add(todo_setup, admin_client, settings):
-    default_list = TaskList.objects.first()
+    default_list = Book.objects.first()
     settings.TODO_DEFAULT_LIST_SLUG = default_list.slug
     assert settings.TODO_DEFAULT_LIST_SLUG == default_list.slug
     url = reverse("todo:external_add")
@@ -47,7 +47,7 @@ def test_view_mine(todo_setup, admin_client):
 
 
 def test_view_list_completed(todo_setup, admin_client):
-    tlist = TaskList.objects.get(slug="zip")
+    tlist = Book.objects.get(slug="zip")
     url = reverse(
         "todo:list_detail_completed", kwargs={"list_id": tlist.id, "list_slug": tlist.slug}
     )
@@ -56,7 +56,7 @@ def test_view_list_completed(todo_setup, admin_client):
 
 
 def test_view_list(todo_setup, admin_client):
-    tlist = TaskList.objects.get(slug="zip")
+    tlist = Book.objects.get(slug="zip")
     url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
     response = admin_client.get(url)
     assert response.status_code == 200
@@ -108,7 +108,7 @@ def test_view_search(todo_setup, admin_client):
 
 @pytest.mark.django_db
 def test_no_javascript_in_task_note(todo_setup, client):
-    task_list = TaskList.objects.first()
+    task_list = Book.objects.first()
     user = get_user_model().objects.get(username="u2")
     title = "Some Unique String"
     note = "foo <script>alert('oh noez');</script> bar"
@@ -136,7 +136,7 @@ def test_no_javascript_in_task_note(todo_setup, client):
 @pytest.mark.django_db
 def test_created_by_unchanged(todo_setup, client):
 
-    task_list = TaskList.objects.first()
+    task_list = Book.objects.first()
     u2 = get_user_model().objects.get(username="u2")
     title = "Some Unique String with unique chars: ab78539e"
     note = "a note"
@@ -257,7 +257,7 @@ def test_view_add_list_nonadmin(todo_setup, client):
 
 
 def test_view_del_list_nonadmin(todo_setup, client):
-    tlist = TaskList.objects.get(slug="zip")
+    tlist = Book.objects.get(slug="zip")
     url = reverse("todo:del_list", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
     client.login(username="you", password="password")
     response = client.get(url)
@@ -265,7 +265,7 @@ def test_view_del_list_nonadmin(todo_setup, client):
 
 
 def test_del_list_not_in_list_group(todo_setup, admin_client):
-    tlist = TaskList.objects.get(slug="zip")
+    tlist = Book.objects.get(slug="zip")
     url = reverse("todo:del_list", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
     response = admin_client.get(url)
     assert response.status_code == 403
@@ -274,7 +274,7 @@ def test_del_list_not_in_list_group(todo_setup, admin_client):
 def test_view_list_mine(todo_setup, client):
     """View a list in a group I belong to.
     """
-    tlist = TaskList.objects.get(slug="zip")  # User u1 is in this group's list
+    tlist = Book.objects.get(slug="zip")  # User u1 is in this group's list
     url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
     client.login(username="u1", password="password")
     response = client.get(url)
@@ -284,7 +284,7 @@ def test_view_list_mine(todo_setup, client):
 def test_view_list_not_mine(todo_setup, client):
     """View a list in a group I don't belong to.
     """
-    tlist = TaskList.objects.get(slug="zip")  # User u1 is in this group, user u2 is not.
+    tlist = Book.objects.get(slug="zip")  # User u1 is in this group, user u2 is not.
     url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
     client.login(username="u2", password="password")
     response = client.get(url)

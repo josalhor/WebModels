@@ -5,6 +5,8 @@ from django.contrib.messages import constants as message_constants
 
 DEBUG = False
 
+AUTH_USER_MODEL = 'cuser.CUser'
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Local time zone for this installation. Choices can be found here:
@@ -48,6 +50,7 @@ SESSION_SECURITY_EXPIRE_AFTER = 12
 WSGI_APPLICATION = "project.wsgi.application"
 
 INSTALLED_APPS = (
+    "cuser",
     "django.contrib.admin",
     "django.contrib.admindocs",
     "django.contrib.auth",
