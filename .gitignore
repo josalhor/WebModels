@@ -3,6 +3,7 @@
 # If we symlink in the todo project
 # todo
 
+/todo/migrations
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,venv,vscode,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,venv,vscode,visualstudiocode
