@@ -31,7 +31,7 @@ def handle_add_comment(request, task):
         return
 
     Comment.objects.create(
-        author=request.user, task=task, body=bleach.clean(request.POST["comment-body"], strip=True)
+        author=request.user.user_info, task=task, body=bleach.clean(request.POST["comment-body"], strip=True)
     )
 
     send_email_to_thread_participants(

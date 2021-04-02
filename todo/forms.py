@@ -14,10 +14,6 @@ class AddEditTaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["task_type"].queryset = Task.TYPES_OF_TASK_CHOICES
-        # self.fields["task_type"].label_from_instance = lambda obj: "%s (%s)" % (
-        #     obj.get_full_name(),
-        #     obj.username,
-        # )
         self.fields["task_type"].widget.attrs = {
             "id": "id_task_type",
             "class": "custom-select mb-3",
@@ -40,8 +36,15 @@ class AddEditTaskForm(ModelForm):
 
 
 class AddExternalTaskForm(ModelForm):
-    """Form to allow users who are not part of the GTD system to file a ticket."""
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["task_type"].queryset = Task.TYPES_OF_TASK_CHOICES
+        self.fields["task_type"].widget.attrs = {
+            "id": "id_task_type",
+            "class": "custom-select mb-3",
+            "name": "task_type",
+        }
+        
     title = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}), label="Summary")
     note = forms.CharField(widget=forms.widgets.Textarea(), label="Problem Description")
     priority = forms.IntegerField(widget=forms.HiddenInput())
@@ -60,6 +63,4 @@ class AddExternalTaskForm(ModelForm):
 
 
 class SearchForm(forms.Form):
-    """Search."""
-
     q = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}))

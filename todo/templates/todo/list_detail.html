@@ -29,7 +29,6 @@
           <th>Task</th>
           <th>Created</th>
           <th>Due on</th>
-          <th>Owner</th>
           <th>Assigned</th>
           <th>Mark</th>
         </tr>
@@ -48,10 +47,7 @@
               </span>
             </td>
             <td>
-              {{ task.created_by }}
-            </td>
-            <td>
-              {% if task.assigned_to %}{{ task.assigned_to }}{% else %}Anyone{% endif %}
+              {% if task.assigned_to %}{{ task.assigned_to }}{% else %}Unassigned{% endif %}
             </td>
             <td>
               <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form">

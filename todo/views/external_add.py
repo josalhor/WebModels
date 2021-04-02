@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -10,11 +10,10 @@ from django.template.loader import render_to_string
 
 from todo.defaults import defaults
 from todo.forms import AddExternalTaskForm
-from todo.models import Book
+from todo.models import Book, Editor
 from todo.utils import staff_check
 
 
-@login_required
 @user_passes_test(staff_check)
 def external_add(request) -> HttpResponse:
     """Allow authenticated users who don't have access to the rest of the ticket system to file a ticket
@@ -35,6 +34,10 @@ def external_add(request) -> HttpResponse:
             "There is no Book with slug specified for TODO_DEFAULT_LIST_SLUG in settings."
         )
 
+    editor = None
+    if request.user.is_authenticated:
+        editor = Editor.objects.filter(user=request.user).first()
+
     if request.POST:
         form = AddExternalTaskForm(request.POST)
 
@@ -42,7 +45,7 @@ def external_add(request) -> HttpResponse:
             current_site = Site.objects.get_current()
             task = form.save(commit=False)
             task.book_list = Book.objects.get(slug=settings.TODO_DEFAULT_LIST_SLUG)
-            task.created_by = request.user
+            task.created_by = editor
             if defaults("TODO_DEFAULT_ASSIGNEE"):
                 task.assigned_to = get_user_model().objects.get(username=settings.TODO_DEFAULT_ASSIGNEE)
             task.save()

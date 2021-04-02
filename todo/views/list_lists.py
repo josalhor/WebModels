@@ -13,8 +13,6 @@ from todo.utils import staff_check
 @login_required
 @user_passes_test(staff_check)
 def list_lists(request) -> HttpResponse:
-    """Homepage view - list of lists a user can view, and ability to add a list.
-    """
 
     thedate = datetime.datetime.now()
     searchform = SearchForm(auto_id=False)

@@ -12,6 +12,7 @@ from django.db import DEFAULT_DB_ALIAS, models
 from django.db.transaction import Atomic, get_connection
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 
 
 def get_attachment_upload_dir(instance, filename):
@@ -57,10 +58,27 @@ class LockedAtomicTransaction(Atomic):
 # Then great! It looks repetitive to me too!
 
 # The way Django works, this way of building the models
-# is better for form handling
+# is better for form handling.
 
-class Writer(models.Model):
+class UserInfo(models.Model):
     full_name = models.CharField(max_length=150)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        null=False,
+        on_delete=models.CASCADE,
+        related_name='user_info'
+    )
+
+    def __str__(self):
+        return str(self.full_name)
+
+# This should probably ABC
+class UserRole(models.Model):
+    def __str__(self):
+        return str(self.user.user_info)
+
+class Writer(UserRole):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         primary_key=True,
@@ -68,26 +86,30 @@ class Writer(models.Model):
         on_delete=models.CASCADE
     )
 
-class Editor(models.Model):
-    full_name = models.CharField(max_length=150)
+
+class Editor(UserRole):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         primary_key=True,
         null=False,
         on_delete=models.CASCADE
     )
+    chief = models.BooleanField(default=False)
 
-class Designer(models.Model):
-    full_name = models.CharField(max_length=150)
+# These classes are not to be used in the first iteration of
+# the app. However, modeling them helps us make better design decisions
+# and prepare generic code :D
+
+class Designer(UserRole):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         primary_key=True,
         null=False,
         on_delete=models.CASCADE
     )
+    chief = models.BooleanField(default=False)
 
-class Reader(models.Model):
-    full_name = models.CharField(max_length=150)
+class Reader(UserRole):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         primary_key=True,
@@ -104,6 +126,11 @@ class Book(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name, allow_unicode=True)
+        super(Book, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ["name"]
@@ -134,20 +161,20 @@ class Task(models.Model):
         default=LAYOUT,
     )
     created_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        Editor,
         null=True,
         blank=True,
         related_name="todo_created_by",
         on_delete=models.CASCADE,
     )
     assigned_to = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        UserInfo,
         blank=True,
         null=True,
         related_name="todo_assigned_to",
         on_delete=models.CASCADE,
     )
-    note = models.TextField(blank=True, null=True)
+    note = models.TextField(default="")
     priority = models.PositiveIntegerField(blank=True, null=True)
 
     # Has due date for an instance of this object passed?
@@ -191,26 +218,15 @@ class Comment(models.Model):
     """
 
     author = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+        UserInfo, on_delete=models.CASCADE
     )
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
-    date = models.DateTimeField(default=datetime.datetime.now)
-    email_from = models.CharField(max_length=320, blank=True, null=True)
-    email_message_id = models.CharField(max_length=255, blank=True, null=True)
-
-    body = models.TextField(blank=True)
-
-    class Meta:
-        # an email should only appear once per task
-        unique_together = ("task", "email_message_id")
+    date = models.DateTimeField(auto_now_add=True)
+    body = models.TextField(default="")
 
     @property
     def author_text(self):
-        if self.author is not None:
-            return str(self.author)
-
-        assert self.email_message_id is not None
-        return str(self.email_from)
+        return str(self.author)
 
     @property
     def snippet(self):

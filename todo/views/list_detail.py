@@ -7,28 +7,26 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from todo.forms import AddEditTaskForm
-from todo.models import Task, Book
-from todo.utils import send_notify_mail, staff_check
+from todo.models import Task, Book, Writer, Editor
+from todo.utils import send_notify_mail, staff_check, user_can_read_book
 
 
 @login_required
 @user_passes_test(staff_check)
 def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> HttpResponse:
-    """Display and manage tasks in a todo list.
-    """
 
     # Defaults
     book_list = None
     form = None
 
+    editor = Editor.objects.filter(user=request.user).first()
     # Which tasks to show on this list view?
     if list_slug == "mine":
-        tasks = Task.objects.filter(assigned_to=request.user)
-
+        tasks = Task.objects.filter(assigned_to=request.user.user_info)
     else:
         # Show a specific list, ensuring permissions.
         book_list = get_object_or_404(Book, id=list_id)
-        if not request.user.is_superuser:
+        if not user_can_read_book(book_list, request.user):
             raise PermissionDenied
         tasks = Task.objects.filter(book_list=book_list.id)
 
@@ -50,14 +48,15 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
 
         if form.is_valid():
             new_task = form.save(commit=False)
-            new_task.created_by = request.user
+            new_task.created_by = editor
+            if new_task.task_type == Task.WRITING:
+                new_task.assigned_to = book_list.author
             new_task.note = bleach.clean(form.cleaned_data["note"], strip=True)
             form.save()
 
             # Send email alert only if Notify checkbox is checked AND assignee is not same as the submitter
             if (
-                "notify" in request.POST
-                and new_task.assigned_to
+                new_task.assigned_to
                 and new_task.assigned_to != request.user
             ):
                 send_notify_mail(new_task)

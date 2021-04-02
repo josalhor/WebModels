@@ -1,5 +1,5 @@
-create_superuser:
-	echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin@g.com', 'TodoPassword')" | python manage.py shell
+populate:
+	python manage.py populate
 
 clean:
 	find project/ todo/ | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
@@ -20,7 +20,7 @@ all_migrations:
 reset_migrations:
 	make clean_all
 	make all_migrations
-	make create_superuser
+	make populate
 
 install_dependencies:
 	pipenv --python 3.9
@@ -29,3 +29,7 @@ install_dependencies:
 
 run:
 	python manage.py runserver 0.0.0.0:9000
+
+reset_run:
+	make reset_migrations
+	make run

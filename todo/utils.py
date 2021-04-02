@@ -9,7 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Task
+from todo.models import Attachment, Comment, Task, Writer, Editor
 
 log = logging.getLogger(__name__)
 
@@ -27,8 +27,17 @@ def staff_check(user):
         return True
 
 
+def user_can_read_book(book, user):
+    author = Writer.objects.filter(user=user).first()
+    editor = Editor.objects.filter(user=user).first()
+    return user.is_superuser or \
+        (author != None and book.author == author) or \
+        (editor != None and (book.editor == editor or editor.chief))
+
 def user_can_read_task(task, user):
-    return user.is_superuser
+    if task.task_type == task.WRITING:
+        return user_can_read_book(task.book_list, user)
+    raise NotImplementedError('')
 
 
 def todo_get_backend(task):
@@ -57,9 +66,11 @@ def todo_get_mailer(user, task):
 
 def todo_send_mail(user, task, subject, body, recip_list):
     """Send an email attached to task, triggered by user"""
-    references = Comment.objects.filter(task=task).only("email_message_id")
-    references = (ref.email_message_id for ref in references)
-    references = " ".join(filter(bool, references))
+    # TODO: delete
+    # references = Comment.objects.filter(task=task).only("email_message_id")
+    # references = (ref.email_message_id for ref in references)
+    # references = " ".join(filter(bool, references))
+    references = ""
 
     from_address, backend = todo_get_mailer(user, task)
     message_hash = hash((subject, body, from_address, frozenset(recip_list), references))
@@ -135,10 +146,10 @@ def send_email_to_thread_participants(task, msg_body, user, subject=None):
 
     # Get all thread participants
     commenters = Comment.objects.filter(task=task)
-    recip_list = set(ca.author.email for ca in commenters if ca.author is not None)
+    recip_list = set(ca.author.user.email for ca in commenters if ca.author is not None)
     for related_user in (task.created_by, task.assigned_to):
         if related_user is not None:
-            recip_list.add(related_user.email)
+            recip_list.add(related_user.user.email)
     recip_list = list(m for m in recip_list if m)
 
     todo_send_mail(user, task, email_subject, email_body, recip_list)

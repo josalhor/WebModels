@@ -4,7 +4,6 @@ from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.utils.text import slugify
 
 from todo.forms import AddBookForm
 from todo.utils import staff_check
@@ -24,9 +23,7 @@ def add_list(request) -> HttpResponse:
         form = AddBookForm(request.POST)
         if form.is_valid():
             try:
-                newlist = form.save(commit=False)
-                newlist.slug = slugify(newlist.name, allow_unicode=True)
-                newlist.save()
+                newlist = form.save()
                 messages.success(request, "A new list has been added.")
                 return redirect("todo:lists")
 
