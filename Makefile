@@ -5,12 +5,12 @@ clean:
 	find project/ todo/ | grep -E "(__pycache__|\.pyc|\.pyo$\)" | xargs rm -rf
 
 clean_db:
-	rm -f db.sqlite3
+	python -c "import os; os.remove('db.sqlite3')"
 
 clean_all:
 	make clean
 	make clean_db
-	rm -rf todo/migrations
+	python -c "import shutil; shutil.rmtree('todo/migrations')"
 
 all_migrations:
 	python manage.py makemigrations

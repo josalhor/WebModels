@@ -30,6 +30,7 @@
           <th>Created</th>
           <th>Due on</th>
           <th>Assigned</th>
+          <th>Task Type</th>
           <th>Mark</th>
         </tr>
 
@@ -48,6 +49,9 @@
             </td>
             <td>
               {% if task.assigned_to %}{{ task.assigned_to }}{% else %}Unassigned{% endif %}
+            </td>
+            <td>
+              {{task.get_task_type_display}}
             </td>
             <td>
               <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form">

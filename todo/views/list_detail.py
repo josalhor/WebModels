@@ -52,7 +52,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             if new_task.task_type == Task.WRITING:
                 new_task.assigned_to = book_list.author
             new_task.note = bleach.clean(form.cleaned_data["note"], strip=True)
-            form.save()
+            new_task.save()
 
             # Send email alert only if Notify checkbox is checked AND assignee is not same as the submitter
             if (
@@ -63,18 +63,14 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
 
             messages.success(request, 'New task "{t}" has been added.'.format(t=new_task.title))
             return redirect(request.path)
-        else:
-            messages.warning(
-                    request,
-                    form.errors 
-                )
+
     else:
         # Don't allow adding new tasks on some views
         if list_slug not in ["mine", "recent-add", "recent-complete"]:
             form = AddEditTaskForm(
                 initial={"priority": 999, "book_list": book_list},
             )
-
+    
     context = {
         "list_id": list_id,
         "list_slug": list_slug,
