@@ -14,6 +14,8 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
+from abc import ABC
+
 
 def get_attachment_upload_dir(instance, filename):
     """Determine upload dir for task attachment files.
@@ -73,7 +75,8 @@ class UserInfo(models.Model):
     def __str__(self):
         return str(self.full_name)
 
-# This should probably ABC
+# This should be an ABC, but that interferes
+# with the model's metaclass
 class UserRole(models.Model):
     def __str__(self):
         return str(self.user.user_info)
@@ -123,6 +126,22 @@ class Book(models.Model):
     author = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.RESTRICT, related_name='book_author')
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
     completed = models.BooleanField(default=False)
+    note = models.TextField()
+
+    TYPE_SCARE = 'S'
+    TYPE_ADVENTURE = 'A'
+    TYPE_FANTASY = 'F'
+
+    THEMATIC = [
+        (TYPE_SCARE, 'Miedo'),
+        (TYPE_ADVENTURE, 'Aventura'),
+        (TYPE_FANTASY, 'Fantasía'),
+    ]
+
+    thematic = models.CharField(
+        max_length=2,
+        choices=THEMATIC,
+    )
 
     def __str__(self):
         return self.name
@@ -245,7 +264,7 @@ class Attachment(models.Model):
 
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(default=datetime.datetime.now)
+    timestamp = models.DateTimeField(auto_now_add=True)
     file = models.FileField(upload_to=get_attachment_upload_dir, max_length=255)
 
     def filename(self):

@@ -1,10 +1,19 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-from todo.models import Task, Book
+from todo.models import Task, Book, UserInfo
 
 
 class AddBookForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["thematic"].queryset = Book.THEMATIC
+        self.fields["thematic"].widget.attrs = {
+            "id": "id_thematic",
+            "class": "custom-select mb-3",
+            "name": "thematic",
+        }
+
     class Meta:
         model = Book
         exclude = ["created_date", "slug", "author", "editor", "completed"]
@@ -36,29 +45,17 @@ class AddEditTaskForm(ModelForm):
 
 
 class AddExternalTaskForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["task_type"].queryset = Task.TYPES_OF_TASK_CHOICES
-        self.fields["task_type"].widget.attrs = {
-            "id": "id_task_type",
-            "class": "custom-select mb-3",
-            "name": "task_type",
-        }
-        
-    title = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}), label="Summary")
-    note = forms.CharField(widget=forms.widgets.Textarea(), label="Problem Description")
-    priority = forms.IntegerField(widget=forms.HiddenInput())
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+
+    # title = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}), label="Summary")
+    # note = forms.CharField(widget=forms.widgets.Textarea(), label="Problem Description")
+    # priority = forms.IntegerField(widget=forms.HiddenInput())
 
     class Meta:
-        model = Task
+        model = UserInfo
         exclude = (
-            "book_list",
-            "created_date",
-            "due_date",
-            "created_by",
-            "assigned_to",
-            "completed",
-            "completed_date",
+            "user",
         )
 
 

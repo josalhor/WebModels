@@ -7,10 +7,11 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
+from django.contrib.auth import get_user_model
 
 from todo.defaults import defaults
-from todo.forms import AddExternalTaskForm
-from todo.models import Book, Editor
+from todo.forms import AddExternalTaskForm, AddBookForm
+from todo.models import Book, Editor, Writer, UserInfo
 from todo.utils import staff_check
 
 
@@ -23,32 +24,46 @@ def external_add(request) -> HttpResponse:
     Publicly filed tickets are unassigned unless settings.DEFAULT_ASSIGNEE exists.
     """
 
-    if not settings.TODO_DEFAULT_LIST_SLUG:
-        # We do NOT provide a default in defaults
-        raise RuntimeError(
-            "This feature requires TODO_DEFAULT_LIST_SLUG: in settings. See documentation."
-        )
+    # if not settings.TODO_DEFAULT_LIST_SLUG:
+    #     # We do NOT provide a default in defaults
+    #     raise RuntimeError(
+    #         "This feature requires TODO_DEFAULT_LIST_SLUG: in settings. See documentation."
+    #     )
 
-    if not Book.objects.filter(slug=settings.TODO_DEFAULT_LIST_SLUG).exists():
-        raise RuntimeError(
-            "There is no Book with slug specified for TODO_DEFAULT_LIST_SLUG in settings."
-        )
-
-    editor = None
-    if request.user.is_authenticated:
-        editor = Editor.objects.filter(user=request.user).first()
+    # if not Book.objects.filter(slug=settings.TODO_DEFAULT_LIST_SLUG).exists():
+    #     raise RuntimeError(
+    #         "There is no Book with slug specified for TODO_DEFAULT_LIST_SLUG in settings."
+    #     )
 
     if request.POST:
         form = AddExternalTaskForm(request.POST)
+        form_book = AddBookForm(request.POST)
 
-        if form.is_valid():
+        if form.is_valid() and form_book.is_valid():
             current_site = Site.objects.get_current()
-            task = form.save(commit=False)
-            task.book_list = Book.objects.get(slug=settings.TODO_DEFAULT_LIST_SLUG)
-            task.created_by = editor
-            if defaults("TODO_DEFAULT_ASSIGNEE"):
-                task.assigned_to = get_user_model().objects.get(username=settings.TODO_DEFAULT_ASSIGNEE)
-            task.save()
+            User = get_user_model()
+            email = request.POST['email']
+            user = User.objects.filter(email=email).first()
+            if not user:
+                password = User.objects.make_random_password()
+                user = User.objects.create_user(email, password)
+            user_info = UserInfo.objects.filter(user=user).first()
+            if not user_info:
+                user_info = form.save(commit=False)
+                user_info.user = user
+                user_info.save()
+            writer, _ = Writer.objects.update_or_create(user=user)
+
+            book = form_book.save(commit=False)
+            book.author = writer
+            book.save()
+
+
+            
+            messages.success(
+                request, "Your trouble ticket has been submitted. We'll get back to you soon."
+            )
+            return redirect(defaults("TODO_PUBLIC_SUBMIT_REDIRECT"))
 
             # Send email to assignee if we have one
             if task.assigned_to:
@@ -71,14 +86,11 @@ def external_add(request) -> HttpResponse:
                         request, "Task saved but mail not sent. Contact your administrator."
                     )
 
-            messages.success(
-                request, "Your trouble ticket has been submitted. We'll get back to you soon."
-            )
-            return redirect(defaults("TODO_PUBLIC_SUBMIT_REDIRECT"))
 
     else:
         form = AddExternalTaskForm(initial={"priority": 999})
+        form_book = AddBookForm()
 
-    context = {"form": form}
+    context = {"form": form, "form_book": form_book}
 
     return render(request, "todo/add_task_external.html", context)

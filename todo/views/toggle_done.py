@@ -25,13 +25,7 @@ def toggle_done(request, task_id: int) -> HttpResponse:
             kwargs={"list_id": task.book_list.id, "list_slug": task.book_list.slug},
         )
 
-        # Permissions
-        if not (
-            (task.created_by == request.user)
-            or (request.user.is_superuser)
-            or (task.assigned_to == request.user)
-            or (task.book_list.group in request.user.groups.all())
-        ):
+        if (not request.user.is_superuser) and (request.user != task.created_by.user):
             raise PermissionDenied
 
         toggle_task_completed(task.id)
