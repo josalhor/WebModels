@@ -31,6 +31,14 @@ pipenv install --dev  # Installs all dependencies
 pipenv shell  # Activates the environment
 ```
 
+In case of having multiple versions of python installed, run the same instructions above with `python3 -m` at the beginning as shown in the following example.
+
+```
+python3 -m pipenv --python 3.9   # Initializes the virtual environment
+python3 -m pipenv install --dev  # Installs all dependencies
+python3 -m pipenv shell  # Activates the environment
+```
+
 Use `make` to reset the entire database and run the server,
 
 ```
