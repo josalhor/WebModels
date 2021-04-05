@@ -3,13 +3,13 @@
 {% block title %}{{ list_title }} Todo Lists{% endblock %}
 
 {% block content %}
-  <h1>Todo Lists</h1>
+  <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Peticiones</h1>
 
-  <p>{{ task_count }} tasks in {{ list_count }} list{{ list_count|pluralize }}</p>
+  <p>{{ task_count }} {% if task_count == 1 %} tarea pendiente {% else %} tareas pendientes {% endif %} en {{ list_count }} libro{{ list_count|pluralize }}</p>
 
   {% regroup lists by group as section_list %}
   {% for group in section_list %}
-    <h3>Group: {{ group.grouper }}</h3>
+    <!-- <h3>Group: {{ group.grouper }}</h3> -->
     <ul class="list-group mb-4">
       {% for task in group.list %}
       <li class="list-group-item d-flex justify-content-between align-items-center">
