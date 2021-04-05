@@ -8,7 +8,6 @@ clean_db:
 	python clean_db.py
 
 clean_all:
-	make clean
 	make clean_db
 	python clean_migrations.py
 
