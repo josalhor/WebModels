@@ -49,10 +49,6 @@ If you are using Windows, to use the make command you previously need to [instal
 choco install make
 ```
 
-## Documentation
-
-You can find basic functionality of our site in the DOMAIN.md file.
-
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -62,4 +58,13 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 - Balma Cascón Piñol
 - Sara Quejido Garriga
 - Anna Torres Tuca
+
+## License
+
+BSD 3-Clause License
+
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](/LICENSE.txt)
+
+## References
+This project has been based on [django-todo app](http://django-todo.org/), a pluggable, multi-user, multi-group, multi-list todo and ticketing system where users can create tasks for themselves or for others, or create Unassigned tasks that will be filed into a specific list. [Learn more](https://django-todo.readthedocs.io/en/latest/).
 
