@@ -5,7 +5,7 @@
 {% block content %}
   <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Peticiones</h1>
 
-  <p>{{ task_count }} {% if task_count == 1 %} tarea pendiente {% else %} tareas pendientes {% endif %} en {{ list_count }} {% if list_count == 1 %} libro {% else %} libros {% endif %} {{ list_count|pluralize }}</p>
+  <p>{{ task_count }} {% if task_count == 1 %} tarea pendiente {% else %} tareas pendientes {% endif %} en {{ list_count }} libro{{ list_count|pluralize }}</p>
 
   {% regroup lists by group as section_list %}
   {% for group in section_list %}
