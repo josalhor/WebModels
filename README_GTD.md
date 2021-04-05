@@ -22,6 +22,18 @@ pipenv install --dev  # Installs all dependencies
 pipenv shell  # Activates the environment
 ```
 
+In case of having multiple versions of python installed, run the same instructions above with `python3 -m` at the beginning as shown in the following example.
+
+```
+pip3 install --user git+https://github.com/pypa/pipenv.git
+cd ~/dev
+git clone git@github.com:shacker/gtd.git
+cd gtd
+python3 -m pipenv --python 3.9   # Initializes the virtual environment
+python3 -m pipenv install --dev  # Installs all dependencies
+python3 -m pipenv shell  # Activates the environment
+```
+
 Copy `local.example.py` to `local.py` and modify to match your local db credentials. In `local.py`:
 
 ```
