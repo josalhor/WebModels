@@ -1,6 +1,6 @@
 # WebModels
 
-This is the project for an assignment for the subject *Web Project*.
+This is the project for an assignment for the subject *Web Models*.
 
 ## Description
 
