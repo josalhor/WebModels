@@ -49,14 +49,16 @@
             {% if user.is_authenticated %}
             <li class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones</a></li>
             <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Peticiones aceptadas</a></li>
-            <li style="float: right;width: 820px;">
-              <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
-            </li>
-            {% else %}
-            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></li>
-            <li class="nav-item"><a href="{% url 'todo:external_add' %}" class="nav-link">¿Eres escritor? Envíanos tu obra</a></li>
             {% endif %}
           </ul>
+          <span class="navbar-nav">
+            {% if user.is_authenticated %}
+            <a class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></a>
+            {% else %}
+            <a class="nav-item"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></a>
+            <a class="nav-item"><a href="{% url 'todo:external_add' %}" class="nav-link">¿Eres escritor? Envíanos tu obra</a></a>
+            {% endif %}
+          </span>
 
           <!--
           {% if user.is_authenticated %}
