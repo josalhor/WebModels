@@ -49,19 +49,23 @@
             {% if user.is_authenticated %}
             <li class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones</a></li>
             <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Peticiones aceptadas</a></li>
-            <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+            <li style="float: right;width: 820px;">
+              <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+            </li>
             {% else %}
             <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></li>
             <li class="nav-item"><a href="{% url 'todo:external_add' %}" class="nav-link">¿Eres escritor? Envíanos tu obra</a></li>
             {% endif %}
           </ul>
 
+          <!--
           {% if user.is_authenticated %}
       		  <form class="form-inline mt-2 mt-md-0" action="{% url 'todo:search' %}" method="get" placeholder="Search" aria-label="Search">
               <input type="text" name="q" value="" class="form-control mr-sm-2" id="q">
               <input type="submit" value="Buscar tareas" class="btn btn-outline-success my-2 my-sm-0">
             </form>
           {% endif %}
+          -->
 
         </div>
       </nav>
