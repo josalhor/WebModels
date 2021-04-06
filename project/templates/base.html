@@ -20,7 +20,7 @@
     <meta name="author" content="">
     <link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/bebas" type="text/css"/>
 
-    <title>django-todo</title>
+    <title>Editorial Bookiernes, S.A.</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -49,6 +49,10 @@
             {% if user.is_authenticated %}
             <li class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones</a></li>
             <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Peticiones aceptadas</a></li>
+            {% endif %}
+          </ul>
+          <ul class="navbar-nav">
+            {% if user.is_authenticated %}
             <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
             {% else %}
             <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></li>
@@ -56,19 +60,21 @@
             {% endif %}
           </ul>
 
+          <!--
           {% if user.is_authenticated %}
       		  <form class="form-inline mt-2 mt-md-0" action="{% url 'todo:search' %}" method="get" placeholder="Search" aria-label="Search">
               <input type="text" name="q" value="" class="form-control mr-sm-2" id="q">
               <input type="submit" value="Buscar tareas" class="btn btn-outline-success my-2 my-sm-0">
             </form>
           {% endif %}
+          -->
 
         </div>
       </nav>
     </header>
 
     <!-- Begin page content -->
-    <main role="main" class="container">
+    <main role="main" class="container" style="padding-bottom: 60px;">
 
       {% if messages %}
         {% for message in messages %}
