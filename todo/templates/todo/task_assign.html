@@ -1,0 +1,33 @@
+{% extends "todo/base.html" %}
+{% block page_heading %}{% endblock %}
+{% block title %}File Ticket{% endblock %}
+
+{% block content %}
+
+  <h2>{{ task }}</h2>
+
+  <form action="" method="POST">
+    {% csrf_token %}
+
+    <h3 class=".bar-text">¿Quieres publicar tu obra?</h3>
+
+    {% if form.errors %}
+      {% for error in form.errors %}
+        <ul class="errorlist">
+          <li>
+            <strong>The {{ error|escape }} field is required.</strong>
+          </li>
+        </ul>
+      {% endfor %}
+    {% endif %}
+
+    <form action="" name="task_assign" method="post">
+        {% csrf_token %}
+        <div class="form-task-type">
+          {{assign_form}}
+        </div>
+    
+        <p><input type="submit" class="btn btn-primary" name="task_assign" value="Enviar"></p>
+    </form>
+
+{% endblock %}

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-from todo.models import Task, Book, UserInfo
+from todo.models import Task, Book, UserInfo, Editor
 
 
 class AddBookForm(ModelForm):
@@ -61,3 +61,14 @@ class AddExternalTaskForm(ModelForm):
 
 class SearchForm(forms.Form):
     q = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}))
+
+class AssignForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["editor"].widget.attrs = {
+            #"id": "id_thematic",
+            "class": "custom-select mb-3",
+            #"name": "thematic",
+        }
+
+    editor = forms.ModelChoiceField(queryset=Editor.objects.all())
