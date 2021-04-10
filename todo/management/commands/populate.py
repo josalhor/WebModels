@@ -40,3 +40,7 @@ class Command(BaseCommand):
             user=u,
             chief=True
         )
+
+        b = Book.objects.create(
+            name="Not assigned Book",
+        )
