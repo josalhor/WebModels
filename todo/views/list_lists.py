@@ -18,9 +18,9 @@ def list_lists(request) -> HttpResponse:
     searchform = SearchForm(auto_id=False)
 
     # Superusers see all lists
-    lists = Book.objects.all().order_by("name")
+    lists = Book.objects.filter(editor=None).order_by("name")
 
-    list_count = lists.count()
+    list_count = lists.filter(editor=None).count()
 
     # superusers see all lists, so count shouldn't filter by just lists the admin belongs to
     if request.user.is_superuser:
