@@ -127,6 +127,7 @@ class Book(models.Model):
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
     completed = models.BooleanField(default=False)
     note = models.TextField()
+    file = models.FileField(upload_to=get_attachment_upload_dir, max_length=255)
 
     TYPE_SCARE = 'S'
     TYPE_ADVENTURE = 'A'
