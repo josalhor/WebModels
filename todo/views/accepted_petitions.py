@@ -18,9 +18,9 @@ def accepted_petitions(request) -> HttpResponse:
     searchform = SearchForm(auto_id=False)
 
     # Superusers see all lists
-    lists = Book.objects.all().order_by("name")
+    lists = Book.objects.exclude(editor=None).order_by("name")
 
-    list_count = lists.count()
+    list_count = lists.exclude(editor=None).count()
 
     # superusers see all lists, so count shouldn't filter by just lists the admin belongs to
     if request.user.is_superuser:
