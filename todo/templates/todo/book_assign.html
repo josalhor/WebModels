@@ -21,13 +21,13 @@
       {% endfor %}
     {% endif %}
 
-    <form action="" name="task_assign" method="post">
+    <form action="" name="book_assign" method="post">
         {% csrf_token %}
         <div class="form-task-type">
           {{assign_form}}
         </div>
     
-        <p><input type="submit" class="btn btn-primary" name="task_assign" value="Enviar"></p>
+        <p><input type="submit" class="btn btn-primary" name="book_assign" value="Enviar"></p>
     </form>
 
 {% endblock %}

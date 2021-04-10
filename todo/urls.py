@@ -23,7 +23,7 @@ urlpatterns = [
     path("<int:list_id>/<str:list_slug>/", views.list_detail, name="list_detail"),
     path("<int:list_id>/<str:list_slug>/delete/", views.del_list, name="del_list"),
     path("add_list/", views.add_list, name="add_list"),
-    path("task/<int:task_id>/assign", views.task_assign, name="task_assign"),
+    path("book/<int:book_id>/assign", views.book_assign, name="book_assign"),
     path("task/<int:task_id>/", views.task_detail, name="task_detail"),
     path(
         "attachment/remove/<int:attachment_id>/", views.remove_attachment, name="remove_attachment"
