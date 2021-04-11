@@ -1,7 +1,7 @@
 A new task comment has been added.
 
 Task: {{ task.title }}
-Commenter: {{ user.first_name }} {{ user.last_name }}
+Commenter: {{ user.full_name }}
 
 Comment:
 {% autoescape off %}
@@ -10,7 +10,3 @@ Comment:
 
 Task details/comments:
 https://{{ site }}{% url 'todo:task_detail' task.id %}
-
-List {{ task.book_list.name }}:
-https://{{ site }}{% url 'todo:list_detail' task.book_list.id task.book_list.slug %}
-

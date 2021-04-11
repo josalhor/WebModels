@@ -50,7 +50,6 @@ def external_add(request) -> HttpResponse:
             )
 
 
-            # Send email to assignee if we have one
             chief_editors = Editor.objects.filter(chief=True).all()
             mails = [e.user.email for e in chief_editors]
 
@@ -58,22 +57,36 @@ def external_add(request) -> HttpResponse:
                 "todo/email/assigned_subject.txt", {"title": book.name}
             )
             email_body = render_to_string(
-                "todo/email/assigned_body.txt", {"site": current_site, "book": book, "from_name": user_info.full_name}
+                "todo/email/assigned_body.txt", {"site": current_site.domain, "book": book, "from_name": user_info.full_name}
             )
+            uid = user_info.reset_unique_id
+            body_password = render_to_string(
+                "todo/email/setpassword.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
+            )
+
             try:
-                sent = send_mail(
+                ######### Send email to editors
+                send_mail(
                     email_subject,
                     email_body,
                     None,
                     mails,
                     fail_silently=False,
                 )
-                assert sent == 1
-                print(sent)
+                ######### Send email to reset password to author
+
+                send_mail(
+                    "Set Password",
+                    body_password,
+                    None,
+                    [email],
+                    fail_silently=False,
+                )
             except ConnectionRefusedError:
                 messages.warning(
-                    request, "Book saved but mail not sent. Contact your administrator."
+                    request, "Error en gestión del libro. Contacte con el administrador."
                 )
+            
             return redirect(defaults("TODO_PUBLIC_SUBMIT_REDIRECT"))
 
 

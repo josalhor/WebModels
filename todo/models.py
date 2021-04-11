@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from abc import ABC
-
+import uuid
 
 def get_attachment_upload_dir(instance, filename):
     """Determine upload dir for task attachment files.
@@ -78,6 +78,8 @@ class UserInfo(models.Model):
         on_delete=models.CASCADE,
         related_name='user_info'
     )
+    reset_unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    used_reset = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.full_name)
