@@ -18,8 +18,10 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
     # Defaults
     book_list = None
     form = None
+    editor_view = False
 
     editor = Editor.objects.filter(user=request.user).first()
+    if editor != None: editor_view = True
     # Which tasks to show on this list view?
     if list_slug == "mine":
         tasks = Task.objects.filter(assigned_to=request.user.user_info)
@@ -72,6 +74,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             )
     
     context = {
+        "editor_view": editor_view,
         "list_id": list_id,
         "list_slug": list_slug,
         "book_list": book_list,
