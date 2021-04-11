@@ -40,13 +40,13 @@ def user_can_read_task(task, user):
     raise NotImplementedError('')
 
 
-def todo_get_backend(task):
+def todo_get_backend():
     """Returns a mail backend for some task"""
     mail_backends = getattr(settings, "TODO_MAIL_BACKENDS", None)
     if mail_backends is None:
         return None
 
-    task_backend = mail_backends[task.book_list.slug]
+    task_backend = mail_backends["mail-queue"]
     if task_backend is None:
         return None
 
@@ -55,7 +55,7 @@ def todo_get_backend(task):
 
 def todo_get_mailer(user, task):
     """A mailer is a (from_address, backend) pair"""
-    task_backend = todo_get_backend(task)
+    task_backend = todo_get_backend()
     if task_backend is None:
         return (None, mail.get_connection)
 
@@ -72,7 +72,7 @@ def todo_send_mail(user, task, subject, body, recip_list):
     # references = " ".join(filter(bool, references))
     references = ""
 
-    from_address, backend = todo_get_mailer(user, task)
+    from_address, backend = todo_get_mailer(user)
     message_hash = hash((subject, body, from_address, frozenset(recip_list), references))
 
     message_id = (

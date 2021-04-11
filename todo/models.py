@@ -24,6 +24,13 @@ def get_attachment_upload_dir(instance, filename):
     return "/".join(["tasks", "attachments", str(instance.task.id), filename])
 
 
+def get_attachment_upload_dir_book(instance, filename):
+    """Determine upload dir for task attachment files.
+    """
+
+    return "/".join(["books", "attachments", str(instance.id), filename])
+
+
 class LockedAtomicTransaction(Atomic):
     """
     modified from https://stackoverflow.com/a/41831049
@@ -127,7 +134,7 @@ class Book(models.Model):
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
     completed = models.BooleanField(default=False)
     note = models.TextField()
-    file = models.FileField(upload_to=get_attachment_upload_dir, max_length=255)
+    file = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255)
 
     TYPE_SCARE = 'S'
     TYPE_ADVENTURE = 'A'
@@ -174,6 +181,7 @@ class Task(models.Model):
     created_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
+    notified_due_date = models.BooleanField(default=False)
     completed_date = models.DateField(blank=True, null=True)
     task_type = models.CharField(
         max_length=2,
