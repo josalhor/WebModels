@@ -2,17 +2,22 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import render
 
 from todo.forms import SearchForm
-from todo.models import Task, Book
+from todo.models import Task, Book, Editor
 from todo.utils import staff_check
 
 
 @login_required
 @user_passes_test(staff_check)
 def list_lists(request) -> HttpResponse:
+
+    editor = Editor.objects.filter(user=request.user).first()
+    if not editor or not editor.chief:
+        raise PermissionDenied
 
     thedate = datetime.datetime.now()
     searchform = SearchForm(auto_id=False)
