@@ -34,9 +34,8 @@ def chief_check(user):
 def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()
     editor = Editor.objects.filter(user=user).first()
-    return user.is_superuser or \
-        (author != None and book.author == author) or \
-        (editor != None and (book.editor == editor or editor.chief))
+    return (author != None and book.author == author) or \
+           (editor != None and (book.editor == editor or editor.chief))
 
 def user_can_read_task(task, user):
     if task.task_type == task.WRITING:

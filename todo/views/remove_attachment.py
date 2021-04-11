@@ -21,10 +21,7 @@ def remove_attachment(request, attachment_id: int) -> HttpResponse:
         redir_url = reverse("todo:task_detail", kwargs={"task_id": attachment.task.id})
 
         # Permissions
-        if not (
-            attachment.task.book_list.group in request.user.groups.all()
-            or request.user.is_superuser
-        ):
+        if not (attachment.task.book_list.group in request.user.groups.all()):
             raise PermissionDenied
 
         if remove_attachment_file(attachment.id):

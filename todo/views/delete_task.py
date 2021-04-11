@@ -25,7 +25,7 @@ def delete_task(request, task_id: int) -> HttpResponse:
         )
 
         # Permissions
-        if (task.created_by.user != request.user) and (not request.user.is_superuser):
+        if task.created_by.user != request.user:
             raise PermissionDenied
 
         task.delete()
