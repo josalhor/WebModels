@@ -58,8 +58,8 @@
             {% if user.is_authenticated %}
             <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
             {% else %}
-            <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></li>
-            <li class="nav-item"><a href="{% url 'todo:external_add' %}" class="nav-link">¿Eres escritor? Envíanos tu obra</a></li>
+            <li button class="w3-btn w3-round w3-medium"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></button></li>
+            <li button class="btn btn-outline-secondary btn-md"><a href="{% url 'todo:external_add' %}" class="nav-link"><b>¿Eres escritor? Envíanos tu obra</b></a></button></li>
             {% endif %}
           </ul>
 
@@ -90,8 +90,9 @@
       {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
-      <div class="container">
+    <footer>
+      <div class="w3-container w3-white">
+        <br>
         <span class="text-muted">
           <div class="row">
             <div class="col-md-2">
@@ -120,6 +121,7 @@
           {% if user.is_authenticated %}Logged in as {{ user.username }}{% endif %}</span>-->
       </div>
     </footer> 
+
     
     <!-- jQuery and Bootstrap core JS, plus Popper -->
     <script

@@ -57,13 +57,20 @@
 
         <div class="form-task-type">
           <label for="thematic">Adjunta tu libro</label>
-            <div class="input-group mb-3">
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="attachment_file_input" name="attachment_file_input" />
-            <label class="custom-file-label" for="attachment_file_input">Seleccione un archivo...</label>
+          <div class="card-body pb-0">
+            <form method="POST" action="" enctype="multipart/form-data" style="width:50%;">
+              {% csrf_token %}
+              <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="attachment_file_input" name="attachment_file_input" />
+                  <label class="custom-file-label" for="attachment_file_input">Seleccione un archivo...</label>
+                </div>
+              </div>
+            </form>
+      
           </div>
-        </div>
 
+             
         <div class="form-task-type">
           <input type="checkbox" name="policy" value="Accepted" required>
           <label style="display: inline;" for="policy"> Al enviar este formulario acepto la <a href="/">Política de privacidad</a> y las <a href="/">Condiciones de uso</a> </label><br><br>
@@ -74,3 +81,16 @@
     </form>
 
 {% endblock %}
+
+
+{% block extra_js %}
+  {# Support file attachment uploader #}
+  <script>
+    $('#attachment_file_input').on('change',function(){
+      // Get the file name and remove browser-added "fakepath."
+      // Then replace the "Choose a file" label.
+      var fileName = $(this).val().replace('C:\\fakepath\\', " ");
+      $(this).next('.custom-file-label').html(fileName);
+    })
+  </script>
+{% endblock extra_js %}

@@ -21,14 +21,13 @@ def external_add(request) -> HttpResponse:
     if request.POST:
         form = AddExternalTaskForm(request.POST)
         form_book = AddBookForm(request.POST)
-
-        print(form_book.is_valid())
-        print(form_book.errors)
+        
         if form.is_valid() and form_book.is_valid():
             current_site = Site.objects.get_current()
             User = get_user_model()
             email = request.POST['email']
             user = User.objects.filter(email=email).first()
+            
             if not user:
                 password = User.objects.make_random_password()
                 user = User.objects.create_user(email, password)
@@ -39,12 +38,33 @@ def external_add(request) -> HttpResponse:
                 user_info.save()
             writer, _ = Writer.objects.update_or_create(user=user)
 
+
             book = form_book.save(commit=False)
+
+            # Handle uploaded files
+            if request.POST.get("attachment_file_input"):
+                file = request.POST.get("attachment_file_input")
+
+                #if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
+                    #messages.error(request, f"File exceeds maximum attachment size.")
+                    #return redirect("todo:external_add")
+
+                #name, extension = os.path.splitext(file.name)
+
+                #if extension not in defaults("TODO_LIMIT_FILE_ATTACHMENTS"):
+                    #messages.error(request, f"This site does not allow upload of {extension} files.")
+                    #return redirect("todo:external_add")
+
+                book.file = file
+
+            else:
+                messages.error(request, f"You must attach your book.")
+                return redirect("todo:external_add")
+
             book.author = writer
             book.save()
 
 
-            
             messages.success(
                 request, "El teu llibre s'ha enviat. Ens possarem amb contacte amb tu aviat."
             )
