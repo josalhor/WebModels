@@ -19,7 +19,6 @@
       <divclass="btn" style="width:100%"><i class="fa fa-download"></i>   Descargar archivo adjunto</div>
     </a>
     {% endif %}
-    <br><br>
     
     {% if form.errors %}
       {% for error in form.errors %}
@@ -34,9 +33,8 @@
     <form action="" name="book_assign" method="post">
         {% csrf_token %}
         <div class="form-task-type">
-          <button onclick="acceptPetition(this.form.editor)" class="check-button transparent-button"><i class="check fa fa-check-circle fa-3x" style="vertical-align: middle;"></i><b>&nbsp&nbsp ACEPTAR PROPUESTA</b></button><br>
           <button onclick="rejectPetition(this.form)" class="cross-button transparent-button"><i class="cross fa fa-times-circle fa-3x" style="vertical-align: middle;"></i><b>&nbsp&nbsp RECHAZAR PROPUESTA</b></button><br><br>
-          <div><i class="fa fa-chevron-circle-right fa-3x" style="color:lightskyblue; vertical-align: middle;"></i><b>&nbsp&nbsp ASIGNAR A OTRO EDITOR/A </b><div style="display: inline-block;"> {{assign_form}}</div></div><br><br>
+          <div><i class="fa fa-chevron-circle-right fa-3x" style="color:lightskyblue; vertical-align: middle;"></i><b>&nbsp&nbsp SELECCIONE EL EDITOR/A AL QUE DESEA ASIGNAR LA PROPUESTA </b><div style="display: inline-block;"> {{assign_form}}</div></div><br><br>
         </div>
         <p><input hidden id="submitBtn" type="submit" class="btn btn-primary" name="book_assign" value="Enviar"></p>
     </form>
@@ -52,19 +50,6 @@
           // TODO 
         } while(motivo !== null && motivo === "" || motivo.length < minlength) 
         formToPost.submit();
-      }
-
-      function acceptPetition(selectObj) {
-        editor = '{{ editor_user }}';
-        for(var i = 0; i < selectObj.length; i++)
-        {
-          if(selectObj.options[i].innerHTML === editor){
-            confirm = confirm("¿Está seguro que quiere autoasignarse esta propuesta de edición?");
-            if(confirm){
-              selectObj.selectedIndex = i;
-            }
-          }
-        }
       }
 
       document.getElementById("id_editor").addEventListener('change', hideOrShowBtn);
