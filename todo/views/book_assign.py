@@ -28,8 +28,10 @@ def book_assign(request, book_id: int) -> HttpResponse:
     user_email = request.user
     editor = Editor.objects.filter(user=user_email).first()
 
-    # Considering the category of the editor
-    if book.editor != None or not editor.chief:
+    editor_view = False
+    if editor != None: editor_view = True
+
+    if book.editor != None or (editor_view and not editor.chief):
         raise PermissionDenied
 
     if request.POST:
@@ -46,6 +48,7 @@ def book_assign(request, book_id: int) -> HttpResponse:
         return redirect("todo:accepted_petitions")
     
     context = {
+        'editor_view': editor_view,
         'thematic': thematic,
         'editor_user': editor,
         'book': book,
