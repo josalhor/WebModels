@@ -39,7 +39,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "project.urls"
 LOGIN_URL = "/login"
-LOGIN_REDIRECT_URL = "todo:lists"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

@@ -26,6 +26,10 @@ def staff_check(user):
         # If unset or False, allow all logged in users
         return True
 
+def chief_check(user):
+    u = Editor.objects.filter().first()
+    return u.chief
+
 
 def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()
