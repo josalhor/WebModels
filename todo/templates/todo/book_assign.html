@@ -70,7 +70,6 @@
       document.getElementById("id_editor").addEventListener('change', hideOrShowBtn);
 
       function hideOrShowBtn() { 
-        prompt(document.getElementById("id_editor").value);
         if(document.getElementById("id_editor").value >= 1){
           document.getElementById("submitBtn").removeAttribute("hidden");
         }else{
