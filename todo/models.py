@@ -130,11 +130,13 @@ class Reader(UserRole):
 class Book(models.Model):
     name = models.CharField(max_length=60, unique=True)
     slug = models.SlugField(default="", unique=True)
-    author = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.RESTRICT, related_name='book_author')
+    author = models.ForeignKey(Writer, on_delete=models.RESTRICT, related_name='book_author')
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
     completed = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
     note = models.TextField()
-    file = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255)
+    # file can bee null for debugging purposes
+    file = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
 
     TYPE_SCARE = 'S'
     TYPE_ADVENTURE = 'A'

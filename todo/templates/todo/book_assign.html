@@ -14,9 +14,11 @@
     <p><b>Autor/a:</b> {% if book.author is null or blank %} No asignado/a {% else %} {{ book.author }} {% endif %} </p>
     <p><b>Temática:</b> {% if thematic is null or blank %} No asignada {% else %} {{ thematic }} {% endif %}</p>
 
+    {% if book.file %}
     <a href="{{ book.file.url }}" download>
       <divclass="btn" style="width:100%"><i class="fa fa-download"></i>   Descargar archivo adjunto</div>
     </a>
+    {% endif %}
     <br><br>
     
     {% if form.errors %}

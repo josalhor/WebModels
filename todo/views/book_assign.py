@@ -36,11 +36,10 @@ def book_assign(request, book_id: int) -> HttpResponse:
             messages.success(request, "La propuesta de edición ha sido correctamente asignada.")
         else:
             messages.success(request, "La propuesta de edición ha sido correctamente rechazada.")
-            Book.objects.filter(id=book.id).first().delete() # Delete unaccepted book
-        
+            book.rejected = True
+            book.save()
+            
         return redirect("todo:accepted_petitions")
-    else:
-        form = AssignForm()
     
     context = {
         'thematic': thematic,

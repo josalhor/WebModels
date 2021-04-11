@@ -18,7 +18,7 @@ def list_lists(request) -> HttpResponse:
     searchform = SearchForm(auto_id=False)
 
     # Superusers see all lists
-    lists = Book.objects.filter(editor=None).order_by("name")
+    lists = Book.objects.filter(editor=None, rejected=False).order_by("name")
 
     list_count = lists.filter(editor=None).count()
 
