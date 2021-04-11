@@ -55,7 +55,10 @@ admin.site.register(Comment, CommentAdmin)
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Attachment, AttachmentAdmin)
 
-admin.site.register(UserInfo)
+class UserInfoAdmin(admin.ModelAdmin):
+    readonly_fields=('reset_unique_id',)
+
+admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(Designer)
 admin.site.register(Editor)
 admin.site.register(Writer)

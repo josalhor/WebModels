@@ -56,18 +56,6 @@ def todo_get_backend():
 
     return task_backend
 
-
-def todo_get_mailer(user, task):
-    """A mailer is a (from_address, backend) pair"""
-    task_backend = todo_get_backend()
-    if task_backend is None:
-        return (None, mail.get_connection)
-
-    from_address = getattr(task_backend, "from_address")
-    from_address = email.utils.formataddr((user.username, from_address))
-    return (from_address, task_backend)
-
-
 def todo_send_mail(user, task, subject, body, recip_list):
     """Send an email attached to task, triggered by user"""
     # TODO: delete
@@ -76,8 +64,8 @@ def todo_send_mail(user, task, subject, body, recip_list):
     # references = " ".join(filter(bool, references))
     references = ""
 
-    from_address, backend = todo_get_mailer(user)
-    message_hash = hash((subject, body, from_address, frozenset(recip_list), references))
+    backend = todo_get_backend()
+    message_hash = hash((subject, body, user.pk, frozenset(recip_list), references))
 
     message_id = (
         # the task_id enables attaching back notification answers
@@ -102,7 +90,7 @@ def todo_send_mail(user, task, subject, body, recip_list):
         message = mail.EmailMessage(
             subject,
             body,
-            from_address,
+            None,
             recip_list,
             [],  # Bcc
             headers={
@@ -128,7 +116,7 @@ def send_notify_mail(new_task):
     current_site = Site.objects.get_current()
     subject = render_to_string("todo/email/assigned_subject.txt", {"task": new_task})
     body = render_to_string(
-        "todo/email/assigned_body.txt", {"task": new_task, "site": current_site}
+        "todo/email/assigned_body.txt", {"task": new_task, "site": current_site, "user": new_task.created_by}
     )
 
     recip_list = [new_task.assigned_to.email]
