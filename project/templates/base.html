@@ -88,8 +88,9 @@
       {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
-      <div class="container">
+    <footer>
+      <div class="w3-container w3-white">
+        <br>
         <span class="text-muted">
           <div class="row">
             <div class="col-md-2">
@@ -118,6 +119,7 @@
           {% if user.is_authenticated %}Logged in as {{ user.username }}{% endif %}</span>-->
       </div>
     </footer> 
+
     
     <!-- jQuery and Bootstrap core JS, plus Popper -->
     <script
