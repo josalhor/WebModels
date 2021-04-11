@@ -14,7 +14,7 @@ from django.urls import reverse
 from todo.defaults import defaults
 from todo.features import HAS_TASK_MERGE
 from todo.forms import AddEditTaskForm
-from todo.models import Attachment, Comment, Task
+from todo.models import Attachment, Comment, Task, Editor
 from todo.utils import (
     send_email_to_thread_participants,
     staff_check,
@@ -49,7 +49,10 @@ def handle_add_comment(request, task):
 def task_detail(request, task_id: int) -> HttpResponse:
     """View task details. Allow task details to be edited. Process new comments on task.
     """
-
+    editor = editor = Editor.objects.filter(user=request.user).first()
+    editor_view = False
+    if editor != None: editor_view = True
+    
     task = get_object_or_404(Task, pk=task_id)
     comment_list = Comment.objects.filter(task=task_id).order_by("-date")
 
@@ -139,6 +142,7 @@ def task_detail(request, task_id: int) -> HttpResponse:
         return redirect("todo:task_detail", task_id=task.id)
 
     context = {
+        "editor_view": editor_view,
         "task": task,
         "comment_list": comment_list,
         "form": form,

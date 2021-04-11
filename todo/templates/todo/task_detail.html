@@ -32,33 +32,36 @@
     <div class="card col-sm-4 p-0">
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          <button
-            class="btn btn-sm btn-primary"
-            id="EditTaskButton"
-            type="button"
-            data-toggle="collapse"
-            data-target="#TaskEdit">
-            Editar tarea
-          </button>
+          {% if editor_view %}
+            <button
+              class="btn btn-sm btn-primary"
+              id="EditTaskButton"
+              type="button"
+              data-toggle="collapse"
+              data-target="#TaskEdit">
+              Editar tarea
+            </button>
 
-          <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form" class="d-inline">
-            {% csrf_token %}
-            <div style="display:inline;">
-              <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
-                {% if task.completed %} Marcar como no completada {% else %} Marcar como completada {% endif %}
-              </button>
-            </div>
-          </form>
+            <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form" class="d-inline">
+              {% csrf_token %}
+              <div style="display:inline;">
+                <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
+                  {% if task.completed %} Marcar como no completada {% else %} Marcar como completada {% endif %}
+                </button>
+              </div>
+            </form>
 
-          <form method="post" action="{% url "todo:delete_task" task.id %}" role="form" class="d-inline">
-            {% csrf_token %}
-            <div style="display:inline;">
-              <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('¿Está seguro/a que quiere eliminar esta tarea?');" name="submit_delete">
-                Borrar
-              </button>
-            </div>
-          </form>
-        </li>
+            <form method="post" action="{% url "todo:delete_task" task.id %}" role="form" class="d-inline">
+              {% csrf_token %}
+              <div style="display:inline;">
+                <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('¿Está seguro/a que quiere eliminar esta tarea?');" name="submit_delete">
+                  Borrar
+                </button>
+              </div>
+            </form>
+          </li>
+        {% endif %}
+
         <li class="list-group-item">
           <strong>Asignada a:</strong>
           {% if task.assigned_to %} {{ task.assigned_to.full_name }} {% else %} Unassigned {% endif %}
