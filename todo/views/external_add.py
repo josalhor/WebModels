@@ -63,7 +63,7 @@ def external_add(request) -> HttpResponse:
 
             
             messages.success(
-                request, "El teu llibre s'ha enviat. Ens possarem amb contacte amb tu en aviat."
+                request, "El teu llibre s'ha enviat. Ens possarem amb contacte amb tu aviat."
             )
 
 

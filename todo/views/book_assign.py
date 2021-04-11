@@ -28,6 +28,10 @@ def book_assign(request, book_id: int) -> HttpResponse:
     user_email = request.user
     editor = Editor.objects.filter(user=user_email).first()
 
+    # Considering the category of the editor
+    if book.editor != None or not editor.chief:
+        raise PermissionDenied
+
     if request.POST:
         form = AssignForm(request.POST)
         if form.is_valid():
