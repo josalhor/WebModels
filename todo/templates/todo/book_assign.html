@@ -10,6 +10,7 @@
 
   <p><b>Autor/a:</b> {% if book.author is null or blank %} No asignado/a {% else %} {{ book.author }} {% endif %} </p>
   <p><b>Temática:</b> {% if thematic is null or blank %} No asignada {% else %} {{ thematic }} {% endif %}</p>
+  <p><b>Descripción:</b> {% if note is null or blank %} No asignada {% else %} {{ note }} {% endif %}</p>
 
   {% if book.file %}
   <a href="{{ book.file.url }}" download>
@@ -36,7 +37,7 @@
         {% csrf_token %}
         <div class="form-task-type">
           <button onclick="rejectPetition(this.form)" class="cross-button transparent-button"><i class="cross fa fa-times-circle fa-3x" style="vertical-align: middle;"></i><b>&nbsp&nbsp RECHAZAR PROPUESTA</b></button><br><br>
-          <div><i class="fa fa-chevron-circle-right fa-3x" style="color:lightskyblue; vertical-align: middle;"></i><b>&nbsp&nbsp SELECCIONE EL EDITOR/A AL QUE DESEA ASIGNAR LA P </b><div style="display: inline-block;"> {{assign_form}}</div></div><br><br>
+          <div><i class="fa fa-chevron-circle-right fa-3x" style="color:lightskyblue; vertical-align: middle;"></i><b>&nbsp&nbsp ASIGNAR A: </b><div style="display: inline-block;"> {{assign_form}}</div></div><br><br>
         </div>
         <p><input hidden id="submitBtn" type="submit" class="btn btn-primary" name="book_assign" value="Enviar"></p>
     </form>

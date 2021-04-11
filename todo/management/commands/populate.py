@@ -64,5 +64,6 @@ class Command(BaseCommand):
         b = Book.objects.create(
             name="Not assigned Book",
             author=w,
-            thematic='S'
+            thematic='S',
+            note="El otro día soñe que me despertaba y recogía el título del doble grado."
         )

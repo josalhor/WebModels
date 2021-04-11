@@ -19,20 +19,14 @@ def accepted_petitions(request) -> HttpResponse:
     searchform = SearchForm(auto_id=False)
 
     editor = Editor.objects.filter(user=request.user).first()
-    writer = Writer.objects.filter(user=request.user).first()
 
     if editor:
-        lists = Book.objects.exclude(editor=None, rejected=False).order_by("name")
-        # Superusers see all lists
-        if not request.user.is_superuser:
-            lists = lists.filter(editor=editor) 
+        lists = Book.objects.exclude(editor=None, rejected=True).order_by("name")
         editor_view = True
     else:
         author = Writer.objects.filter(user=request.user)
         lists = Book.objects.filter(rejected=False, author__in=author).order_by("name")
-        print(lists)
         lists = lists.exclude(editor=None)
-        print(lists)
     
     list_count = lists.count()
 
