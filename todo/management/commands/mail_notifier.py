@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Print tasks that are due on the next 3 days
 
-        tasks = Task.objects.filter(completed=True).filter(notified_due_date=False)
+        tasks = Task.objects.filter(completed=True, notified_due_date=False)
 
         for task in tasks:
             today = timezone.now()
