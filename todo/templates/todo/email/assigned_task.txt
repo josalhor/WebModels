@@ -1,0 +1,4 @@
+A new task has been added in book {{ book.name }}:
+
+Assignment page:
+http://{{ site }}{% url 'todo:task_detail' task.id %}

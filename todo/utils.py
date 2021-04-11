@@ -116,10 +116,10 @@ def send_notify_mail(new_task):
     current_site = Site.objects.get_current()
     subject = render_to_string("todo/email/assigned_subject.txt", {"task": new_task})
     body = render_to_string(
-        "todo/email/assigned_body.txt", {"task": new_task, "site": current_site, "user": new_task.created_by}
+        "todo/email/assigned_task.txt", {"task": new_task, "site": current_site, "user": new_task.created_by.user}
     )
 
-    recip_list = [new_task.assigned_to.email]
+    recip_list = [new_task.assigned_to.user.email]
     todo_send_mail(new_task.created_by, new_task, subject, body, recip_list)
 
 
