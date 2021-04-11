@@ -16,7 +16,7 @@ class AddBookForm(ModelForm):
 
     class Meta:
         model = Book
-        exclude = ["created_date", "slug", "author", "editor", "completed"]
+        exclude = ["created_date", "slug", "author", "editor", "completed", "file"]
 
 
 class AddEditTaskForm(ModelForm):
