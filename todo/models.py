@@ -181,6 +181,7 @@ class Task(models.Model):
     created_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
+    notified_due_date = models.BooleanField(default=False)
     completed_date = models.DateField(blank=True, null=True)
     task_type = models.CharField(
         max_length=2,
