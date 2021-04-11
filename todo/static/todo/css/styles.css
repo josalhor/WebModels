@@ -16,11 +16,6 @@ label {
     cursor:pointer;
     overflow: hidden;
     outline:none;
-	display:inline-block;
-}
-
-.check-button:hover > .check{ 
-    color: green;
 }
 
 .cross-button:hover > .cross{ 
