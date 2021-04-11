@@ -39,4 +39,4 @@ def accepted_petitions(request) -> HttpResponse:
         "task_count": task_count,
     }
 
-    return render(request, "todo/list_lists.html", context)
+    return render(request, "todo/accepted_petitions.html", context)
