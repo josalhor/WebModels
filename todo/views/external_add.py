@@ -17,23 +17,6 @@ from todo.utils import staff_check
 
 @user_passes_test(staff_check)
 def external_add(request) -> HttpResponse:
-    """Allow authenticated users who don't have access to the rest of the ticket system to file a ticket
-    in the list specified in settings (e.g. django-todo can be used a ticket filing system for a school, where
-    students can file tickets without access to the rest of the todo system).
-
-    Publicly filed tickets are unassigned unless settings.DEFAULT_ASSIGNEE exists.
-    """
-
-    # if not settings.TODO_DEFAULT_LIST_SLUG:
-    #     # We do NOT provide a default in defaults
-    #     raise RuntimeError(
-    #         "This feature requires TODO_DEFAULT_LIST_SLUG: in settings. See documentation."
-    #     )
-
-    # if not Book.objects.filter(slug=settings.TODO_DEFAULT_LIST_SLUG).exists():
-    #     raise RuntimeError(
-    #         "There is no Book with slug specified for TODO_DEFAULT_LIST_SLUG in settings."
-    #     )
 
     if request.POST:
         form = AddExternalTaskForm(request.POST)
@@ -85,7 +68,7 @@ def external_add(request) -> HttpResponse:
                     mails,
                     fail_silently=False,
                 )
-                assert sent == len(mails)
+                assert sent == 1
                 print(sent)
             except ConnectionRefusedError:
                 messages.warning(

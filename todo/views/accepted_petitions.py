@@ -22,6 +22,8 @@ def accepted_petitions(request) -> HttpResponse:
 
     list_count = lists.exclude(editor=None).count()
 
+    deleted = False
+
     # superusers see all lists, so count shouldn't filter by just lists the admin belongs to
     if request.user.is_superuser:
         task_count = Task.objects.filter(completed=0).count()
@@ -30,8 +32,19 @@ def accepted_petitions(request) -> HttpResponse:
             Task.objects.filter(completed=0)
             .count()
         )
+    
+    if request.method == "POST":
+        book = Book.objects.filter(name=request.POST['delete-book']).first()
+        deleted = True
+
+        book.editor = None
+        book.rejected = True
+        book.save()
+
+        messages.success(request, "La petición correspondiente al libro '{}' ha sido eliminada de su lista de peticiones aceptadas.".format(book.name))
 
     context = {
+        "deleted": deleted,
         "lists": lists,
         "thedate": thedate,
         "searchform": searchform,
