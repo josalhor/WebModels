@@ -8,3 +8,21 @@ label {
 	color:black;
 	margin-top: 40px;
 }
+
+.transparent-button {
+    background-color: transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+	display:inline-block;
+}
+
+.check-button:hover > .check{ 
+    color: green;
+}
+
+.cross-button:hover > .cross{ 
+    color: red;
+}

@@ -24,8 +24,28 @@ from todo.utils import (
 @login_required
 def book_assign(request, book_id: int) -> HttpResponse:
     book = get_object_or_404(Book, pk=book_id)
+    thematic = dict(Book.THEMATIC)[book.thematic]
+    user_email = request.user
+    editor = Editor.objects.filter(user=user_email).first()
+
+    if request.POST:
+        form = AssignForm(request.POST)
+        if form.is_valid():
+            book.editor = Editor.objects.filter(id=request.POST['editor']).first()
+            book.save()
+            messages.success(request, "La propuesta de edición ha sido correctamente asignada.")
+        else:
+            messages.success(request, "La propuesta de edición ha sido correctamente rechazada.")
+            Book.objects.filter(id=book.id).first().delete() # Delete unaccepted book
+        
+        return redirect("todo:accepted_petitions")
+    else:
+        form = AssignForm()
     
     context = {
+        'thematic': thematic,
+        'editor_user': editor,
+        'book': book,
         'assign_form': AssignForm()
     }
     return render(request, "todo/book_assign.html", context)

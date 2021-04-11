@@ -11,6 +11,9 @@
 <style>
 body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
 body {font-size: 16px;}
+.w3-xxxlarge {font-family: 'BebasNeueRegular'; font-size: 60px!important;}
+.w3-xlarge { font-family: 'BebasNeueRegular'; font-size: 30px!important;}
+.w3-jumbo > b { font-family: 'BebasNeueRegular'; font-size: 80px!important;}
 img {margin-bottom: -8px;}
 .mySlides {display: none;}
 </style>
@@ -31,7 +34,7 @@ img {margin-bottom: -8px;}
   </div>
   <div class="w3-button w3-block w3-black w3-hide-large w3-hide-medium"></div>
     {% if user.is_authenticated %}
-      You are already logged in.
+      <!--You are already logged in.-->
     {% else %}
     <a class="w3-button w3-black w3-display-right w3-margin-right w3-round w3-hide-small w3-hover-light-grey" href="{% url 'login' %}">ACCEDE <i class="fa fa-angle-right"></i></a>
     {% endif %}

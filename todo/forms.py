@@ -70,5 +70,6 @@ class AssignForm(forms.Form):
             "class": "custom-select mb-3",
             #"name": "thematic",
         }
+        self.fields["editor"].label = ""
 
     editor = forms.ModelChoiceField(queryset=Editor.objects.all())

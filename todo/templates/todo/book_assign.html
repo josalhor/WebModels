@@ -5,12 +5,20 @@
 {% block content %}
 
   <h2>{{ task }}</h2>
-
   <form action="" method="POST">
     {% csrf_token %}
 
-    <h3 class=".bar-text">¿Quieres publicar tu obra?</h3>
+    <h3 class="bar-text">{{ book.name }}</h3>
+    <hr>
 
+    <p><b>Autor/a:</b> {% if book.author is null or blank %} No asignado/a {% else %} {{ book.author }} {% endif %} </p>
+    <p><b>Temática:</b> {% if thematic is null or blank %} No asignada {% else %} {{ thematic }} {% endif %}</p>
+
+    <a href="{{ book.file.url }}" download>
+      <divclass="btn" style="width:100%"><i class="fa fa-download"></i>   Descargar archivo adjunto</div>
+    </a>
+    <br><br>
+    
     {% if form.errors %}
       {% for error in form.errors %}
         <ul class="errorlist">
@@ -20,14 +28,54 @@
         </ul>
       {% endfor %}
     {% endif %}
-
+    
     <form action="" name="book_assign" method="post">
         {% csrf_token %}
         <div class="form-task-type">
-          {{assign_form}}
+          <button onclick="acceptPetition(this.form.editor)" class="check-button transparent-button"><i class="check fa fa-check-circle fa-3x" style="vertical-align: middle;"></i><b>&nbsp&nbsp ACEPTAR PROPUESTA</b></button><br>
+          <button onclick="rejectPetition(this.form)" class="cross-button transparent-button"><i class="cross fa fa-times-circle fa-3x" style="vertical-align: middle;"></i><b>&nbsp&nbsp RECHAZAR PROPUESTA</b></button><br><br>
+          <div><i class="fa fa-chevron-circle-right fa-3x" style="color:lightskyblue; vertical-align: middle;"></i><b>&nbsp&nbsp ASIGNAR A OTRO EDITOR/A </b><div style="display: inline-block;"> {{assign_form}}</div></div><br><br>
         </div>
-    
-        <p><input type="submit" class="btn btn-primary" name="book_assign" value="Enviar"></p>
+        <p><input hidden id="submitBtn" type="submit" class="btn btn-primary" name="book_assign" value="Enviar"></p>
     </form>
+
+    <script>
+      function rejectPetition(formToPost) {
+        formToPost.editor.selectedIndex = 0;
+        hideOrShowBtn();
+        var minlength = 1;
+        var motivo;
+        do{
+          motivo = prompt("¿Está seguro/a que quiere rechazar la propuesta de edición?");
+          // TODO 
+        } while(motivo !== null && motivo === "" || motivo.length < minlength) 
+        formToPost.submit();
+      }
+
+      function acceptPetition(selectObj) {
+        editor = '{{ editor_user }}';
+        for(var i = 0; i < selectObj.length; i++)
+        {
+          if(selectObj.options[i].innerHTML === editor){
+            confirm = confirm("¿Está seguro que quiere autoasignarse esta propuesta de edición?");
+            if(confirm){
+              selectObj.selectedIndex = i;
+            }
+          }
+        }
+      }
+
+      document.getElementById("id_editor").addEventListener('change', hideOrShowBtn);
+
+      function hideOrShowBtn() { 
+        prompt(document.getElementById("id_editor").value);
+        if(document.getElementById("id_editor").value >= 1){
+          document.getElementById("submitBtn").removeAttribute("hidden");
+        }else{
+          document.getElementById("submitBtn").setAttribute("hidden", true);
+        }
+      }
+       
+    </script>
 
 {% endblock %}
