@@ -6,32 +6,42 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from todo.forms import SearchForm
-from todo.models import Task, Book
+from todo.models import Task, Book, Editor, Writer
 from todo.utils import staff_check
 
 
 @login_required
 @user_passes_test(staff_check)
 def accepted_petitions(request) -> HttpResponse:
+    deleted, editor = False, False
 
     thedate = datetime.datetime.now()
     searchform = SearchForm(auto_id=False)
 
-    # Superusers see all lists
-    lists = Book.objects.exclude(editor=None).order_by("name")
+    editor = Editor.objects.filter(user=request.user).first()
+    writer = Writer.objects.filter(user=request.user).first()
 
-    list_count = lists.exclude(editor=None).count()
-
-    deleted = False
-
-    # superusers see all lists, so count shouldn't filter by just lists the admin belongs to
-    if request.user.is_superuser:
-        task_count = Task.objects.filter(completed=0).count()
+    if editor:
+        if request.user.is_superuser:
+            # Superusers see all lists
+            lists = Book.objects.filter(editor=None, rejected=False).order_by("name")
+        else:
+            lists = lists.filter(editor=editor) 
+        editor = True
     else:
-        task_count = (
-            Task.objects.filter(completed=0)
-            .count()
-        )
+        author = Writer.objects.filter(user=request.user)
+        lists = Book.objects.filter(rejected=False, author__in=author).order_by("name")
+        print(lists)
+        lists = lists.exclude(editor=None)
+        print(lists)
+    
+    list_count = lists.count()
+
+    task_count = 0
+    for book in lists:
+        tasks = Task.objects.filter(book_list=book).count()
+        task_count += tasks
+        
     
     if request.method == "POST":
         book = Book.objects.filter(name=request.POST['delete-book']).first()
@@ -44,6 +54,7 @@ def accepted_petitions(request) -> HttpResponse:
         messages.success(request, "La petición correspondiente al libro '{}' ha sido eliminada de su lista de peticiones aceptadas.".format(book.name))
 
     context = {
+        "editor": editor,
         "deleted": deleted,
         "lists": lists,
         "thedate": thedate,
