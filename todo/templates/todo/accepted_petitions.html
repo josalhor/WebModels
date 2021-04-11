@@ -5,16 +5,22 @@
 {% block content %}
   <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Peticiones aceptadas</h1>
 
-  <p>{{ task_count }} {% if task_count == 1 %} tarea pendiente {% else %} tareas pendientes {% endif %} en {{ list_count }} libro{{ list_count|pluralize }}</p>
+  <p id="task-count">{% if deleted == False %} {{ task_count }} {% if task_count == 1 %} tarea pendiente {% else %} tareas pendientes {% endif %} en {{ list_count }} libro{{ list_count|pluralize }} {% endif %}</p>
 
   {% regroup lists by group as section_list %}
   {% for group in section_list %}
     <!-- <h3>Group: {{ group.grouper }}</h3> -->
     <ul class="list-group mb-4">
       {% for task in group.list %}
-      <li class="list-group-item d-flex justify-content-between align-items-center">
+      <li id="{{ task.name }}" class="list-group-item d-flex justify-content-between align-items-center">
         <a href="{% url 'todo:list_detail' task.id task.slug %}">{{ task.name }}</a>
-        <span class="badge badge-primary badge-pill">{{ task.task_set.count }}</span>
+        <span class="ml-auto badge badge-primary badge-pill">{{ task.task_set.count }}</span>
+      
+        <form method="post" action="{% url "todo:accepted_petitions" %}" role="form" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm" name="delete-book" value='{{ task.name }}' onclick="return confirm('¿Está seguro/a que desea rechazar la propuesta de edición?');"><i class="fa fa-trash"></i></button>
+        </form>
+
       </li>
       {% endfor %}
     </ul>
