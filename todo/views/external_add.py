@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 
 from todo.defaults import defaults
-from todo.forms import AddExternalTaskForm, AddBookForm
+from todo.forms import AddExternalBookForm, AddBookForm
 from todo.models import Book, Editor, Writer, UserInfo
 from todo.utils import staff_check
 
@@ -19,7 +19,7 @@ from todo.utils import staff_check
 def external_add(request) -> HttpResponse:
 
     if request.POST:
-        form = AddExternalTaskForm(request.POST)
+        form = AddExternalBookForm(request.POST)
         form_book = AddBookForm(request.POST)
         
         if form.is_valid() and form_book.is_valid():
@@ -112,7 +112,7 @@ def external_add(request) -> HttpResponse:
 
 
     else:
-        form = AddExternalTaskForm(initial={"priority": 999})
+        form = AddExternalBookForm(initial={"priority": 999})
         form_book = AddBookForm()
 
     context = {"form": form, "form_book": form_book}

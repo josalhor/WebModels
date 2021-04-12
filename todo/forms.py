@@ -37,8 +37,6 @@ class AddEditTaskForm(ModelForm):
     note = forms.CharField(widget=forms.Textarea(), required=False)
 
     def clean_created_by(self):
-        """Keep the existing created_by regardless of anything coming from the submitted form.
-        If creating a new task, then created_by will be None, but we set it before saving."""
         return self.instance.created_by
 
     class Meta:
@@ -46,14 +44,7 @@ class AddEditTaskForm(ModelForm):
         exclude = ["assigned_to", "created_date"]
 
 
-class AddExternalTaskForm(ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-
-    # title = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}), label="Summary")
-    # note = forms.CharField(widget=forms.widgets.Textarea(), label="Problem Description")
-    # priority = forms.IntegerField(widget=forms.HiddenInput())
-
+class AddExternalBookForm(ModelForm):
     class Meta:
         model = UserInfo
         exclude = (

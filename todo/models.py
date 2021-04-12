@@ -190,7 +190,7 @@ class Task(models.Model):
     task_type = models.CharField(
         max_length=2,
         choices=TYPES_OF_TASK_CHOICES,
-        default=LAYOUT,
+        default=WRITING,
     )
     created_by = models.ForeignKey(
         Editor,

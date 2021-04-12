@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth import get_user_model
 
 from todo.defaults import defaults
-from todo.forms import AddExternalTaskForm, AddBookForm
+from todo.forms import AddExternalBookForm, AddBookForm
 from todo.models import Book, Editor, Writer, UserInfo
 from todo.utils import staff_check
 from django.contrib.auth.views import SetPasswordForm
