@@ -21,14 +21,14 @@ def remove_attachment(request, attachment_id: int) -> HttpResponse:
         redir_url = reverse("todo:task_detail", kwargs={"task_id": attachment.task.id})
 
         # Permissions
-        if not (attachment.task.book_list.group in request.user.groups.all()):
+        if (attachment.added_by != request.user):
             raise PermissionDenied
-
+        
         if remove_attachment_file(attachment.id):
-            messages.success(request, f"Attachment {attachment.id} removed.")
+            messages.success(request, f"Archivo {attachment.id} borrado.")
         else:
             messages.error(
-                request, f"Sorry, there was a problem deleting attachment {attachment.id}."
+                request, f"Lo sentimos, ha habido un problema corrando el archivo {attachment.id}."
             )
 
         return redirect(redir_url)

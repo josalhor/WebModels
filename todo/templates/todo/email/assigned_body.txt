@@ -1,12 +1,12 @@
-A new book has been added by {{ from_name }}:
+Un nuevo libro ha sido añadido por {{ from_name }}:
 
 {{ book.name }}
 
 {% if book.note %}
 {% autoescape off %}
-Note: {{ book.note }}
+Nota: {{ book.note }}
 {% endautoescape %}
 {% endif %}
 
-Assignment page:
+Página de asignamiento:
 http://{{ site }}{% url 'todo:book_assign' book.id %}

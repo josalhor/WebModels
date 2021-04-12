@@ -1,1 +1,1 @@
-A new book has been added - {% autoescape off %}{{ title }}{% endautoescape %}
+Un nuevo libro ha sido añadido - {% autoescape off %}{{ title }}{% endautoescape %}

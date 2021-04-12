@@ -142,13 +142,15 @@
                 <tr>
                   <td><a href="{{ attachment.file.url }}">{{ attachment.filename }}</a></td>
                   <td>{{ attachment.timestamp }}</td>
-                  <td>{{ attachment.added_by.get_full_name }}</td>
+                  <td>{{ attachment.added_by }}</td>
                   <td>{{ attachment.extension.lower }}</td>
                   <td>
+                    {% if attachment.added_by == user %}
                     <form action="{% url "todo:remove_attachment" attachment.id %}" method="POST">
                       {% csrf_token %}
-                      <input type="submit" value="X" class="btn btn-danger btn-sm">
+                      <input onclick="return confirm('¿Está seguro/a que desea rechazar la propuesta de edición?');" type="submit" value="X" class="btn btn-danger btn-sm">
                     </form>
+                    {% endif %}
                   </td>
                 </tr>
               {% endfor %}
