@@ -14,7 +14,7 @@ from django.urls import reverse
 from todo.defaults import defaults
 from todo.features import HAS_TASK_MERGE
 from todo.forms import AddEditTaskForm
-from todo.models import Attachment, Comment, Task
+from todo.models import Attachment, Comment, Task, Editor
 from todo.utils import (
     send_email_to_thread_participants,
     staff_check,
@@ -41,7 +41,7 @@ def handle_add_comment(request, task):
         subject='New comment posted on task "{}"'.format(task.title),
     )
 
-    messages.success(request, "Comment posted. Notification email sent to thread participants.")
+    messages.success(request, "Comentario publicado. Los implicados serán avisados por email.")
 
 
 @login_required
@@ -49,7 +49,10 @@ def handle_add_comment(request, task):
 def task_detail(request, task_id: int) -> HttpResponse:
     """View task details. Allow task details to be edited. Process new comments on task.
     """
-
+    editor = Editor.objects.filter(user=request.user).first()
+    editor_view = False
+    if editor != None: editor_view = True
+    
     task = get_object_or_404(Task, pk=task_id)
     comment_list = Comment.objects.filter(task=task_id).order_by("-date")
 
@@ -109,7 +112,7 @@ def task_detail(request, task_id: int) -> HttpResponse:
     if request.POST.get("toggle_done"):
         results_changed = toggle_task_completed(task.id)
         if results_changed:
-            messages.success(request, f"Changed completion status for task {task.id}")
+            messages.success(request, f"Estado de la tarea {task.id} cambiado")
 
         return redirect("todo:task_detail", task_id=task.id)
 
@@ -123,22 +126,24 @@ def task_detail(request, task_id: int) -> HttpResponse:
         file = request.FILES.get("attachment_file_input")
 
         if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
-            messages.error(request, f"File exceeds maximum attachment size.")
+            messages.error(request, f"El tamaño del archivo supera el máximo admitido.")
             return redirect("todo:task_detail", task_id=task.id)
 
         name, extension = os.path.splitext(file.name)
 
         if extension not in defaults("TODO_LIMIT_FILE_ATTACHMENTS"):
-            messages.error(request, f"This site does not allow upload of {extension} files.")
+            messages.error(request, f"No se admiten archivos {extension}.")
             return redirect("todo:task_detail", task_id=task.id)
 
         Attachment.objects.create(
             task=task, added_by=request.user, timestamp=datetime.datetime.now(), file=file
         )
-        messages.success(request, f"File attached successfully")
+        messages.success(request, f"Archivo correctamente adjuntado")
         return redirect("todo:task_detail", task_id=task.id)
 
+
     context = {
+        "editor_view": editor_view,
         "task": task,
         "comment_list": comment_list,
         "form": form,

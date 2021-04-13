@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = "America/Los_Angeles"
+TIME_ZONE = "Europe/Madrid"
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -39,7 +39,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "project.urls"
 LOGIN_URL = "/login"
-LOGIN_REDIRECT_URL = "todo:lists"
+LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -118,3 +118,4 @@ DATABASES = {}
 # TODO_PUBLIC_SUBMIT_REDIRECT = '/'
 # TODO_ALLOW_FILE_ATTACHMENTS = True
 # TODO_LIMIT_FILE_ATTACHMENTS = [".jpg", ".gif", ".png", ".csv", ".pdf"]
+TODO_MAIL_BACKENDS = None

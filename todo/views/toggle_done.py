@@ -25,11 +25,11 @@ def toggle_done(request, task_id: int) -> HttpResponse:
             kwargs={"list_id": task.book_list.id, "list_slug": task.book_list.slug},
         )
 
-        if (not request.user.is_superuser) and (request.user != task.created_by.user):
+        if request.user != task.created_by.user:
             raise PermissionDenied
 
         toggle_task_completed(task.id)
-        messages.success(request, "Task status changed for '{}'".format(task.title))
+        messages.success(request, "El estado de la tarea '{}' ha sido actualizado".format(task.title))
 
         return redirect(redir_url)
 

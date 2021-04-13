@@ -1,16 +1,12 @@
-A new task comment has been added.
+Un nuevo comentario ha sido añadido.
 
-Task: {{ task.title }}
-Commenter: {{ user.first_name }} {{ user.last_name }}
+Tarea: {{ task.title }}
+Autor del comentario: {{ user_info.full_name }}
 
-Comment:
+Comentario:
 {% autoescape off %}
 {{ body }}
 {% endautoescape %}
 
-Task details/comments:
+Detalles de la tarea/comentarios:
 https://{{ site }}{% url 'todo:task_detail' task.id %}
-
-List {{ task.book_list.name }}:
-https://{{ site }}{% url 'todo:list_detail' task.book_list.id task.book_list.slug %}
-

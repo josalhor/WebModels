@@ -9,7 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Task, Writer, Editor
+from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo
 
 log = logging.getLogger(__name__)
 
@@ -26,13 +26,16 @@ def staff_check(user):
         # If unset or False, allow all logged in users
         return True
 
+def chief_check(user):
+    u = Editor.objects.filter().first()
+    return u.chief
+
 
 def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()
     editor = Editor.objects.filter(user=user).first()
-    return user.is_superuser or \
-        (author != None and book.author == author) or \
-        (editor != None and (book.editor == editor or editor.chief))
+    return (author != None and book.author == author) or \
+           (editor != None and (book.editor == editor or editor.chief))
 
 def user_can_read_task(task, user):
     if task.task_type == task.WRITING:
@@ -40,29 +43,17 @@ def user_can_read_task(task, user):
     raise NotImplementedError('')
 
 
-def todo_get_backend(task):
+def todo_get_backend():
     """Returns a mail backend for some task"""
     mail_backends = getattr(settings, "TODO_MAIL_BACKENDS", None)
     if mail_backends is None:
         return None
 
-    task_backend = mail_backends[task.book_list.slug]
+    task_backend = mail_backends["mail-queue"]
     if task_backend is None:
         return None
 
     return task_backend
-
-
-def todo_get_mailer(user, task):
-    """A mailer is a (from_address, backend) pair"""
-    task_backend = todo_get_backend(task)
-    if task_backend is None:
-        return (None, mail.get_connection)
-
-    from_address = getattr(task_backend, "from_address")
-    from_address = email.utils.formataddr((user.username, from_address))
-    return (from_address, task_backend)
-
 
 def todo_send_mail(user, task, subject, body, recip_list):
     """Send an email attached to task, triggered by user"""
@@ -72,8 +63,8 @@ def todo_send_mail(user, task, subject, body, recip_list):
     # references = " ".join(filter(bool, references))
     references = ""
 
-    from_address, backend = todo_get_mailer(user, task)
-    message_hash = hash((subject, body, from_address, frozenset(recip_list), references))
+    backend = todo_get_backend()
+    message_hash = hash((subject, body, user.pk, frozenset(recip_list), references))
 
     message_id = (
         # the task_id enables attaching back notification answers
@@ -98,7 +89,7 @@ def todo_send_mail(user, task, subject, body, recip_list):
         message = mail.EmailMessage(
             subject,
             body,
-            from_address,
+            None,
             recip_list,
             [],  # Bcc
             headers={
@@ -124,10 +115,10 @@ def send_notify_mail(new_task):
     current_site = Site.objects.get_current()
     subject = render_to_string("todo/email/assigned_subject.txt", {"task": new_task})
     body = render_to_string(
-        "todo/email/assigned_body.txt", {"task": new_task, "site": current_site}
+        "todo/email/assigned_task.txt", {"task": new_task, "site": current_site, "user": new_task.created_by.user}
     )
 
-    recip_list = [new_task.assigned_to.email]
+    recip_list = [new_task.assigned_to.user.email]
     todo_send_mail(new_task.created_by, new_task, subject, body, recip_list)
 
 
@@ -139,9 +130,10 @@ def send_email_to_thread_participants(task, msg_body, user, subject=None):
     if not subject:
         subject = render_to_string("todo/email/assigned_subject.txt", {"task": task})
 
+    user_info = UserInfo.objects.filter(user=user).first()
     email_body = render_to_string(
         "todo/email/newcomment_body.txt",
-        {"task": task, "body": msg_body, "site": current_site, "user": user},
+        {"task": task, "body": msg_body, "site": current_site, "user_info": user_info},
     )
 
     # Get all thread participants

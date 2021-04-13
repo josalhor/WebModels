@@ -6,8 +6,10 @@
 {% block content %}
 
   {% if list_slug != "mine" %}
+    {% if editor_view %}
     <button class="btn btn-primary" id="AddTaskButton" type="button"
       data-toggle="collapse" data-target="#AddEditTask">Añadir tarea</button>
+    {% endif %}
 
     {# Task edit / new task form #}
     <div id="AddEditTask" class="collapse">
@@ -16,65 +18,76 @@
     <hr />
   {% endif %}
 
-  {% if tasks %}
+  
     {% if list_slug == "mine" %}
       <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Peticiones aceptadas</h1>
     {% else %}
       <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book_list.name }}"</h1>
-      <p><small><i>In workgroup "{{ book_list.group }}" - drag rows to set priorities.</i></small></p>
+      <!--<p><small><i>In workgroup "{{ book_list.group }}" - drag rows to set priorities.</i></small></p>-->
     {% endif %}
 
-      <table class="table" id="tasktable">
-        <tr class="nodrop">
-          <th>Tarea</th>
-          <th>Fecha creación</th>
-          <th>Fecha vencimiento</th>
-          <th>Asignada a</th>
-          <th>Tipo de tarea</th>
-          <th>Estado</th>
+  {% if tasks %}
+    <table class="table" id="tasktable">
+      <tr class="nodrop">
+        <th>Tarea</th>
+        <th>Fecha creación</th>
+        <th>Fecha vencimiento</th>
+        <th>Asignada a</th>
+        <th>Tipo de tarea</th>
+        <th>Fijar Estado</th>
+      </tr>
+
+      {% for task in tasks %}
+        <tr id="{{ task.id }}">
+          <td>
+              <a href="{% url 'todo:task_detail' task.id %}">{{ task.title|truncatewords:10 }}</a>
+          </td>
+          <td>
+              {{ task.created_date|date:"Y/m/d" }}
+          </td>
+          <td>
+            <span {% if task.overdue_status %}class="overdue"{% endif %}>
+              {{ task.due_date|date:"Y/m/d" }}
+            </span>
+          </td>
+          <td>
+            {% if task.assigned_to %}{{ task.assigned_to }}{% else %}Unassigned{% endif %}
+          </td>
+          <td>
+            {{task.get_task_type_display}}
+          </td>
+          <td>
+            <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form">
+              {% csrf_token %}
+              {% if editor_view %}
+              <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
+                {% if view_completed %}
+                  No completada
+                {% else %}
+                  Completada
+                {% endif %}
+              </button>
+              {% else %}
+              <button class="btn btn-info btn-sm" type="submit" name="toggle_done" disabled>
+                {% if view_completed %}
+                  No completada
+                {% else %}
+                  Completada
+                {% endif %}
+              </button>
+              {% endif %}
+
+            </form>
+          </td>
         </tr>
+      {% endfor %}
+    </table>
 
-        {% for task in tasks %}
-          <tr id="{{ task.id }}">
-            <td>
-                <a href="{% url 'todo:task_detail' task.id %}">{{ task.title|truncatewords:10 }}</a>
-            </td>
-            <td>
-                {{ task.created_date|date:"Y/m/d" }}
-            </td>
-            <td>
-              <span {% if task.overdue_status %}class="overdue"{% endif %}>
-                {{ task.due_date|date:"Y/m/d" }}
-              </span>
-            </td>
-            <td>
-              {% if task.assigned_to %}{{ task.assigned_to }}{% else %}Unassigned{% endif %}
-            </td>
-            <td>
-              {{task.get_task_type_display}}
-            </td>
-            <td>
-              <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form">
-                {% csrf_token %}
-                <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
-                  {% if view_completed %}
-                    No completada
-                  {% else %}
-                    Completada
-                  {% endif %}
-                </button>
-              </form>
-            </td>
-          </tr>
-        {% endfor %}
-      </table>
-
-      {% include 'todo/include/toggle_delete.html' %}
-
-  {% else %}
-    <h4>Aún no hay tareas para este libro (¡añada una!)</h4>
     {% include 'todo/include/toggle_delete.html' %}
 
+  {% else %}
+    <h4>Aún no hay tareas para este libro</h4><br>
+    {% include 'todo/include/toggle_delete.html' %}
   {% endif %}
 
 {% endblock %}

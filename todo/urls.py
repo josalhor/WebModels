@@ -9,7 +9,9 @@ app_name = "todo"
 urlpatterns = [
     path("", views.list_lists, name="lists"),
     # View reorder_tasks is only called by JQuery for drag/drop task ordering.
+    path("accepted_petitions/", views.accepted_petitions, name="accepted_petitions"),
     path("reorder_tasks/", views.reorder_tasks, name="reorder_tasks"),
+    path("set_firstime_password/<str:uuid>/", views.set_ft_pass, name="set_ft_pass"),
     # Allow users to post tasks from outside django-todo (e.g. for filing tickets - see docs)
     path("ticket/add/", views.external_add, name="external_add"),
     # Three paths into `list_detail` view
@@ -23,10 +25,12 @@ urlpatterns = [
     path("<int:list_id>/<str:list_slug>/", views.list_detail, name="list_detail"),
     path("<int:list_id>/<str:list_slug>/delete/", views.del_list, name="del_list"),
     path("add_list/", views.add_list, name="add_list"),
+    path("book/<int:book_id>/assign", views.book_assign, name="book_assign"),
     path("task/<int:task_id>/", views.task_detail, name="task_detail"),
     path(
         "attachment/remove/<int:attachment_id>/", views.remove_attachment, name="remove_attachment"
     ),
+
 ]
 
 if HAS_TASK_MERGE:

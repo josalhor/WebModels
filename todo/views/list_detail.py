@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from todo.forms import AddEditTaskForm
-from todo.models import Task, Book, Writer, Editor
+from todo.models import Task, Book, Writer, Editor, UserInfo
 from todo.utils import send_notify_mail, staff_check, user_can_read_book
 
 
@@ -18,8 +18,10 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
     # Defaults
     book_list = None
     form = None
+    editor_view = False
 
     editor = Editor.objects.filter(user=request.user).first()
+    if editor != None: editor_view = True
     # Which tasks to show on this list view?
     if list_slug == "mine":
         tasks = Task.objects.filter(assigned_to=request.user.user_info)
@@ -50,7 +52,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             new_task = form.save(commit=False)
             new_task.created_by = editor
             if new_task.task_type == Task.WRITING:
-                new_task.assigned_to = book_list.author
+                new_task.assigned_to = UserInfo.objects.filter(user=book_list.author.user).first()
             new_task.note = bleach.clean(form.cleaned_data["note"], strip=True)
             new_task.save()
 
@@ -61,7 +63,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             ):
                 send_notify_mail(new_task)
 
-            messages.success(request, 'New task "{t}" has been added.'.format(t=new_task.title))
+            messages.success(request, 'La nueva tarea "{t}" ha sido añadida.'.format(t=new_task.title))
             return redirect(request.path)
 
     else:
@@ -72,6 +74,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             )
     
     context = {
+        "editor_view": editor_view,
         "list_id": list_id,
         "list_slug": list_slug,
         "book_list": book_list,

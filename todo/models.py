@@ -15,13 +15,20 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from abc import ABC
-
+import uuid
 
 def get_attachment_upload_dir(instance, filename):
     """Determine upload dir for task attachment files.
     """
 
     return "/".join(["tasks", "attachments", str(instance.task.id), filename])
+
+
+def get_attachment_upload_dir_book(instance, filename):
+    """Determine upload dir for task attachment files.
+    """
+
+    return "/".join(["books", "attachments", str(instance.id), filename])
 
 
 class LockedAtomicTransaction(Atomic):
@@ -71,6 +78,8 @@ class UserInfo(models.Model):
         on_delete=models.CASCADE,
         related_name='user_info'
     )
+    reset_unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    used_reset = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.full_name)
@@ -123,10 +132,13 @@ class Reader(UserRole):
 class Book(models.Model):
     name = models.CharField(max_length=60, unique=True)
     slug = models.SlugField(default="", unique=True)
-    author = models.ForeignKey(Writer, null=True, blank=True, on_delete=models.RESTRICT, related_name='book_author')
+    author = models.ForeignKey(Writer, on_delete=models.RESTRICT, related_name='book_author')
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
     completed = models.BooleanField(default=False)
+    rejected = models.BooleanField(default=False)
     note = models.TextField()
+    # file can bee null for debugging purposes
+    file = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
 
     TYPE_SCARE = 'S'
     TYPE_ADVENTURE = 'A'
@@ -173,11 +185,12 @@ class Task(models.Model):
     created_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
+    notified_due_date = models.BooleanField(default=False)
     completed_date = models.DateField(blank=True, null=True)
     task_type = models.CharField(
         max_length=2,
         choices=TYPES_OF_TASK_CHOICES,
-        default=LAYOUT,
+        default=WRITING,
     )
     created_by = models.ForeignKey(
         Editor,

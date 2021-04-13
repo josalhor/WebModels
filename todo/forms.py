@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-from todo.models import Task, Book, UserInfo
+from todo.models import Task, Book, UserInfo, Editor
+from django.contrib.auth import password_validation
+from django.core.exceptions import ValidationError
 
 
 class AddBookForm(ModelForm):
@@ -16,7 +18,7 @@ class AddBookForm(ModelForm):
 
     class Meta:
         model = Book
-        exclude = ["created_date", "slug", "author", "editor", "completed"]
+        exclude = ["created_date", "slug", "author", "editor", "completed", "file"]
 
 
 class AddEditTaskForm(ModelForm):
@@ -35,8 +37,6 @@ class AddEditTaskForm(ModelForm):
     note = forms.CharField(widget=forms.Textarea(), required=False)
 
     def clean_created_by(self):
-        """Keep the existing created_by regardless of anything coming from the submitted form.
-        If creating a new task, then created_by will be None, but we set it before saving."""
         return self.instance.created_by
 
     class Meta:
@@ -44,14 +44,7 @@ class AddEditTaskForm(ModelForm):
         exclude = ["assigned_to", "created_date"]
 
 
-class AddExternalTaskForm(ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-
-    # title = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}), label="Summary")
-    # note = forms.CharField(widget=forms.widgets.Textarea(), label="Problem Description")
-    # priority = forms.IntegerField(widget=forms.HiddenInput())
-
+class AddExternalBookForm(ModelForm):
     class Meta:
         model = UserInfo
         exclude = (
@@ -61,3 +54,15 @@ class AddExternalTaskForm(ModelForm):
 
 class SearchForm(forms.Form):
     q = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}))
+
+class AssignForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["editor"].widget.attrs = {
+            #"id": "id_thematic",
+            "class": "custom-select mb-3",
+            #"name": "thematic",
+        }
+        self.fields["editor"].label = ""
+
+    editor = forms.ModelChoiceField(queryset=Editor.objects.all())

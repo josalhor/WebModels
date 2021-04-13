@@ -8,3 +8,20 @@ label {
 	color:black;
 	margin-top: 40px;
 }
+
+.transparent-button {
+    background-color: transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.cross-button:hover > .cross{ 
+    color: red;
+}
+
+.btn-danger {
+    margin-left: 25%;
+}

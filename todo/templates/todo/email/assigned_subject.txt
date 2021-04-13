@@ -1,1 +1,1 @@
-A new task has been assigned to you - {% autoescape off %}{{ task.title }}{% endautoescape %}
+Un nuevo libro ha sido añadido - {% autoescape off %}{{ title }}{% endautoescape %}

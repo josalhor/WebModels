@@ -1,17 +1,12 @@
-{{ task.assigned_to.first_name }} -
+Un nuevo libro ha sido añadido por {{ from_name }}:
 
-A new task on the list {{ task.book_list.name }} has been assigned to you by {{ task.created_by.get_full_name }}:
+{{ book.name }}
 
-{{ task.title }}
-
-{% if task.note %}
+{% if book.note %}
 {% autoescape off %}
-Note: {{ task.note }}
+Nota: {{ book.note }}
 {% endautoescape %}
 {% endif %}
 
-Task details/comments:
-http://{{ site }}{% url 'todo:task_detail' task.id %}
-
-List {{ task.book_list.name }}:
-http://{{ site }}{% url 'todo:list_detail' task.book_list.id task.book_list.slug %}
+Página de asignamiento:
+http://{{ site }}{% url 'todo:book_assign' book.id %}
