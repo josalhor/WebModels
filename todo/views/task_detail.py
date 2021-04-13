@@ -49,7 +49,7 @@ def handle_add_comment(request, task):
 def task_detail(request, task_id: int) -> HttpResponse:
     """View task details. Allow task details to be edited. Process new comments on task.
     """
-    editor = editor = Editor.objects.filter(user=request.user).first()
+    editor = Editor.objects.filter(user=request.user).first()
     editor_view = False
     if editor != None: editor_view = True
     

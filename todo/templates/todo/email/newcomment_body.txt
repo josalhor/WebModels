@@ -1,7 +1,7 @@
 Un nuevo comentario ha sido añadido.
 
 Tarea: {{ task.title }}
-Autor del comentario: {{ user.full_name }}
+Autor del comentario: {{ user_info.full_name }}
 
 Comentario:
 {% autoescape off %}

@@ -1,4 +1,5 @@
 {% extends "todo/base.html" %}
+{% load todo_tags %}
 
 {% block title %}Task:{{ task.title }}{% endblock %}
 
@@ -142,7 +143,7 @@
                 <tr>
                   <td><a href="{{ attachment.file.url }}">{{ attachment.filename }}</a></td>
                   <td>{{ attachment.timestamp }}</td>
-                  <td>{{ attachment.added_by }}</td>
+                  <td>{{ attachment.added_by|get_full_name }}</td>
                   <td>{{ attachment.extension.lower }}</td>
                   <td>
                     {% if attachment.added_by == user %}

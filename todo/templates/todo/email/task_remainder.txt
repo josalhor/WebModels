@@ -1,0 +1,4 @@
+La tarea {{ task.title }} está a punto de finalizar.
+
+Detalles de la tarea/comentarios:
+https://{{ site }}{% url 'todo:task_detail' task.id %}

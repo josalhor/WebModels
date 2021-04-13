@@ -9,7 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Task, Writer, Editor
+from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo
 
 log = logging.getLogger(__name__)
 
@@ -130,9 +130,10 @@ def send_email_to_thread_participants(task, msg_body, user, subject=None):
     if not subject:
         subject = render_to_string("todo/email/assigned_subject.txt", {"task": task})
 
+    user_info = UserInfo.objects.filter(user=user).first()
     email_body = render_to_string(
         "todo/email/newcomment_body.txt",
-        {"task": task, "body": msg_body, "site": current_site, "user": user},
+        {"task": task, "body": msg_body, "site": current_site, "user_info": user_info},
     )
 
     # Get all thread participants
