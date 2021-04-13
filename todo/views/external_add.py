@@ -36,7 +36,7 @@ def external_add(request) -> HttpResponse:
                 user_info = form.save(commit=False)
                 user_info.user = user
                 user_info.save()
-            writer, writer_already_existed = Writer.objects.update_or_create(user=user)
+            writer, created_writer = Writer.objects.update_or_create(user=user)
 
 
             book = form_book.save(commit=False)
@@ -96,7 +96,7 @@ def external_add(request) -> HttpResponse:
                 )
                 ######### Send email to reset password to author
 
-                if not writer_already_existed:
+                if created_writer:
                     send_mail(
                         "Set Password",
                         body_password,
