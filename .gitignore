@@ -254,7 +254,7 @@ pip-selfcheck.json
 .ionide
 
 ### vscode ###
-!.vscode/settings.json
-!.vscode/extensions.json
+.vscode/settings.json
+.vscode/extensions.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,venv,vscode,visualstudiocode

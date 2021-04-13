@@ -13,7 +13,7 @@ from todo.defaults import defaults
 from todo.forms import AddExternalBookForm, AddBookForm
 from todo.models import Book, Editor, Writer, UserInfo
 from todo.utils import staff_check
-
+import os
 
 @user_passes_test(staff_check)
 def external_add(request) -> HttpResponse:
@@ -36,29 +36,30 @@ def external_add(request) -> HttpResponse:
                 user_info = form.save(commit=False)
                 user_info.user = user
                 user_info.save()
-            writer, _ = Writer.objects.update_or_create(user=user)
+            writer, created_writer = Writer.objects.update_or_create(user=user)
 
 
             book = form_book.save(commit=False)
 
             # Handle uploaded files
-            if request.POST.get("attachment_file_input"):
-                file = request.POST.get("attachment_file_input")
+            print(request.FILES, request.POST)
+            if request.FILES.get("attachment_file_input"):
+                file = request.FILES.get("attachment_file_input")
 
-                #if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
-                    #messages.error(request, f"File exceeds maximum attachment size.")
-                    #return redirect("todo:external_add")
+                if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
+                    messages.error(request, f"File exceeds maximum attachment size.")
+                    return redirect("todo:external_add")
 
-                #name, extension = os.path.splitext(file.name)
+                name, extension = os.path.splitext(file.name)
 
-                #if extension not in defaults("TODO_LIMIT_FILE_ATTACHMENTS"):
-                    #messages.error(request, f"This site does not allow upload of {extension} files.")
-                    #return redirect("todo:external_add")
+                if extension not in defaults("TODO_LIMIT_FILE_ATTACHMENTS"):
+                    messages.error(request, f"This site does not allow upload of {extension} files.")
+                    return redirect("todo:external_add")
 
                 book.file = file
 
             else:
-                messages.error(request, f"You must attach your book.")
+                messages.error(request, f"Debes adjuntar un libro.")
                 return redirect("todo:external_add")
 
             book.author = writer
@@ -66,7 +67,7 @@ def external_add(request) -> HttpResponse:
 
 
             messages.success(
-                request, "El teu llibre s'ha enviat. Ens possarem amb contacte amb tu aviat."
+                request, "Su libro se ha enviado. Nos pondremos en contacto con usted pronto."
             )
 
 
@@ -95,13 +96,14 @@ def external_add(request) -> HttpResponse:
                 )
                 ######### Send email to reset password to author
 
-                send_mail(
-                    "Set Password",
-                    body_password,
-                    None,
-                    [email],
-                    fail_silently=False,
-                )
+                if created_writer:
+                    send_mail(
+                        "Set Password",
+                        body_password,
+                        None,
+                        [email],
+                        fail_silently=False,
+                    )
             except ConnectionRefusedError:
                 messages.warning(
                     request, "Error en gestión del libro. Contacte con el administrador."
