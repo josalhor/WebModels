@@ -4,20 +4,6 @@
 {% block title %}Todo List: {{ book_list.name }}{% endblock %}
 
 {% block content %}
-
-  {% if list_slug != "mine" %}
-    {% if editor_view %}
-    <button class="btn btn-primary" id="AddTaskButton" type="button"
-      data-toggle="collapse" data-target="#AddEditTask">Añadir tarea</button>
-    {% endif %}
-
-    {# Task edit / new task form #}
-    <div id="AddEditTask" class="collapse">
-      {% include 'todo/include/task_edit.html' %}
-    </div>
-    <hr />
-  {% endif %}
-
   
     {% if list_slug == "mine" %}
       <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Peticiones aceptadas</h1>
@@ -90,6 +76,20 @@
     {% include 'todo/include/toggle_delete.html' %}
   {% endif %}
 
+  {% if list_slug != "mine" %}
+    {% if editor_view %}
+    <button class="btn btn-primary" id="AddTaskButton" type="button"
+      data-toggle="collapse" data-target="#AddEditTask">Añadir tarea</button>
+    {% endif %}
+
+    {# Task edit / new task form #}
+    <div id="AddEditTask" class="collapse">
+      {% include 'todo/include/task_edit.html' %}
+    </div>
+    <hr />
+  {% endif %}
+
+
 {% endblock %}
 
 {% block extra_js %}
@@ -120,7 +120,7 @@
     function handleClick()
     {
         console.log(this.innerHTML);
-        this.innerHTML = (this.innerHTML == 'Añadir tarea' ? 'Cancelar' : 'Añadir tarea');
+        this.innerHTML = (this.innerHTML == 'Añadir tarea' ? 'Ocultar formulario' : 'Añadir tarea');
     }
     document.getElementById('AddTaskButton').onclick=handleClick;
   </script>

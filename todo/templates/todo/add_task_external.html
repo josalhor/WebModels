@@ -6,79 +6,71 @@
 
   <h2>{{ task }}</h2>
 
-  <form action="" method="POST">
-    {% csrf_token %}
+  <h3 class="bar-text">¿Quieres publicar tu obra?</h3>
+  <p>
+    En Bookiernes S.A. nos especializamos en la edición y distribución de calidad. Rellene el siguiente formulario y su libro será revisado por uno de nuestros editores.
+    Consulte nuestra <a href="/">Política de privacidad</a>.
+  </p>
 
-    <h3 class="bar-text">¿Quieres publicar tu obra?</h3>
-    <p>
-      En Bookiernes S.A. nos especializamos en la edición y distribución de calidad. Rellene el siguiente formulario y su libro será revisado por uno de nuestros editores.
-      Consulte nuestra <a href="/">Política de privacidad</a>.
-    </p>
+  {% if form.errors %}
+    {% for error in form.errors %}
+      <ul class="errorlist">
+        <li>
+          <strong>The {{ error|escape }} field is required.</strong>
+        </li>
+      </ul>
+    {% endfor %}
+  {% endif %}
 
-    {% if form.errors %}
-      {% for error in form.errors %}
-        <ul class="errorlist">
-          <li>
-            <strong>The {{ error|escape }} field is required.</strong>
-          </li>
-        </ul>
-      {% endfor %}
-    {% endif %}
-
-    <form action="" name="add_task" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-          <label for="id_full_name" name="full_name">Nombre completo</label>
-          <input type="text" class="form-control" id="id_full_name" name="full_name" required placeholder="Introduzca su nombre completo"
-            value="{% if form.full_name.value %}{{ form.full_name.value }}{% endif %}">
-        </div>
-        <div class="form-group">
-          <label for="id_email" name="email">Email</label>
-          <input type="email" class="form-control" id="id_email" name="email" required placeholder="algo@gmail.com">
-        </div>
-        <div class="form-group">
-          <label for="id_name" name="name">Título</label>
-          <input type="text" class="form-control" id="id_name" name="name" required placeholder="Título de su obra"
-            value="{% if form_book.name.value %}{{ form_book.name.value }}{% endif %}">
-        </div>
-        <div class="form-group">
-          <label for="id_note">Descripción</label>
-          <textarea class="form-control" id="id_note" name="note" rows="5"
-            aria-describedby="inputNoteHelp">{% if form_book.note.value %}{{ form_book.note.value }}{% endif %}</textarea>
-          <small id="inputNoteHelp" class="form_book-text text-muted">
-            Añada la sinopsis del libro o cualquier comentario que considere relevante.
-          </small>
-        </div>
-        
-        <div class="form-task-type">
-          <label for="thematic">Temática</label>
-          {{form_book.thematic}}
-        </div>
-
-        <div class="form-task-type">
-          <label for="thematic">Adjunta tu libro</label>
-          <div class="card-body pb-0">
-            <form method="POST" action="" enctype="multipart/form-data" style="width:50%;">
-              {% csrf_token %}
-              <div class="input-group mb-3">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="attachment_file_input" name="attachment_file_input" />
-                  <label class="custom-file-label" for="attachment_file_input">Seleccione un archivo...</label>
-                </div>
-              </div>
-            </form>
+  <form action="" name="add_task" enctype="multipart/form-data" method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="id_full_name" name="full_name">Nombre completo</label>
+        <input type="text" class="form-control" id="id_full_name" name="full_name" required placeholder="Introduzca su nombre completo"
+          value="{% if form.full_name.value %}{{ form.full_name.value }}{% endif %}">
+      </div>
+      <div class="form-group">
+        <label for="id_email" name="email">Email</label>
+        <input type="email" class="form-control" id="id_email" name="email" required placeholder="algo@gmail.com">
+      </div>
+      <div class="form-group">
+        <label for="id_name" name="name">Título</label>
+        <input type="text" class="form-control" id="id_name" name="name" required placeholder="Título de su obra"
+          value="{% if form_book.name.value %}{{ form_book.name.value }}{% endif %}">
+      </div>
+      <div class="form-group">
+        <label for="id_note">Descripción</label>
+        <textarea class="form-control" id="id_note" name="note" rows="5"
+          aria-describedby="inputNoteHelp">{% if form_book.note.value %}{{ form_book.note.value }}{% endif %}</textarea>
+        <small id="inputNoteHelp" class="form_book-text text-muted">
+          Añada la sinopsis del libro o cualquier comentario que considere relevante.
+        </small>
+      </div>
       
-          </div>
+      <div class="form-task-type">
+        <label for="thematic">Temática</label>
+        {{form_book.thematic}}
+      </div>
 
-             
-        <div class="form-task-type">
-          <input type="checkbox" name="policy" value="Accepted" required>
-          <label style="display: inline;" for="policy"> Al enviar este formulario acepto la <a href="/">Política de privacidad</a> y las <a href="/">Condiciones de uso</a> </label><br><br>
-        </div>
-    
-        <input type="hidden" id="id_priority" name="priority" value="50">
-        <p><input type="submit" class="btn btn-primary" name="add_task" value="Enviar"></p>
-    </form>
+      <div class="form-task-type">
+        <label for="thematic">Adjunta tu libro</label>
+          <div class="input-group mb-3">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="attachment_file_input" name="attachment_file_input" />
+              <label class="custom-file-label" for="attachment_file_input">Seleccione un archivo...</label>
+            </div>
+          </div>
+      </div>
+
+            
+      <div class="form-task-type">
+        <input type="checkbox" name="policy" value="Accepted" required>
+        <label style="display: inline;" for="policy"> Al enviar este formulario acepto la <a href="/">Política de privacidad</a> y las <a href="/">Condiciones de uso</a> </label><br><br>
+      </div>
+  
+      <input type="hidden" id="id_priority" name="priority" value="50">
+      <p><input type="submit" class="btn btn-primary" name="add_task" value="Enviar"></p>
+  </form>
 
 {% endblock %}
 

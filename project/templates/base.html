@@ -48,7 +48,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
-              {% if user|is_chief_editor %} 
+              {% if user|can_see_not_accepted %} 
               <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones</a></li>
               {% endif %}
             <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Peticiones aceptadas</a></li>
