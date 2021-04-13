@@ -8,7 +8,10 @@
     {% if list_slug == "mine" %}
       <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Peticiones aceptadas</h1>
     {% else %}
-      <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book_list.name }}"</h1>
+      <div style="display:flex; justify-content: space-between;">
+        <div><h1 style="font-family: 'BebasNeueRegular';">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book_list.name }}"</h1></div>
+        <div>{% include 'todo/include/toggle_delete.html' %}</div> 
+      </div>
       <!--<p><small><i>In workgroup "{{ book_list.group }}" - drag rows to set priorities.</i></small></p>-->
     {% endif %}
 
@@ -37,7 +40,7 @@
             </span>
           </td>
           <td>
-            {% if task.assigned_to %}{{ task.assigned_to }}{% else %}Unassigned{% endif %}
+            {% if task.assigned_to %}{{ task.assigned_to }}{% else %}No asignada{% endif %}
           </td>
           <td>
             {{task.get_task_type_display}}
@@ -54,13 +57,13 @@
                 {% endif %}
               </button>
               {% else %}
-              <button class="btn btn-info btn-sm" type="submit" name="toggle_done" disabled>
-                {% if view_completed %}
-                  No completada
-                {% else %}
-                  Completada
-                {% endif %}
-              </button>
+                <button class="btn btn-info btn-sm" type="submit" name="toggle_done" disabled>
+                  {% if view_completed %}
+                    No completada
+                  {% else %}
+                    Completada
+                  {% endif %}
+                </button>
               {% endif %}
 
             </form>
@@ -69,24 +72,22 @@
       {% endfor %}
     </table>
 
-    {% include 'todo/include/toggle_delete.html' %}
-
   {% else %}
     <h4>Aún no hay tareas para este libro</h4><br>
-    {% include 'todo/include/toggle_delete.html' %}
   {% endif %}
 
   {% if list_slug != "mine" %}
     {% if editor_view %}
-    <button class="btn btn-primary" id="AddTaskButton" type="button"
-      data-toggle="collapse" data-target="#AddEditTask">Añadir tarea</button>
+    <br>
+    <div style="display: flex;"></div><button style="float: right; width: 18%;" class="btn btn-primary" id="AddTaskButton" type="button"
+      data-toggle="collapse" data-target="#AddEditTask">Añadir tarea</button></div>
+      <br>
     {% endif %}
 
     {# Task edit / new task form #}
     <div id="AddEditTask" class="collapse">
       {% include 'todo/include/task_edit.html' %}
     </div>
-    <hr />
   {% endif %}
 
 
