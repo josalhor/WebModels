@@ -23,7 +23,11 @@
         <th>Fecha vencimiento</th>
         <th>Asignada a</th>
         <th>Tipo de tarea</th>
-        <th>Fijar Estado</th>
+        {% if editor_view %}
+          <th>Fijar Estado</th>
+        {% else %}
+          <th>Estado</th>
+        {% endif %}
       </tr>
 
       {% for task in tasks %}
@@ -46,27 +50,23 @@
             {{task.get_task_type_display}}
           </td>
           <td>
+            {% if editor_view %}
             <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form">
               {% csrf_token %}
-              {% if editor_view %}
               <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
-                {% if view_completed %}
-                  No completada
-                {% else %}
-                  Completada
-                {% endif %}
-              </button>
-              {% else %}
-                <button class="btn btn-info btn-sm" type="submit" name="toggle_done" disabled>
-                  {% if view_completed %}
-                    No completada
-                  {% else %}
-                    Completada
-                  {% endif %}
-                </button>
-              {% endif %}
+            {% endif %}
 
+            {% if view_completed %}
+              No completada
+            {% else %}
+              Completada
+            {% endif %}
+
+            {% if editor_view %}
+              </button>
             </form>
+            {% endif %}
+
           </td>
         </tr>
       {% endfor %}
@@ -74,6 +74,14 @@
 
   {% else %}
     <h4>Aún no hay tareas para este libro</h4><br>
+  {% endif %}
+  
+  {% if book_list.file %}
+  <h5>
+    <a href="{{ book_list.file.url }}" download>
+      <divclass="btn" style="width:100%"><i class="fa fa-download"></i>   Descargar versión original del libro</div>
+    </a>
+  </h5>
   {% endif %}
 
   {% if list_slug != "mine" %}
