@@ -19,6 +19,7 @@ from todo.features import HAS_TASK_MERGE
 from todo.forms import AddEditTaskForm
 from todo.models import Attachment, Comment, Task, Editor
 from todo.utils import (
+    send_email_to_thread_participants,
     get_thread_participants,
     staff_check,
     toggle_task_completed,

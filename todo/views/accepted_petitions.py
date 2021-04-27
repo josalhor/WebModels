@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render
+from .book_assign import send_email_reject_book
 
 from todo.forms import SearchForm
 from todo.models import Task, Book, Editor, Writer
@@ -42,6 +43,8 @@ def accepted_petitions(request) -> HttpResponse:
         book.editor = None
         book.rejected = True
         book.save()
+
+        send_email_reject_book(book, reasons=request.POST['reasons'])
 
         messages.success(request, "La petición correspondiente al libro '{}' ha sido eliminada de su lista de peticiones aceptadas.".format(book.name))
 

@@ -19,7 +19,8 @@
         {% if editor_view %}
           <form method="post" action="{% url "todo:accepted_petitions" %}" role="form" class="d-inline">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-sm" name="delete-book" value='{{ task.name }}' onclick="return confirm('¿Está seguro/a que desea rechazar la propuesta de edición?');"><i class="fa fa-trash"></i></button>
+            <input type="hidden" name="reasons" id="motivo" value=""/>
+            <button type="submit" class="btn btn-danger btn-sm" name="delete-book" value='{{ task.name }}' onclick="rejectPetition(this.form)"><i class="fa fa-trash"></i></button>
           </form>
         {% endif %}
 
@@ -29,6 +30,18 @@
   {% endfor %}
 
   <script>
+    function rejectPetition(formToPost) {
+        console.log("no està arribant aquí");
+        formToPost.editor.selectedIndex = 0;
+        hideOrShowBtn();
+        var minlength = 1;
+        var motivo;
+        do{
+          motivo = prompt("¿Está seguro/a que quiere rechazar la propuesta de edición? MOTIVO:");
+        } while(motivo === null || motivo === "" || motivo.length < minlength) 
+        formToPost.getElementById("motivo").value = motivo;
+        formToPost.submit();
+      }
     document.getElementById("peticiones-acc").style.borderBottom = "4px solid rgb(133, 5, 5)";
   </script>
   

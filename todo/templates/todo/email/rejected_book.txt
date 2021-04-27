@@ -1,4 +1,4 @@
-Buenos días,
+Lo sentimos,
 
 El libro {{ book.name }} ha sido rechazado por Bookiernes S.A.
 

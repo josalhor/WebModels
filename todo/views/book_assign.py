@@ -74,7 +74,7 @@ def book_assign(request, book_id: int) -> HttpResponse:
             book.rejected = True
             book.save()
 
-            send_email_reject_book(book, reasons="TODO FILL MOTIVOS")
+            send_email_reject_book(book, reasons=request.POST['reasons'])
             
         return redirect("todo:accepted_petitions")
     
