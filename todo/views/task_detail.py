@@ -149,11 +149,15 @@ def task_detail(request, task_id: int) -> HttpResponse:
             {"task": task, "site": Site.objects.get_current(), "user_info": request.user.user_info},
         )
 
-        get_thread_participants(task)
+        recipients = get_thread_participants(task)
 
-        send_email_to_thread_participants(task, email_body, request.user, subject="Nuevo archivo adjunto")
-
-        send_mail()
+        send_mail(
+            'Nuevo archivo adjunto',
+            email_body,
+            None,
+            recipients,
+            fail_silently=False,
+        )
 
         return redirect("todo:task_detail", task_id=task.id)
 

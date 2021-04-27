@@ -36,6 +36,7 @@
     <form action="" name="book_assign" method="post">
         {% csrf_token %}
         
+        <input type="text" id="reasons" style="visibility:hidden;" value="">
         <div class="form-task-type">
           <button onclick="rejectPetition(this.form)" class="cross-button transparent-button" style="padding-left: 0px;"><i class="cross fa fa-times-circle fa-3x" style="vertical-align: middle;"></i><b>&nbsp&nbsp RECHAZAR PROPUESTA</b></button><br><br><br><br>
           <div><i class="fa fa-chevron-circle-right fa-3x" style="color:lightskyblue; vertical-align: middle;"></i><b>&nbsp&nbsp ASIGNAR A: </b><div style="display: inline-block;"> {{assign_form}}</div></div><br>
@@ -53,7 +54,9 @@
         do{
           motivo = prompt("¿Está seguro/a que quiere rechazar la propuesta de edición? MOTIVO:");
           // TODO 
-        } while(motivo !== null && motivo === "" || motivo.length < minlength) 
+        } while(motivo !== null && motivo === "" || motivo.length < minlength);
+        
+        document.getElementById('reasons').value = motivo;
         formToPost.submit();
       }
 

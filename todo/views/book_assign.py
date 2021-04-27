@@ -50,6 +50,7 @@ def book_assign(request, book_id: int) -> HttpResponse:
         raise PermissionDenied
 
     if request.POST:
+        print(request.POST)
         form = AssignForm(request.POST)
         if form.is_valid():
             book.editor = Editor.objects.filter(id=request.POST['editor']).first()
