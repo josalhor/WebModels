@@ -1,8 +1,8 @@
 ¡Buenas notícias!
 
-El libro {{ book.name }} escrito por {{ author.name }} ha sido aceptado por Bookiernes S.A.
+El libro {{ book.name }} escrito por {{ author.full_name }} ha sido aceptado por Bookiernes S.A.
 
-Se ha asignado el editor {{ editor.name }}:
+Se ha asignado el editor {{ editor.full_name }}:
 
 Página de asignamiento:
 http://{{ site }}{% url 'todo:accepted_petitions' %}
