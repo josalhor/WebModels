@@ -19,7 +19,7 @@ from todo.features import HAS_TASK_MERGE
 from todo.forms import AddEditTaskForm
 from todo.models import Attachment, Comment, Task, Editor
 from todo.utils import (
-    send_email_to_thread_participants,
+    get_thread_participants,
     staff_check,
     toggle_task_completed,
     user_can_read_task,
@@ -149,7 +149,11 @@ def task_detail(request, task_id: int) -> HttpResponse:
             {"task": task, "site": Site.objects.get_current(), "user_info": request.user.user_info},
         )
 
+        get_thread_participants(task)
+
         send_email_to_thread_participants(task, email_body, request.user, subject="Nuevo archivo adjunto")
+
+        send_mail()
 
         return redirect("todo:task_detail", task_id=task.id)
 

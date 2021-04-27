@@ -81,9 +81,17 @@ def external_add(request) -> HttpResponse:
                 "todo/email/assigned_body.txt", {"site": current_site.domain, "book": book, "from_name": user_info.full_name}
             )
             uid = user_info.reset_unique_id
-            body_password = render_to_string(
-                "todo/email/setpassword.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
-            )
+
+            if created_writer:
+                writer_body = render_to_string(
+                    "todo/email/setpassword.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
+                )
+                writer_subject = "Set Password"
+            else:
+                writer_body = render_to_string(
+                    "todo/email/new_book_no_password.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
+                )
+                writer_subject = "Libro recibido"
 
             try:
                 ######### Send email to editors
@@ -94,16 +102,15 @@ def external_add(request) -> HttpResponse:
                     mails,
                     fail_silently=False,
                 )
-                ######### Send email to reset password to author
+                ######### Send email to author
 
-                if created_writer:
-                    send_mail(
-                        "Set Password",
-                        body_password,
-                        None,
-                        [email],
-                        fail_silently=False,
-                    )
+                send_mail(
+                    writer_subject,
+                    writer_body,
+                    None,
+                    [email],
+                    fail_silently=False,
+                )
             except ConnectionRefusedError:
                 messages.warning(
                     request, "Error en gestión del libro. Contacte con el administrador."
