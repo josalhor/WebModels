@@ -10,6 +10,9 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
+from django.core.mail import send_mail
 
 from todo.defaults import defaults
 from todo.features import HAS_TASK_MERGE
@@ -139,6 +142,15 @@ def task_detail(request, task_id: int) -> HttpResponse:
             task=task, added_by=request.user, timestamp=datetime.datetime.now(), file=file
         )
         messages.success(request, f"Archivo correctamente adjuntado")
+
+        # Send mail new attachment
+        email_body = render_to_string(
+            "todo/email/new_attachment.txt",
+            {"task": task, "site": Site.objects.get_current(), "user_info": request.user.user_info},
+        )
+
+        send_email_to_thread_participants(task, email_body, request.user, subject="Nuevo archivo adjunto")
+
         return redirect("todo:task_detail", task_id=task.id)
 
 

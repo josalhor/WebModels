@@ -6,9 +6,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         User = get_user_model()
-        u = User.objects.create_superuser('admin@g.com', 'pass')
+        u = User.objects.create_superuser('josep@g.com', 'pass')
         UserInfo.objects.create(
-            full_name="SuperAdminEditor",
+            full_name="JosepAdminEditor",
             user=u
         )
         e = Editor.objects.create(
@@ -16,9 +16,9 @@ class Command(BaseCommand):
             chief=True
         )
 
-        u = User.objects.create_user('basic@g.com', 'pass')
+        u = User.objects.create_user('anna@g.com', 'pass')
         UserInfo.objects.create(
-            full_name="BasicEditor",
+            full_name="AnnaEditor",
             user=u
         )
         e = Editor.objects.create(
@@ -41,9 +41,9 @@ class Command(BaseCommand):
             thematic='S'
         )
 
-        u = User.objects.create_user('chief@g.com', 'pass')
+        u = User.objects.create_user('balma@g.com', 'pass')
         UserInfo.objects.create(
-            full_name="ChiefEditor",
+            full_name="BalmaChiefEditor",
             user=u
         )
 

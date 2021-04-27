@@ -1,0 +1,7 @@
+Un nuevo fichero ha sido añadido.
+
+Tarea: {{ task.title }}
+Autor del fichero: {{ user_info.full_name }}
+
+Detalles de la tarea:
+https://{{ site }}{% url 'todo:task_detail' task.id %}

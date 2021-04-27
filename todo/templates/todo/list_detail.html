@@ -23,11 +23,7 @@
         <th>Fecha vencimiento</th>
         <th>Asignada a</th>
         <th>Tipo de tarea</th>
-        {% if editor_view %}
-          <th>Fijar Estado</th>
-        {% else %}
-          <th>Estado</th>
-        {% endif %}
+        <th>Estado</th>
       </tr>
 
       {% for task in tasks %}
@@ -50,23 +46,11 @@
             {{task.get_task_type_display}}
           </td>
           <td>
-            {% if editor_view %}
-            <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form">
-              {% csrf_token %}
-              <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
-            {% endif %}
-
             {% if view_completed %}
-              No completada
-            {% else %}
               Completada
+            {% else %}
+              No completada
             {% endif %}
-
-            {% if editor_view %}
-              </button>
-            </form>
-            {% endif %}
-
           </td>
         </tr>
       {% endfor %}

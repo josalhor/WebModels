@@ -16,7 +16,6 @@ from todo.utils import staff_check
 def list_lists(request) -> HttpResponse:
 
     editor = Editor.objects.filter(user=request.user).first()
-    writer = Writer.objects.filter(user=request.user).first()
 
     if editor:
         lists = Book.objects.filter(editor=None, rejected=False).order_by("name")
@@ -26,13 +25,8 @@ def list_lists(request) -> HttpResponse:
         lists = Book.objects.filter(editor=None, rejected=False, author__in=author).order_by("name")
         list_count = lists.count()
 
-    
-    # if not editor or not editor.chief:
-    #    raise PermissionDenied
-
     thedate = datetime.datetime.now()
     searchform = SearchForm(auto_id=False)  
-
 
     context = {
         "lists": lists,
