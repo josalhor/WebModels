@@ -35,19 +35,19 @@ def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()
     editor = Editor.objects.filter(user=user).first()
     return (author != None and book.author == author) or \
-           (editor != None and (book.editor == editor or editor.chief)) or \
+           (editor != None and (book.editor == editor or editor.chief))
            
-def user_can_design_book(book, user):
+def user_can_design_book(book, task, user):
     editor = Editor.objects.filter(user=user).first()
     designer = Designer.objects.filter(user=user).first()
     return (editor != None and (book.editor == editor or editor.chief)) or \
-           (designer != None and (book.designer == designer or designer.chief))
+           (designer != None and (task.designer == designer or designer.chief))
 
 def user_can_read_task(task, user):
     if task.task_type == task.WRITING:
         return user_can_read_book(task.book_list, user)
     elif task.task_type == task.ILLUSTRATION or task.task_type == task.LAYOUT:
-        return user_can_design_book(task.book_list, user)
+        return user_can_design_book(task.book_list, task, user)
     raise NotImplementedError('')
 
 
