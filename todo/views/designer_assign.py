@@ -24,22 +24,10 @@ from todo.utils import (
     user_can_read_task,
 )
 
-"""def send_email_reject_book(book, reasons):
-    email_body = render_to_string(
-        "todo/email/rejected_book.txt", {"book": book, "reasons": reasons}
-    )
-
-    send_mail(
-        "Libro rechazado",
-        email_body,
-        None,
-        [book.author.user.email],
-        fail_silently=False,
-    )"""
 
 @login_required
 def designer_assign(request, task_id: int) -> HttpResponse:
-    task = get_object_or_404(Book, pk=task_id)
+    task = get_object_or_404(Task, pk=task_id)
     type_task = dict(Task.TYPES_OF_TASK_CHOICES)[task.task_type]
     user_email = request.user
     designer = Designer.objects.filter(user=user_email).first()
@@ -69,13 +57,10 @@ def designer_assign(request, task_id: int) -> HttpResponse:
                 [book.editor.user.email, book.author.user.email],
                 fail_silently=False,
             )"""
-        else:
-            messages.success(request, "La propuesta de ilustracion ha sido correctamente rechazada.")
-
-            """send_email_reject_book(book, reasons=request.POST['reasons'])"""
             
         return redirect("todo:accepted_petitions")
     
+
     context = {
         'designer_view': designer_view,
         'type_task': type_task,
