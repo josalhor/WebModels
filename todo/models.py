@@ -179,8 +179,7 @@ class PublishedBook(models.Model):
         on_delete=models.CASCADE,
     )
 
-    publication_date = models.DateTimeField()
-    publication_date = timezone.now().strftime("%d/%m/%Y")
+    publication_date = models.DateField(auto_now_add=True)
     final_version = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
     related_image = models.ImageField(upload_to=get_attachment_upload_dir_book, null=True, blank=True)
 

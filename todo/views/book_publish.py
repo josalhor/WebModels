@@ -65,6 +65,7 @@ def book_publish(request, book_id: int) -> HttpResponse:
             published_book.book.title = request.POST.get("title")
             published_book.book.note = request.POST.get("note")
             published_book.book.save()
+            published_book.save()
 
             messages.success(request, "¡Enhorabuena! El libro ha sido publicado correctamente.")
             
