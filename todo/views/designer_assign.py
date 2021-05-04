@@ -41,11 +41,11 @@ def designer_assign(request, task_id: int) -> HttpResponse:
         print(request.POST)
         form = AssignFormDesigner(request.POST)
         if form.is_valid():
-            task.assigned_to = Designer.objects.filter(id=request.POST['designer']).first()
+            task.assigned_to = UserInfo.objects.filter(user=task.assigned_to).first()
             task.save()
             messages.success(request, "La propuesta de ilustracion ha sido correctamente asignada.")
-            editor_user_info = UserInfo.objects.filter(user=task.created_by.user).first()
-            designer_user_info = UserInfo.objects.filter(user=task.assigned_to.user).first()
+            designer_user_info = UserInfo.objects.filter(user=task.assigned_to).first()
+            editor_user_info = task.created_by
             email_body = render_to_string(
                 "todo/email/assigned_designer.txt", {"site": Site.objects.get_current().domain, "task": task, "editor": editor_user_info, "designer": designer_user_info}
             )
@@ -54,7 +54,7 @@ def designer_assign(request, task_id: int) -> HttpResponse:
                 "Tarea asignada",
                 email_body,
                 None,
-                [task.created_by.user.email, task.assigned_to.user.email],
+                [task.created_by, task.assigned_to],
                 fail_silently=False,
             )
             
