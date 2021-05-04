@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
-from todo.models import Editor, Book, UserInfo, Writer
+from todo.models import Editor, Book, UserInfo, Writer, Designer, Task 
 
 class Command(BaseCommand):
 
@@ -66,4 +66,29 @@ class Command(BaseCommand):
             author=w,
             thematic='S',
             note="El otro día soñe que me despertaba y recogía el título del doble grado."
+        )
+
+        u = User.objects.create_user('chief.d@g.com', 'pass')
+        UserInfo.objects.create(
+            full_name="ChiefDesigner",
+            user=u
+        )
+        d = Designer.objects.create(
+            user=u,
+            chief=True
+        )
+
+        u = User.objects.create_user('designer@g.com', 'pass')
+        UserInfo.objects.create(
+            full_name="Designer",
+            user=u
+        )
+        d = Designer.objects.create(
+            user=u,
+            chief=False
+        )
+        t = Task.objects.create(
+            title="DesignTask",
+            book_list=b,
+            task_type='I',
         )
