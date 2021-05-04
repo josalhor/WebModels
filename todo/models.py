@@ -12,6 +12,8 @@ from django.db import DEFAULT_DB_ALIAS, models
 from django.db.transaction import Atomic, get_connection
 from django.urls import reverse
 from django.utils import timezone
+from datetime import date
+from django import forms
 from django.utils.text import slugify
 
 from abc import ABC
@@ -29,6 +31,7 @@ def get_attachment_upload_dir_book(instance, filename):
     """
 
     return "/".join(["books", "attachments", str(instance.id), filename])
+
 
 
 class LockedAtomicTransaction(Atomic):
@@ -167,6 +170,19 @@ class Book(models.Model):
         ordering = ["name"]
         verbose_name_plural = "Books"
 
+class PublishedBook(models.Model):
+    book = models.ForeignKey(
+        Book,
+        null=False,
+        blank=False,
+        related_name="published_book",
+        on_delete=models.CASCADE,
+    )
+
+    publication_date = models.DateTimeField()
+    publication_date = timezone.now().strftime("%d/%m/%Y")
+    final_version = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
+    related_image = models.ImageField(upload_to=get_attachment_upload_dir_book, null=True, blank=True)
 
 class Task(models.Model):
 
