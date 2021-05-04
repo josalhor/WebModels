@@ -12,3 +12,4 @@ from todo.views.task_detail import task_detail  # noqa: F401
 from todo.views.toggle_done import toggle_done  # noqa: F401
 from todo.views.book_assign import book_assign
 from todo.views.set_ft_pass import set_ft_pass
+from todo.views.designer_assign import designer_assign

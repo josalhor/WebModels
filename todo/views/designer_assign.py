@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 
 from todo.defaults import defaults
 from todo.models import Attachment, Comment, UserInfo, Task, Designer
-from todo.forms import AssignForm
+from todo.forms import AssignFormDesigner
 from todo.utils import (
     send_email_to_thread_participants,
     staff_check,
@@ -46,17 +46,17 @@ def designer_assign(request, task_id: int) -> HttpResponse:
             messages.success(request, "La propuesta de ilustracion ha sido correctamente asignada.")
             editor_user_info = UserInfo.objects.filter(user=task.created_by.user).first()
             designer_user_info = UserInfo.objects.filter(user=task.assigned_to.user).first()
-            """email_body = render_to_string(
-                "todo/email/assigned_designer.txt", {"site": Site.objects.get_current().domain, "book": book, "editor": editor_user_info, "author": author_user_info}
+            email_body = render_to_string(
+                "todo/email/assigned_designer.txt", {"site": Site.objects.get_current().domain, "task": task, "editor": editor_user_info, "designer": designer_user_info}
             )
 
             send_mail(
-                "Libro asignado",
+                "Tarea asignada",
                 email_body,
                 None,
-                [book.editor.user.email, book.author.user.email],
+                [task.created_by.user.email, task.assigned_to.user.email],
                 fail_silently=False,
-            )"""
+            )
             
         return redirect("todo:accepted_petitions")
     
