@@ -6,7 +6,7 @@
 {% block content %}
   
     {% if list_slug == "mine" %}
-      <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Peticiones aceptadas</h1>
+      <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Tareas</h1>
     {% else %}
       <div style="display:flex; justify-content: space-between;">
         <div><h1 style="font-family: 'BebasNeueRegular';">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book_list.name }}"</h1></div>
@@ -57,7 +57,11 @@
     </table>
 
   {% else %}
+    {% if list_slug == "mine" %}
+    <h4>No tienes tareas asignadas</h4><br>
+    {% else %}
     <h4>Aún no hay tareas para este libro</h4><br>
+    {% endif %}  
   {% endif %}
   
   {% if book_list.file %}
