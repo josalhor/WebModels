@@ -22,7 +22,12 @@ def accepted_petitions(request) -> HttpResponse:
     editor = Editor.objects.filter(user=request.user).first()
 
     if editor:
-        lists = Book.objects.filter(editor=editor).exclude(rejected=True).order_by("name")
+        lists = Book.objects
+        if editor.chief:
+            lists = lists.exclude(editor=None)
+        else:
+            lists = lists.filter(editor=editor)
+        lists = lists.exclude(rejected=True).order_by("name")
         editor_view = True
     else:
         author = Writer.objects.filter(user=request.user)
