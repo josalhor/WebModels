@@ -9,7 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo
+from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo, Designer
 
 log = logging.getLogger(__name__)
 
@@ -34,11 +34,17 @@ def chief_check(user):
 def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()
     editor = Editor.objects.filter(user=user).first()
+    designer = Designer.objects.filter(user=user).first()
     return (author != None and book.author == author) or \
-           (editor != None and (book.editor == editor or editor.chief))
+           (editor != None and (book.editor == editor or editor.chief)) or \
+           (designer != None and (book.designer == designer or designer.chief))
 
 def user_can_read_task(task, user):
     if task.task_type == task.WRITING:
+        return user_can_read_book(task.book_list, user)
+    elif task.task_type == task.ILLUSTRATION:
+        return user_can_read_book(task.book_list, user)
+    elif task.task_type == task.LAYOUT:
         return user_can_read_book(task.book_list, user)
     raise NotImplementedError('')
 
