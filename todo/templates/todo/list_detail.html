@@ -61,6 +61,7 @@
     <h4>No tienes tareas asignadas</h4><br>
     {% else %}
     <h4>Aún no hay tareas para este libro</h4><br>
+    <button id="publish" style="float: right; width: 18%; margin-left: 10px;" class="btn btn-dark" type="button"data-toggle="collapse">PUBLICAR</button>
     {% endif %}  
   {% endif %}
   
@@ -74,10 +75,9 @@
 
   {% if list_slug != "mine" %}
     {% if editor_view %}
+    <button style="float: right; width: 18%;" class="btn btn-primary" id="AddTaskButton" type="button"
+      data-toggle="collapse" data-target="#AddEditTask">Añadir tarea</button>
     <br>
-    <div style="display: flex;"></div><button style="float: right; width: 18%;" class="btn btn-primary" id="AddTaskButton" type="button"
-      data-toggle="collapse" data-target="#AddEditTask">Añadir tarea</button></div>
-      <br>
     {% endif %}
 
     {# Task edit / new task form #}
@@ -112,6 +112,10 @@
       });
 
     });
+
+    document.getElementById("publish").onclick = function () {
+        location.href = "{% url 'todo:book_publish' book_list.id %}";
+    };
 
     // When adding a task, change the text of the Add Task button
     function handleClick()
