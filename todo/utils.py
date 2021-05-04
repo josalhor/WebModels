@@ -34,11 +34,9 @@ def chief_check(user):
 def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()
     editor = Editor.objects.filter(user=user).first()
-    designer = Designer.objects.filter(user=user).first()
     return (author != None and book.author == author) or \
            (editor != None and (book.editor == editor or editor.chief)) or \
-           (designer != None and (book.designer == designer or designer.chief))
-
+           
 def user_can_design_book(book, user):
     editor = Editor.objects.filter(user=user).first()
     designer = Designer.objects.filter(user=user).first()
