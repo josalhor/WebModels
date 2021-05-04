@@ -52,7 +52,9 @@
               <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones</a></li>
               {% endif %}
             <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Peticiones aceptadas</a></li>
-            <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
+              {% if user|is_graphic_designer %} 
+                <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
+              {% endif %}
             {% endif %}
           </ul>
           <ul class="navbar-nav">
