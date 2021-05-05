@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-from todo.models import Task, Book, UserInfo, Editor, PublishedBook
+from todo.models import Task, Book, UserInfo, Editor, Designer, PublishedBook
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 
@@ -72,3 +72,15 @@ class AssignForm(forms.Form):
         self.fields["editor"].label = ""
 
     editor = forms.ModelChoiceField(queryset=Editor.objects.all())
+
+class AssignFormDesigner(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["designer"].widget.attrs = {
+            #"id": "id_thematic",
+            "class": "custom-select mb-3",
+            #"name": "thematic",
+        }
+        self.fields["designer"].label = ""
+
+    designer = forms.ModelChoiceField(queryset=Designer.objects.all())
