@@ -60,8 +60,10 @@
     {% if list_slug == "mine" %}
     <h4>No tienes tareas asignadas</h4><br>
     {% else %}
-    <h4>Aún no hay tareas para este libro</h4><br>
-    <button id="publish" style="float: right; width: 18%; margin-left: 10px;" class="btn btn-dark" type="button"data-toggle="collapse">PUBLICAR</button>
+    <h4>No hay tareas pendientes para este libro</h4><br>
+    {% if completed %}
+      <button id="publish" style="float: right; width: 18%; margin-left: 10px;" class="btn btn-dark" type="button"data-toggle="collapse">PUBLICAR</button>
+    {% endif %}
     {% endif %}  
   {% endif %}
   

@@ -188,11 +188,13 @@ class Task(models.Model):
     WRITING = 'E'
     ILLUSTRATION = 'I'
     LAYOUT = 'M'
+    REVISION = 'R'
 
     TYPES_OF_TASK_CHOICES = [
         (WRITING, 'Escritura'),
         (ILLUSTRATION, 'Ilustración'),
         (LAYOUT, 'Maquetación'),
+        (REVISION, 'Revisión final'),
     ]
 
     title = models.CharField(max_length=140)
