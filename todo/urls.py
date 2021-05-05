@@ -2,7 +2,6 @@ from django.conf import settings
 from django.urls import path
 
 from todo import views
-from todo.features import HAS_TASK_MERGE
 
 app_name = "todo"
 
@@ -30,23 +29,8 @@ urlpatterns = [
     path(
         "attachment/remove/<int:attachment_id>/", views.remove_attachment, name="remove_attachment"
     ),
-
+    path("toggle_done/<int:task_id>/", views.toggle_done, name="task_toggle_done"),
+    path("delete/<int:task_id>/", views.delete_task, name="delete_task"),
+    path("search/", views.search, name="search"),
 ]
 
-if HAS_TASK_MERGE:
-    # ensure mail tracker autocomplete is optional
-    from todo.views.task_autocomplete import TaskAutocomplete
-
-    urlpatterns.append(
-        path(
-            "task/<int:task_id>/autocomplete/", TaskAutocomplete.as_view(), name="task_autocomplete"
-        )
-    )
-
-urlpatterns.extend(
-    [
-        path("toggle_done/<int:task_id>/", views.toggle_done, name="task_toggle_done"),
-        path("delete/<int:task_id>/", views.delete_task, name="delete_task"),
-        path("search/", views.search, name="search"),
-    ]
-)

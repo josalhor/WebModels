@@ -11,10 +11,6 @@ from todo.utils import remove_attachment_file
 
 @login_required
 def remove_attachment(request, attachment_id: int) -> HttpResponse:
-    """Delete a previously posted attachment object and its corresponding file
-    from the filesystem, permissions allowing.
-    """
-
     if request.method == "POST":
         attachment = get_object_or_404(Attachment, pk=attachment_id)
 

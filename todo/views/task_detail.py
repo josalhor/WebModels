@@ -15,7 +15,6 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 
 from todo.defaults import defaults
-from todo.features import HAS_TASK_MERGE
 from todo.forms import AddEditTaskForm
 from todo.models import Attachment, Comment, Task, Editor
 from todo.utils import (
@@ -25,10 +24,6 @@ from todo.utils import (
     toggle_task_completed,
     user_can_read_task,
 )
-
-if HAS_TASK_MERGE:
-    from dal import autocomplete
-
 
 def handle_add_comment(request, task):
     if not request.POST.get("add_comment"):
@@ -64,32 +59,6 @@ def task_detail(request, task_id: int) -> HttpResponse:
     # Get the group this task belongs to, and check whether current user is a member of that group.
     if not user_can_read_task(task, request.user):
         raise PermissionDenied
-
-    # Handle task merging
-    if not HAS_TASK_MERGE:
-        merge_form = None
-    else:
-
-        class MergeForm(forms.Form):
-            merge_target = forms.ModelChoiceField(
-                queryset=Task.objects.all(),
-                widget=autocomplete.ModelSelect2(
-                    url=reverse("todo:task_autocomplete", kwargs={"task_id": task_id})
-                ),
-            )
-
-        # Handle task merging
-        if not request.POST.get("merge_task_into"):
-            merge_form = MergeForm()
-        else:
-            merge_form = MergeForm(request.POST)
-            if merge_form.is_valid():
-                merge_target = merge_form.cleaned_data["merge_target"]
-            if not user_can_read_task(merge_target, request.user):
-                raise PermissionDenied
-
-            task.merge_into(merge_target)
-            return redirect(reverse("todo:task_detail", kwargs={"task_id": merge_target.pk}))
 
     # Save submitted comments
     handle_add_comment(request, task)
@@ -168,7 +137,7 @@ def task_detail(request, task_id: int) -> HttpResponse:
         "task": task,
         "comment_list": comment_list,
         "form": form,
-        "merge_form": merge_form,
+        "merge_form": None,
         "thedate": thedate,
         "comment_classes": defaults("TODO_COMMENT_CLASSES"),
         "attachments_enabled": defaults("TODO_ALLOW_FILE_ATTACHMENTS"),

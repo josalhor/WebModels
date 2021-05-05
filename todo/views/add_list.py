@@ -12,9 +12,6 @@ from todo.utils import staff_check
 @login_required
 @user_passes_test(staff_check)
 def add_list(request) -> HttpResponse:
-    """Allow users to add a new todo list to the group they're in.
-    """
-
     # Only staffers can add lists, regardless of TODO_STAFF_USER setting.
     if not request.user.is_staff:
         raise PermissionDenied
