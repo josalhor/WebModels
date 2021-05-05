@@ -53,7 +53,7 @@
               {% endif %}
               {% if user|is_graphic_designer %} 
                 {% if user|is_chief_designer %}
-                <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones</a></li>
+                <li id="peticiones" class="nav-item"><a href="{% url 'todo:task_lists' %}" class="nav-link">Peticiones</a></li>
                 {% endif %}
                 <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
               {% else %}
