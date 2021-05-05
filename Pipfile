@@ -12,7 +12,7 @@ titlecase = "*"
 bleach = "*"
 django = ">=3.1"
 django-username-email = "*"
-pillow = "*"
+pillow = ">=8.2"
 
 [dev-packages]
 pylint = "*"
