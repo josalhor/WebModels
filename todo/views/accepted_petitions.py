@@ -39,8 +39,8 @@ def accepted_petitions(request) -> HttpResponse:
     for book in lists:
         tasks = Task.objects.filter(book_list=book).count()
         task_count += tasks
-        
     
+
     if request.method == "POST":
         book = Book.objects.filter(name=request.POST['delete-book']).first()
         deleted = True

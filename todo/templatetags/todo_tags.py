@@ -14,6 +14,10 @@ def can_see_not_accepted(u):
 def is_graphic_designer(u):
     return Designer.objects.filter(user=u).first() is not None
 
+@register.filter(name='is_chief_designer')
+def is_chief_designer(u):
+    return Designer.objects.filter(user=u, chief=True).first() is not None
+
 @register.filter(name='get_full_name')
 def get_full_name(u):
     return UserInfo.objects.filter(user=u).first().full_name
