@@ -1,0 +1,44 @@
+{% extends "todo/base.html" %}
+{% block page_heading %}{% endblock %}
+{% block title %}File Ticket{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="container ">
+    <div class="row">
+        <!-- Image -->
+        <div class="col-12 col-lg-6">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    {% if published_book.related_image %}
+                        <img class="card-img-top" style="height:420px;object-fit: contain" id="book-img" src="{{ published_book.related_image.url }}"/> 
+                    {% else %}
+                        <img class="card-img-top" style="height:420px;object-fit: contain" id="book-img" src="{% static '/images/no_image.jpg' %}"/>
+                    {% endif %}
+                    <h5 class="card-text bar-text-d">  Publicado: {{ published_book.publication_date|date:'d/m/Y'  }}</h5>
+                    <a href="{{ published_book.final_version.url }}" download><i class="fa fa-download"></i>   Descargar PDF</a><br>
+                    <a href="" download><i class="fa fa-download"></i>   Descargar EBUP (FALTA FER)</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Book details -->
+        <div class="col-12 col-lg-6">
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h2 class="card-title bar-text-d">{{ book.name }}</h2>
+                    <h4 class="card-text mb-2 text-muted bar-text-d">Escrito por: {{ book.author }}</h4>
+                    <br>
+                    <div style="font-size: 20px" class="card-header text-white bg-dark text-uppercase bar-text-d"><i class="fa fa-align-justify"></i> SINOPSIS</div>
+                    <div class="card-body">
+                        <p class="card-text">{{ book.note }}</p>
+                    </div>
+                    <br></br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</script>
+{% endblock %}

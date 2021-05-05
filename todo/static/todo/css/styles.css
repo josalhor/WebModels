@@ -9,6 +9,11 @@ label {
 	margin-top: 40px;
 }
 
+.bar-text-d {
+	font-family: 'BebasNeueRegular';
+	color:black;
+}
+
 .transparent-button {
     background-color: transparent;
     background-repeat:no-repeat;

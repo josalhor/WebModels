@@ -47,13 +47,13 @@ def external_add(request) -> HttpResponse:
                 file = request.FILES.get("attachment_file_input")
 
                 if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
-                    messages.error(request, f"File exceeds maximum attachment size.")
+                    messages.error(request, f"El archivo excede el tamaño máximo permitido")
                     return redirect("todo:external_add")
 
                 name, extension = os.path.splitext(file.name)
 
                 if extension not in defaults("TODO_LIMIT_FILE_ATTACHMENTS"):
-                    messages.error(request, f"This site does not allow upload of {extension} files.")
+                    messages.error(request, f"Este sitio no eccepta atchivos de extensión {extension}")
                     return redirect("todo:external_add")
 
                 book.file = file

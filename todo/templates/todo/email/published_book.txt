@@ -1,0 +1,4 @@
+Su libro "{{ book.name }}" ha sido finalmente publicado en nuestra página web.
+
+Puede acceder en el siguiente link:
+http://{{ site }}{% url 'todo:book_detail' book.id %}

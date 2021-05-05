@@ -16,6 +16,7 @@ from todo.utils import send_notify_mail, staff_check, user_can_read_book
 def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> HttpResponse:
 
     # Defaults
+    completed = False
     book_list = None
     form = None
     editor_view = False
@@ -31,6 +32,11 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
         if not user_can_read_book(book_list, request.user):
             raise PermissionDenied
         tasks = Task.objects.filter(book_list=book_list.id)
+    
+    # Check if it can be published
+    for task in tasks:
+        if task.task_type == task.REVISION and task.completed:
+            completed = True
 
     # Additional filtering
     if view_completed:
@@ -74,6 +80,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             )
     
     context = {
+        "completed": completed,
         "editor_view": editor_view,
         "list_id": list_id,
         "list_slug": list_slug,

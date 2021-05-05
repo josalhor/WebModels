@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-from todo.models import Task, Book, UserInfo, Editor
+from todo.models import Task, Book, UserInfo, Editor, PublishedBook
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 
@@ -51,6 +51,12 @@ class AddExternalBookForm(ModelForm):
             "user",
         )
 
+class PublishedBookForm(ModelForm):
+    class Meta:
+        model = PublishedBook
+        exclude = (
+            "book",
+        )
 
 class SearchForm(forms.Form):
     q = forms.CharField(widget=forms.widgets.TextInput(attrs={"size": 35}))
