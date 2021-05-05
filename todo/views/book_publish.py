@@ -32,7 +32,7 @@ def book_publish(request, book_id: int) -> HttpResponse:
 
     editor_view = editor != None
 
-    if book.editor != None or (editor_view and not editor.chief):
+    if book.editor == None or (editor_view and not editor.chief):
         raise PermissionDenied
 
     if request.POST:
