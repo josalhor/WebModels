@@ -12,10 +12,6 @@ from todo.utils import staff_check
 @login_required
 @user_passes_test(staff_check)
 def delete_task(request, task_id: int) -> HttpResponse:
-    """Delete specified task.
-    Redirect to the list from which the task came.
-    """
-
     if request.method == "POST":
         task = get_object_or_404(Task, pk=task_id)
 

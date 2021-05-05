@@ -111,6 +111,8 @@ MESSAGE_TAGS = {message_constants.ERROR: "danger"}
 # Override in local.py
 DATABASES = {}
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
+
 # Todo-specific settings
 # TODO_STAFF_ONLY = False
 # TODO_DEFAULT_LIST_ID = None
