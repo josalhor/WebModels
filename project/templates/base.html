@@ -49,11 +49,11 @@
           <ul class="navbar-nav mr-auto">
             {% if user.is_authenticated %}
               {% if user|can_see_not_accepted %} 
-              <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones</a></li>
+              <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones de edición</a></li>
               {% endif %}
               {% if user|is_graphic_designer %} 
                 {% if user|is_chief_designer %}
-                <li id="peticiones" class="nav-item"><a href="{% url 'todo:task_lists' %}" class="nav-link">Peticiones</a></li>
+                <li id="peticiones" class="nav-item"><a href="{% url 'todo:task_lists' %}" class="nav-link">Peticiones de diseño</a></li>
                 {% endif %}
                 <li class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
               {% else %}
