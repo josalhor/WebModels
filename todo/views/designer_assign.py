@@ -38,10 +38,9 @@ def designer_assign(request, task_id: int) -> HttpResponse:
         raise PermissionDenied
 
     if request.POST:
-        print(request.POST)
         form = AssignFormDesigner(request.POST)
         if form.is_valid():
-            task.assigned_to = UserInfo.objects.filter(user=task.assigned_to).first()
+            task.assigned_to = UserInfo.objects.filter(user=form.cleaned_data['designer'].user).first()
             task.save()
             messages.success(request, "La propuesta de ilustracion ha sido correctamente asignada.")
             designer_user_info = UserInfo.objects.filter(user=task.assigned_to).first()

@@ -20,16 +20,10 @@ from abc import ABC
 import uuid
 
 def get_attachment_upload_dir(instance, filename):
-    """Determine upload dir for task attachment files.
-    """
-
     return "/".join(["tasks", "attachments", str(instance.task.id), filename])
 
 
 def get_attachment_upload_dir_book(instance, filename):
-    """Determine upload dir for task attachment files.
-    """
-
     return "/".join(["books", "attachments", str(instance.id), filename])
 
 
@@ -288,10 +282,6 @@ class Comment(models.Model):
 
 
 class Attachment(models.Model):
-    """
-    Defines a generic file attachment for use in M2M relation with Task.
-    """
-
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
