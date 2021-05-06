@@ -46,14 +46,14 @@ def designer_assign(request, task_id: int) -> HttpResponse:
             designer_user_info = UserInfo.objects.filter(user=task.assigned_to).first()
             editor_user_info = task.created_by
             email_body = render_to_string(
-                "todo/email/assigned_designer.txt", {"site": Site.objects.get_current().domain, "task": task, "editor": editor_user_info, "designer": designer_user_info}
+                "todo/email/assigned_designer.txt", {"site": Site.objects.get_current().domain, "task": task, "designer": designer_user_info, "type_task": type_task}
             )
 
             send_mail(
-                "Tarea asignada",
+                "Nueva tarea asignada",
                 email_body,
                 None,
-                [task.created_by, task.assigned_to],
+                [designer, task.assigned_to],
                 fail_silently=False,
             )
             
