@@ -41,7 +41,7 @@ def user_can_design_book(book, task, user):
     editor = Editor.objects.filter(user=user).first()
     designer = Designer.objects.filter(user=user).first()
     return (editor != None and (book.editor == editor or editor.chief)) or \
-           (designer != None and (task.assigned_to == designer or designer.chief))
+           (designer != None and (task.assigned_to.user == designer.user or designer.chief))
 
 def user_can_read_task(task, user):
     if task.task_type == task.WRITING or task.task_type == task.REVISION:
