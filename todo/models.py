@@ -133,7 +133,7 @@ class Book(models.Model):
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
     completed = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
-    note = models.TextField()
+    note = models.TextField(blank=True)
     # file can bee null for debugging purposes
     file = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
 

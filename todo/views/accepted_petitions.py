@@ -22,7 +22,7 @@ def accepted_petitions(request) -> HttpResponse:
     editor = Editor.objects.filter(user=request.user).first()
 
     if editor:
-        lists = Book.objects
+        lists = Book.objects.filter(completed=False)
         if editor.chief:
             lists = lists.exclude(editor=None)
         else:
@@ -31,13 +31,13 @@ def accepted_petitions(request) -> HttpResponse:
         editor_view = True
     else:
         author = Writer.objects.filter(user=request.user)
-        lists = Book.objects.filter(rejected=False, author__in=author).exclude(editor=None).order_by("name")
+        lists = Book.objects.filter(completed=False, rejected=False, author__in=author).exclude(editor=None).order_by("name")
     
     list_count = lists.count()
 
     task_count = 0
     for book in lists:
-        tasks = Task.objects.filter(book_list=book).count()
+        tasks = Task.objects.filter(book_list=book, completed=False).count()
         task_count += tasks
     
 
