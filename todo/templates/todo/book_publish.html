@@ -22,7 +22,7 @@
     <div class="mt-3">
       <div class="form-group">
         <label for="id_title" name="title">TÍTULO DEL LIBRO</label>
-        <input required type="text" class="form-control" id="id_title" name="title" required placeholder="{% if book.name is null or blank %} Indique el título del libro {% endif %}"
+        <input required type="text" class="form-control" id="id_title" name="title" placeholder="{% if book.name is null or blank %} Indique el título del libro {% endif %}"
           value="{% if book.name %}{{ book.name }}{% endif %}">
       </div>
     </div>
@@ -30,7 +30,7 @@
     <div class="mt-3">
       <div class="form-group">
         <label for="id_author" name="author">AUTOR/ES</label>
-        <input required type="text" class="form-control" id="id_author" name="author" required placeholder="{% if book.name is null or blank %} Indique el nombre del autor/es {% endif %}"
+        <input required type="text" class="form-control" id="id_author" name="author" placeholder="{% if book.author is null or blank %} Indique el nombre del autor/es {% endif %}"
           value="{% if book.author %}{{ book.author }}{% endif %}">
       </div>
     </div>

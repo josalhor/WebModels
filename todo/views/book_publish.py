@@ -43,7 +43,7 @@ def book_publish(request, book_id: int) -> HttpResponse:
             published_book.book = book
 
             # Handle uploaded files
-            print(request.FILES)
+            print(request.FILES, request.POST)
             if request.FILES.get("attachment_file_input"):
                 file = request.FILES.get("attachment_file_input")
 
@@ -64,6 +64,7 @@ def book_publish(request, book_id: int) -> HttpResponse:
 
             published_book.book.title = request.POST.get("title")
             published_book.book.note = request.POST.get("note")
+            published_book.author_text = request.POST.get("author")
             published_book.book.save()
             published_book.save()
 
