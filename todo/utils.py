@@ -44,7 +44,7 @@ def user_can_design_book(book, task, user):
            (designer != None and (task.assigned_to == designer or designer.chief))
 
 def user_can_read_task(task, user):
-    if task.task_type == task.WRITING:
+    if task.task_type == task.WRITING or task.task_type == task.REVISION:
         return user_can_read_book(task.book_list, user)
     elif task.task_type == task.ILLUSTRATION or task.task_type == task.LAYOUT:
         return user_can_design_book(task.book_list, task, user)
