@@ -77,6 +77,9 @@
   {# Support file attachment uploader #}
   <script>
     function checkImage(formToPost) {
+      if (!formToPost.reportValidity()){
+        return;
+      }
       image = document.getElementById("attachment_image_input").value;
       if(image == "" && confirm("¿Está seguro/a que no quiere adjuntar ninguna imágen?")){
         submit(formToPost);
@@ -85,6 +88,9 @@
       }
     }
     function submit(formToPost) {
+      if (!formToPost.reportValidity()){
+        return;
+      }
       if(confirm("¿Confirma que todos los campos són correctos?")){
         formToPost.submit();
       }
