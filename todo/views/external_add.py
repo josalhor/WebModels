@@ -42,7 +42,6 @@ def external_add(request) -> HttpResponse:
             book = form_book.save(commit=False)
 
             # Handle uploaded files
-            print(request.FILES, request.POST)
             if request.FILES.get("attachment_file_input"):
                 file = request.FILES.get("attachment_file_input")
 

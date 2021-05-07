@@ -115,7 +115,16 @@ def send_notify_mail(new_task):
         "todo/email/assigned_task.txt", {"task": new_task, "site": current_site, "user": new_task.created_by.user}
     )
 
-    recip_list = [new_task.assigned_to.user.email]
+    if new_task.assigned_to:
+        recip_list = [new_task.assigned_to.user.email]
+    elif new_task.task_type == new_task.ILLUSTRATION or new_task.task_type == new_task.LAYOUT:
+        recip_list = [
+            d.user.email
+            for d in Designer.objects.filter(chief=True)
+        ]
+    else:
+        raise ValueError('Expected task to be assigned')
+
     todo_send_mail(new_task.created_by, new_task, subject, body, recip_list)
 
 

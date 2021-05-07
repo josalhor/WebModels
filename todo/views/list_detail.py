@@ -57,17 +57,12 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
         if form.is_valid():
             new_task = form.save(commit=False)
             new_task.created_by = editor
-            if new_task.task_type == Task.WRITING:
+            if new_task.task_type == Task.WRITING or new_task.task_type == Task.REVISION:
                 new_task.assigned_to = UserInfo.objects.filter(user=book_list.author.user).first()
             new_task.note = bleach.clean(form.cleaned_data["note"], strip=True)
             new_task.save()
 
-            # Send email alert only if Notify checkbox is checked AND assignee is not same as the submitter
-            if (
-                new_task.assigned_to
-                and new_task.assigned_to != request.user
-            ):
-                send_notify_mail(new_task)
+            send_notify_mail(new_task)
 
             messages.success(request, 'La nueva tarea "{t}" ha sido añadida.'.format(t=new_task.title))
             return redirect(request.path)
