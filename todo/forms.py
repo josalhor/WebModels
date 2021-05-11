@@ -30,7 +30,7 @@ class AddEditTaskForm(ModelForm):
             "class": "custom-select mb-3",
             "name": "task_type",
         }
-        self.fields["book_list"].value = kwargs["initial"]["book_list"].id
+        self.fields["book"].value = kwargs["initial"]["book"].id
 
     due_date = forms.DateField(widget=forms.DateInput(attrs={"type": "date"}), required=False)
     title = forms.CharField(widget=forms.widgets.TextInput())

@@ -63,7 +63,7 @@ def book_publish(request, book_id: int) -> HttpResponse:
                 published_book.related_image = request.FILES.get("attachment_image_input")
 
             published_book.book.title = request.POST.get("title")
-            published_book.book.note = request.POST.get("note")
+            published_book.book.description = request.POST.get("description")
             published_book.author_text = request.POST.get("author")
             published_book.book.completed = True
             published_book.book.save()

@@ -11,8 +11,8 @@
 
     <div class="form-group">
       <label for="id_note">Descripción</label>
-      <textarea class="form-control" id="id_note" name="note" rows="5"
-        aria-describedby="inputNoteHelp">{% if form.note.value %}{{ form.note.value }}{% endif %}</textarea>
+      <textarea class="form-control" id="id_note" name="description" rows="5"
+        aria-describedby="inputNoteHelp">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
       <small id="inputNoteHelp" class="form-text text-muted">
         Describa la tarea o error. Proporcione los pasos para reproducir el problema.
       </small>
@@ -45,7 +45,7 @@
 
     <input type="hidden" name="priority"
       value="{% if form.priority.value %}{{ form.priority.value }}{% else %}999{% endif %}" id="id_priority">
-    <input type="hidden" name="book_list" value="{{ form.book_list.value }}" id="id_book_list">
+    <input type="hidden" name="book" value="{{ form.book.value }}" id="id_book">
     <input type="hidden" name="completed" class="form-check-input" type="checkbox" checked="{%if task.completed%}checked{% endif %}" id="id_completed">
 
     <p>

@@ -131,9 +131,12 @@ class Book(models.Model):
     slug = models.SlugField(default="", unique=True)
     author = models.ForeignKey(Writer, on_delete=models.RESTRICT, related_name='book_author')
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
+    # This attribute is techincally redundant:
+    # In practice it is a performace improvement and improves legibility
+    presentation_date = models.DateField(auto_now_add=True)
     completed = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
-    note = models.TextField(blank=True)
+    description = models.TextField(blank=True)
     # file can bee null for debugging purposes
     file = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
 
@@ -193,7 +196,7 @@ class Task(models.Model):
     ]
 
     title = models.CharField(max_length=140)
-    book_list = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     created_date = models.DateField(auto_now_add=True)
     due_date = models.DateField(blank=True, null=True)
     completed = models.BooleanField(default=False)
@@ -218,7 +221,7 @@ class Task(models.Model):
         related_name="todo_assigned_to",
         on_delete=models.CASCADE,
     )
-    note = models.TextField(default="")
+    description = models.TextField(default="")
     priority = models.PositiveIntegerField(blank=True, null=True)
 
     # Has due date for an instance of this object passed?
@@ -256,14 +259,7 @@ class Task(models.Model):
 
 
 class Comment(models.Model):
-    """
-    Not using Django's built-in comments because we want to be able to save
-    a comment and change task details at the same time. Rolling our own since it's easy.
-    """
-
-    author = models.ForeignKey(
-        UserInfo, on_delete=models.CASCADE
-    )
+    author = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     body = models.TextField(default="")

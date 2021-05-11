@@ -65,20 +65,20 @@ def task_detail(request, task_id: int) -> HttpResponse:
 
     # Save task edits
     if not request.POST.get("add_edit_task"):
-        form = AddEditTaskForm(instance=task, initial={"book_list": task.book_list})
+        form = AddEditTaskForm(instance=task, initial={"book": task.book})
     else:
         form = AddEditTaskForm(
-            request.POST, instance=task, initial={"book_list": task.book_list}
+            request.POST, instance=task, initial={"book": task.book}
         )
 
         if form.is_valid():
             item = form.save(commit=False)
-            item.note = bleach.clean(form.cleaned_data["note"], strip=True)
+            item.description = bleach.clean(form.cleaned_data["description"], strip=True)
             item.title = bleach.clean(form.cleaned_data["title"], strip=True)
             item.save()
             messages.success(request, "The task has been edited.")
             return redirect(
-                "todo:list_detail", list_id=task.book_list.id, list_slug=task.book_list.slug
+                "todo:list_detail", list_id=task.book.id, list_slug=task.book.slug
             )
 
     # Mark complete

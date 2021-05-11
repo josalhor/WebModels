@@ -4,7 +4,7 @@ Una nueva tarea de {{type_task}} le ha sido asignada.
 
 Detalles de la tarea:
     - Título: {{ task.title }}
-    - Descripción: {{ task.note }}
+    - Descripción: {{ task.description }}
     - Fecha de entrega: {{ task.due_date }}
 
 Página de asignamiento:

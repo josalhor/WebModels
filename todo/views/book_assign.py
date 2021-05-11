@@ -82,7 +82,7 @@ def book_assign(request, book_id: int) -> HttpResponse:
         'editor_view': editor_view,
         'thematic': thematic,
         'editor_user': editor,
-        'note': book.note,
+        'description': book.description,
         'book': book,
         'assign_form': AssignForm()
     }

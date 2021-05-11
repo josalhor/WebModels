@@ -1,19 +1,20 @@
 {% extends "todo/base.html" %}
 {% load static %}
 
-{% block title %}Todo List: {{ book_list.name }}{% endblock %}
+{% block title %}Todo List: {{ book.name }}{% endblock %}
 
 {% block content %}
   
     {% if list_slug == "mine" %}
       <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Tareas</h1>
-    {% else %}
+    {% endif %}
       <div style="display:flex; justify-content: space-between;">
-        <div><h1 style="font-family: 'BebasNeueRegular';">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book_list.name }}"</h1></div>
+        {% if list_slug != "mine" %}
+          <div><h1 style="font-family: 'BebasNeueRegular';">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book.name }}"</h1></div>
+        {% endif %}
         <div>{% include 'todo/include/toggle_delete.html' %}</div> 
       </div>
-      <!--<p><small><i>In workgroup "{{ book_list.group }}" - drag rows to set priorities.</i></small></p>-->
-    {% endif %}
+      <!--<p><small><i>In workgroup "{{ book.group }}" - drag rows to set priorities.</i></small></p>-->
 
   {% if tasks %}
     <table class="table" id="tasktable">
@@ -65,16 +66,16 @@
       <button id="publish" style="float: right; width: 18%; margin-left: 10px;" class="btn btn-dark" type="button"data-toggle="collapse">PUBLICAR</button>
       <script>
         document.getElementById("publish").onclick = function () {
-            location.href = "{% url 'todo:book_publish' book_list.id %}";
+            location.href = "{% url 'todo:book_publish' book.id %}";
         };
       </script>
     {% endif %}
     {% endif %}  
   {% endif %}
   
-  {% if book_list.file %}
+  {% if book.file %}
   <h5>
-    <a href="{{ book_list.file.url }}" download>
+    <a href="{{ book.file.url }}" download>
       <divclass="btn" style="width:100%"><i class="fa fa-download"></i>   Descargar versión original del libro</div>
     </a>
   </h5>

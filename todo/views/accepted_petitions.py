@@ -37,7 +37,7 @@ def accepted_petitions(request) -> HttpResponse:
 
     task_count = 0
     for book in lists:
-        tasks = Task.objects.filter(book_list=book, completed=False).count()
+        tasks = Task.objects.filter(book=book, completed=False).count()
         task_count += tasks
     
 

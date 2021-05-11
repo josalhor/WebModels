@@ -37,8 +37,8 @@
 
     <div class="form-group">
       <label for="id_note">SINOPSIS</label>
-      <textarea required class="form-control" id="id_note" name="note" rows="7"
-        aria-describedby="inputNoteHelp">{% if book.note %}{{ book.note }}{% endif %}</textarea>
+      <textarea required class="form-control" id="id_note" name="description" rows="7"
+        aria-describedby="inputNoteHelp">{% if book.description %}{{ book.description }}{% endif %}</textarea>
       <small id="inputNoteHelp" class="form-text text-muted">
         Esta sinopsis será la mostrada a los lectores. 
       </small>

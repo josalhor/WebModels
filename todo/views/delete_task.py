@@ -17,7 +17,7 @@ def delete_task(request, task_id: int) -> HttpResponse:
 
         redir_url = reverse(
             "todo:list_detail",
-            kwargs={"list_id": task.book_list.id, "list_slug": task.book_list.slug},
+            kwargs={"list_id": task.book.id, "list_slug": task.book.slug},
         )
 
         # Permissions

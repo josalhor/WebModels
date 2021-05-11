@@ -16,6 +16,7 @@ urlpatterns = [
     path("ticket/add/", views.external_add, name="external_add"),
     # Three paths into `list_detail` view
     path("mine/", views.list_detail, {"list_slug": "mine"}, name="mine"),
+    path("mine/completed", views.list_detail, {"list_slug": "mine", "view_completed": True}, name="mine_completed"),
     path(
         "<int:list_id>/<str:list_slug>/completed/",
         views.list_detail,

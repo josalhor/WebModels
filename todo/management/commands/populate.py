@@ -65,7 +65,7 @@ class Command(BaseCommand):
             name="Not assigned Book",
             author=w,
             thematic='S',
-            note="El otro día soñe que me despertaba y recogía el título del doble grado."
+            description="El otro día soñe que me despertaba y recogía el título del doble grado."
         )
 
         u = User.objects.create_user('chief.d@g.com', 'pass')
@@ -89,6 +89,6 @@ class Command(BaseCommand):
         )
         t = Task.objects.create(
             title="DesignTask",
-            book_list=b,
+            book=b,
             task_type='I',
         )

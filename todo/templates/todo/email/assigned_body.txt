@@ -2,9 +2,9 @@ Un nuevo libro ha sido añadido por {{ from_name }}:
 
 {{ book.name }}
 
-{% if book.note %}
+{% if book.description %}
 {% autoescape off %}
-Nota: {{ book.note }}
+Nota: {{ book.description }}
 {% endautoescape %}
 {% endif %}
 

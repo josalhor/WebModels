@@ -5,10 +5,12 @@
 
     {% else %}
       <a href="{% url 'todo:list_detail_completed' list_id list_slug %}" class="btn btn-warning">Ver tareas completadas</a>
-
     {% endif %}
 
-    <!--
-    <a href="{% url 'todo:del_list' list_id list_slug %}" class="btn btn-sm btn-danger">Delete this list</a>
-    -->
+  {% else %}
+    {% if view_completed %}
+      <a href="{% url 'todo:mine' %}" class="btn btn-warning">Ver tareas no completadas</a>
+    {% else %}
+      <a href="{% url 'todo:mine_completed' %}" class="btn btn-warning">Ver tareas completadas</a>
+    {% endif %}
   {% endif %}

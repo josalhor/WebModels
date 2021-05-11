@@ -64,7 +64,7 @@ def designer_assign(request, task_id: int) -> HttpResponse:
         'designer_view': designer_view,
         'type_task': type_task,
         'creator': task.created_by,
-        'note': task.note,
+        'description': task.description,
         'task': task,
         'assign_form': AssignFormDesigner(),
         'init_date': task.created_date,

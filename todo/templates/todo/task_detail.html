@@ -24,8 +24,8 @@
     <div class="card col-sm-8">
       <div class="card-body">
         <h3 class="card-title">{{ task.title }}</h3>
-        {% if task.note %}
-        <div class="card-text">{{ task.note|safe|urlize|linebreaks }}</div>
+        {% if task.description %}
+        <div class="card-text">{{ task.description|safe|urlize|linebreaks }}</div>
         {% endif %}
       </div>
     </div>
@@ -88,8 +88,8 @@
 
         <li class="list-group-item">
           <strong>Libro asociado:</strong>
-          <a href="{% url 'todo:list_detail' task.book_list.id task.book_list.slug %}">
-            {{ task.book_list }}
+          <a href="{% url 'todo:list_detail' task.book.id task.book.slug %}">
+            {{ task.book }}
           </a>
         </li>
       </ul>
