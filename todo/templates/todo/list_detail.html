@@ -5,15 +5,15 @@
 
 {% block content %}
   
+  <div style="display:flex; justify-content: space-between; margin-top: 40px;">
     {% if list_slug == "mine" %}
-      <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Tareas</h1>
+      <h1 style="font-family: 'BebasNeueRegular';">Tareas</h1>
     {% endif %}
-      <div style="display:flex; justify-content: space-between;">
-        {% if list_slug != "mine" %}
-          <div><h1 style="font-family: 'BebasNeueRegular';">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book.name }}"</h1></div>
-        {% endif %}
-        <div>{% include 'todo/include/toggle_delete.html' %}</div> 
-      </div>
+    {% if list_slug != "mine" %}
+      <div><h1 style="font-family: 'BebasNeueRegular';">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book.name }}"</h1></div>
+    {% endif %}
+    <div >{% include 'todo/include/toggle_delete.html' %}</div> 
+  </div>
       <!--<p><small><i>In workgroup "{{ book.group }}" - drag rows to set priorities.</i></small></p>-->
 
   {% if tasks %}
