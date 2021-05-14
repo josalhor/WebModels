@@ -24,8 +24,6 @@ urlpatterns = [
         name="list_detail_completed",
     ),
     path("<int:list_id>/<str:list_slug>/", views.list_detail, name="list_detail"),
-    path("<int:list_id>/<str:list_slug>/delete/", views.del_list, name="del_list"),
-    path("add_list/", views.add_list, name="add_list"),
     path("book/<int:book_id>/assign", views.book_assign, name="book_assign"),
     path("task/<int:task_id>/assign", views.designer_assign, name="designer_assign"),
     path("book/<int:book_id>/publish", views.book_publish, name="book_publish"),

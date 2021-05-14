@@ -1,5 +1,3 @@
-from todo.views.add_list import add_list  # noqa: F401
-from todo.views.del_list import del_list  # noqa: F401
 from todo.views.delete_task import delete_task  # noqa: F401
 from todo.views.external_add import external_add  # noqa: F401
 from todo.views.list_detail import list_detail  # noqa: F401
