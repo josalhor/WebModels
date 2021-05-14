@@ -1,4 +1,4 @@
-Buenos dias {{task.assigned_to}},
+Buenos días {{task.assigned_to}},
 
 Una nueva tarea de {{type_task}} le ha sido asignada. 
 
