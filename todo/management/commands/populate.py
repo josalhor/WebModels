@@ -1,18 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from todo.models import Editor, Book, UserInfo, Writer, Designer, Task 
+import datetime
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
         User = get_user_model()
-        u = User.objects.create_superuser('josep@g.com', 'pass')
+        u1 = User.objects.create_superuser('josep@g.com', 'pass')
         UserInfo.objects.create(
             full_name="JosepAdminEditor",
-            user=u
+            user=u1
         )
-        e = Editor.objects.create(
-            user=u,
+        e1 = Editor.objects.create(
+            user=u1,
             chief=True
         )
 
@@ -91,4 +92,6 @@ class Command(BaseCommand):
             title="DesignTask",
             book=b,
             task_type='I',
+            created_by=e1,
+            due_date=datetime.datetime(2022, 5, 14)
         )
