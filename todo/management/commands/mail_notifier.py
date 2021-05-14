@@ -13,13 +13,12 @@ class Command(BaseCommand):
         # Print tasks that are due on the next 3 days
 
         tasks = Task.objects.filter(completed=False, notified_due_date=False)
-
         for task in tasks:
-            today = timezone.now().date()
+            if task.due_date is None:
+                continue
             notification_due_date = task.due_date - datetime.timedelta(days=3)
             if notification_due_date <= today:
                 print(task.title)
-                
                 current_site = Site.objects.get_current()
 
                 email_body = render_to_string(
@@ -35,7 +34,7 @@ class Command(BaseCommand):
                     fail_silently=False,
                 )
 
-                task.notified_due_date = True
+                task.d_due_date = True
                 task.save()
 
 

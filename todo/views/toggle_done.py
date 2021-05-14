@@ -21,7 +21,6 @@ def toggle_done(request, task_id: int) -> HttpResponse:
         )
 
         editor = Editor.objects.filter(user=request.user).first()
-        print("HOLAAA", task.created_by)
 
         if request.user != task.created_by.user and (task.task_type != task.REVISION) and (not editor.chief):
             raise PermissionDenied
