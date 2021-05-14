@@ -57,7 +57,7 @@
                 {% endif %}
                 <li id="tareas-personales" class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
               {% else %}
-                <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Peticiones asignadas</a></li>
+                <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Tareas personales</a></li>
               {% endif %}
             {% endif %}
           </ul>
