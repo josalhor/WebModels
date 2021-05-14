@@ -61,7 +61,7 @@ class Command(BaseCommand):
             user=u,
         )
 
-        b = Book.objects.create(
+        b2 = Book.objects.create(
             name="Not assigned Book",
             author=w,
             thematic='S',
