@@ -15,15 +15,15 @@ from todo.utils import staff_check
 def toggle_done(request, task_id: int) -> HttpResponse:
     if request.method == "POST":
         task = get_object_or_404(Task, pk=task_id)
-
         redir_url = reverse(
             "todo:list_detail",
             kwargs={"list_id": task.book.id, "list_slug": task.book.slug},
         )
 
         editor = Editor.objects.filter(user=request.user).first()
+        print("HOLAAA", task.created_by)
 
-        if request.user != task.created_by.user and (not editor.chief):
+        if request.user != task.created_by.user and (task.task_type != task.REVISION) and (not editor.chief):
             raise PermissionDenied
 
         toggle_task_completed(task.id)

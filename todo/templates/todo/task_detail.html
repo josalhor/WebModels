@@ -64,6 +64,17 @@
             -->
           </li>
         {% endif %}
+        {% if not editor_view and task_type == task_revision %}
+          <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form" class="d-inline">
+            {% csrf_token %}
+            <div style="display:inline;">
+              <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
+                {% if task.completed %} Marcar como no completada {% else %} Marcar como completada {% endif %}
+              </button>
+            </div>
+          </form>
+        {% endif %}
+
 
         <li class="list-group-item">
           <strong>Asignada a:</strong>

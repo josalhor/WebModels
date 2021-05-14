@@ -133,6 +133,8 @@ def task_detail(request, task_id: int) -> HttpResponse:
 
 
     context = {
+        "task_revision": task.REVISION,
+        "task_type": task.task_type,
         "editor_view": editor_view,
         "task": task,
         "comment_list": comment_list,
