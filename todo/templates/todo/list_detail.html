@@ -7,7 +7,7 @@
   
   <div style="display:flex; justify-content: space-between; margin-top: 40px;">
     {% if list_slug == "mine" %}
-      <h1 style="font-family: 'BebasNeueRegular';">Tareas</h1>
+      <h1 style="font-family: 'BebasNeueRegular';">Tareas personales</h1>
     {% endif %}
     {% if list_slug != "mine" %}
       <div><h1 style="font-family: 'BebasNeueRegular';">{{ view_completed|yesno:"Tareas completadas, Tareas" }} asociadas al libro "{{ book.name }}"</h1></div>
