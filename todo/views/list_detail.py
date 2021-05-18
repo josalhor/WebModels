@@ -34,11 +34,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
         tasks = Task.objects.filter(book=book.id)
     
     # Check if it can be published
-    can_publish = editor_view and \
-                 Task.objects.filter(
-                     task_type=Task.REVISION,
-                     completed=True
-                )
+    completed = Task.objects.filter(task_type=Task.REVISION, completed=True).count > 0
 
     # Additional filtering
     if view_completed:
@@ -79,7 +75,7 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
             )
     
     context = {
-        "completed": can_publish,
+        "completed": completed,
         "editor_view": editor_view,
         "list_id": list_id,
         "list_slug": list_slug,
