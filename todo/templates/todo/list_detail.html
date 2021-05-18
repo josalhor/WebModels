@@ -62,7 +62,7 @@
     <h4>No tienes tareas asignadas</h4><br>
     {% else %}
     <h4>No hay tareas pendientes para este libro</h4><br>
-    {% if completed %}
+    {% if completed and editor_view %}
       <button id="publish" style="float: right; width: 18%; margin-left: 10px;" class="btn btn-dark" type="button"data-toggle="collapse">PUBLICAR</button>
       <script>
         document.getElementById("publish").onclick = function () {
