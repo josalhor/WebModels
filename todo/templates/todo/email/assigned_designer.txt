@@ -1,0 +1,11 @@
+Buenos días {{task.assigned_to}},
+
+Una nueva tarea de {{type_task}} le ha sido asignada. 
+
+Detalles de la tarea:
+    - Título: {{ task.title }}
+    - Descripción: {{ task.description }}
+    - Fecha de entrega: {{ task.due_date }}
+
+Página de asignamiento:
+http://{{ site }}{% url 'todo:accepted_petitions' %}

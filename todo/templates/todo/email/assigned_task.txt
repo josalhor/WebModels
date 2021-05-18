@@ -1,4 +1,4 @@
 Una nueva tarea en el libro {{ book.name }} ha sido añadida:
 
-Página de asignamiento::
+Página de asignamiento:
 http://{{ site }}{% url 'todo:task_detail' task.id %}

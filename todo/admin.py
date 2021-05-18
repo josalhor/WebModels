@@ -4,7 +4,7 @@ import datetime
 from django.contrib import admin
 from django.http import HttpResponse
 
-from todo.models import Attachment, Comment, Task, Book, Designer, Editor, Writer, Reader, UserInfo
+from todo.models import Attachment, Comment, Task, Book, Designer, Editor, Writer, Reader, UserInfo, PublishedBook
 
 
 def export_to_csv(modeladmin, request, queryset):
@@ -34,8 +34,8 @@ export_to_csv.short_description = "Export to CSV"
 
 
 class TaskAdmin(admin.ModelAdmin):
-    list_display = ("title", "book_list", "completed", "priority", "due_date")
-    list_filter = ("book_list",)
+    list_display = ("title", "book", "completed", "priority", "due_date")
+    list_filter = ("book",)
     ordering = ("priority",)
     search_fields = ("title",)
     actions = [export_to_csv]
@@ -63,3 +63,4 @@ admin.site.register(Designer)
 admin.site.register(Editor)
 admin.site.register(Writer)
 admin.site.register(Reader)
+admin.site.register(PublishedBook)

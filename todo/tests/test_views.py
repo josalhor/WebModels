@@ -7,13 +7,6 @@ from django.urls import reverse
 
 from todo.models import Task, Book
 
-"""
-First the "smoketests" - do they respond at all for a logged in admin user?
-Next permissions tests - some views should respond for staffers only.
-After that, view contents and behaviors.
-"""
-
-
 @pytest.mark.django_db
 def test_todo_setup(todo_setup):
     assert Task.objects.all().count() == 6
@@ -108,50 +101,50 @@ def test_view_search(todo_setup, admin_client):
 
 @pytest.mark.django_db
 def test_no_javascript_in_task_note(todo_setup, client):
-    book_list = Book.objects.first()
+    book = Book.objects.first()
     user = get_user_model().objects.get(username="u2")
     title = "Some Unique String"
     note = "foo <script>alert('oh noez');</script> bar"
     data = {
-        "book_list": book_list.id,
+        "book": book.id,
         "created_by": user.id,
         "priority": 10,
         "title": title,
-        "note": note,
+        "description": note,
         "add_edit_task": "Submit",
     }
 
     client.login(username="u2", password="password")
-    url = reverse("todo:list_detail", kwargs={"list_id": book_list.id, "list_slug": book_list.slug})
+    url = reverse("todo:list_detail", kwargs={"list_id": book.id, "list_slug": book.slug})
 
     response = client.post(url, data)
     assert response.status_code == 302
 
     # Retrieve new task and compare notes field
     task = Task.objects.get(title=title)
-    assert task.note != note  # Should have been modified by bleach since note included javascript!
-    assert task.note == bleach.clean(note, strip=True)
+    assert task.description != note  # Should have been modified by bleach since note included javascript!
+    assert task.description == bleach.clean(note, strip=True)
 
 
 @pytest.mark.django_db
 def test_created_by_unchanged(todo_setup, client):
 
-    book_list = Book.objects.first()
+    book = Book.objects.first()
     u2 = get_user_model().objects.get(username="u2")
     title = "Some Unique String with unique chars: ab78539e"
     note = "a note"
     data = {
-        "book_list": book_list.id,
+        "book": book.id,
         "created_by": u2.id,
         "priority": 10,
         "title": title,
-        "note": note,
+        "description": note,
         "add_edit_task": "Submit",
     }
 
     client.login(username="u2", password="password")
     url_add_task = reverse(
-        "todo:list_detail", kwargs={"list_id": book_list.id, "list_slug": book_list.slug}
+        "todo:list_detail", kwargs={"list_id": book.id, "list_slug": book.slug}
     )
 
     response = client.post(url_add_task, data)
@@ -170,11 +163,11 @@ def test_created_by_unchanged(todo_setup, client):
     url_edit_task = reverse("todo:task_detail", kwargs={"task_id": task.id})
 
     dataTwo = {
-        "book_list": task.book_list.id,
+        "book": task.book.id,
         "created_by": extra_g2_user.id,  # this submission is attempting to change created_by
         "priority": 10,
         "title": task.title,
-        "note": "the note was changed",
+        "description": "the note was changed",
         "add_edit_task": "Submit",
     }
 
@@ -184,7 +177,7 @@ def test_created_by_unchanged(todo_setup, client):
     task.refresh_from_db()
 
     # Proof that the task was saved:
-    assert task.note == "the note was changed"
+    assert task.description == "the note was changed"
 
     # client was unable to modify created_by:
     assert task.created_by == u2
@@ -193,10 +186,6 @@ def test_created_by_unchanged(todo_setup, client):
 @pytest.mark.django_db
 @pytest.mark.parametrize("test_input, expected", [(True, True), (False, False)])
 def test_completed_unchanged(test_input, expected, todo_setup, client):
-    """Tasks are marked completed/uncompleted by buttons,
-    not via checkbox on the task edit form. Editing a task should
-    not change its completed status. Test with both completed and incomplete Tasks."""
-
     task = Task.objects.get(title="Task 1", created_by__username="u1")
     task.completed = test_input
     task.save()
@@ -205,9 +194,9 @@ def test_completed_unchanged(test_input, expected, todo_setup, client):
     url_edit_task = reverse("todo:task_detail", kwargs={"task_id": task.id})
 
     data = {
-        "book_list": task.book_list.id,
+        "book": task.book.id,
         "title": "Something",
-        "note": "the note was changed",
+        "description": "the note was changed",
         "add_edit_task": "Submit",
         "completed": task.completed,
     }
@@ -231,7 +220,7 @@ def test_no_javascript_in_comments(todo_setup, client):
     task.created_by = user
     task.save()
 
-    user.groups.add(task.book_list.group)
+    user.groups.add(task.book.group)
 
     comment = "foo <script>alert('oh noez');</script> bar"
     data = {"comment-body": comment, "add_comment": "Submit"}
@@ -272,8 +261,6 @@ def test_del_list_not_in_list_group(todo_setup, admin_client):
 
 
 def test_view_list_mine(todo_setup, client):
-    """View a list in a group I belong to.
-    """
     tlist = Book.objects.get(slug="zip")  # User u1 is in this group's list
     url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
     client.login(username="u1", password="password")
@@ -282,8 +269,6 @@ def test_view_list_mine(todo_setup, client):
 
 
 def test_view_list_not_mine(todo_setup, client):
-    """View a list in a group I don't belong to.
-    """
     tlist = Book.objects.get(slug="zip")  # User u1 is in this group, user u2 is not.
     url = reverse("todo:list_detail", kwargs={"list_id": tlist.id, "list_slug": tlist.slug})
     client.login(username="u2", password="password")
@@ -301,9 +286,6 @@ def test_view_task_mine(todo_setup, client):
 
 
 def test_view_task_my_group(todo_setup, client, django_user_model):
-    """User can always view tasks that are NOT theirs IF the task is in a shared group.
-    u1 and u2 are in different groups in the fixture -
-    Put them in the same group."""
     g1 = Group.objects.get(name="Workgroup One")
     u2 = django_user_model.objects.get(username="u2")
     u2.groups.add(g1)

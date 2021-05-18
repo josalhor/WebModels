@@ -9,7 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo
+from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo, Designer
 
 log = logging.getLogger(__name__)
 
@@ -36,15 +36,22 @@ def user_can_read_book(book, user):
     editor = Editor.objects.filter(user=user).first()
     return (author != None and book.author == author) or \
            (editor != None and (book.editor == editor or editor.chief))
+           
+def user_can_design_book(book, task, user):
+    editor = Editor.objects.filter(user=user).first()
+    designer = Designer.objects.filter(user=user).first()
+    return (editor != None and (book.editor == editor or editor.chief)) or \
+           (designer != None and (task.assigned_to.user == designer.user or designer.chief))
 
 def user_can_read_task(task, user):
-    if task.task_type == task.WRITING:
-        return user_can_read_book(task.book_list, user)
+    if task.task_type == task.WRITING or task.task_type == task.REVISION:
+        return user_can_read_book(task.book, user)
+    elif task.task_type == task.ILLUSTRATION or task.task_type == task.LAYOUT:
+        return user_can_design_book(task.book, task, user)
     raise NotImplementedError('')
 
 
 def todo_get_backend():
-    """Returns a mail backend for some task"""
     mail_backends = getattr(settings, "TODO_MAIL_BACKENDS", None)
     if mail_backends is None:
         return None
@@ -56,11 +63,6 @@ def todo_get_backend():
     return task_backend
 
 def todo_send_mail(user, task, subject, body, recip_list):
-    """Send an email attached to task, triggered by user"""
-    # TODO: delete
-    # references = Comment.objects.filter(task=task).only("email_message_id")
-    # references = (ref.email_message_id for ref in references)
-    # references = " ".join(filter(bool, references))
     references = ""
 
     backend = todo_get_backend()
@@ -104,11 +106,6 @@ def todo_send_mail(user, task, subject, body, recip_list):
 
 
 def send_notify_mail(new_task):
-    """
-    Send email to assignee if task is assigned to someone other than submittor.
-    Unassigned tasks should not try to notify.
-    """
-
     if new_task.assigned_to == new_task.created_by:
         return
 
@@ -118,13 +115,20 @@ def send_notify_mail(new_task):
         "todo/email/assigned_task.txt", {"task": new_task, "site": current_site, "user": new_task.created_by.user}
     )
 
-    recip_list = [new_task.assigned_to.user.email]
+    if new_task.assigned_to:
+        recip_list = [new_task.assigned_to.user.email]
+    elif new_task.task_type == new_task.ILLUSTRATION or new_task.task_type == new_task.LAYOUT:
+        recip_list = [
+            d.user.email
+            for d in Designer.objects.filter(chief=True)
+        ]
+    else:
+        raise ValueError('Expected task to be assigned')
+
     todo_send_mail(new_task.created_by, new_task, subject, body, recip_list)
 
 
 def send_email_to_thread_participants(task, msg_body, user, subject=None):
-    """Notify all previous commentors on a Task about a new comment."""
-
     current_site = Site.objects.get_current()
     email_subject = subject
     if not subject:
@@ -136,19 +140,20 @@ def send_email_to_thread_participants(task, msg_body, user, subject=None):
         {"task": task, "body": msg_body, "site": current_site, "user_info": user_info},
     )
 
-    # Get all thread participants
+    recip_list = get_thread_participants(task)
+
+    todo_send_mail(user, task, email_subject, email_body, recip_list)
+
+def get_thread_participants(task):
     commenters = Comment.objects.filter(task=task)
     recip_list = set(ca.author.user.email for ca in commenters if ca.author is not None)
     for related_user in (task.created_by, task.assigned_to):
         if related_user is not None:
             recip_list.add(related_user.user.email)
-    recip_list = list(m for m in recip_list if m)
-
-    todo_send_mail(user, task, email_subject, email_body, recip_list)
+    return list(m for m in recip_list if m)
 
 
 def toggle_task_completed(task_id: int) -> bool:
-    """Toggle the `completed` bool on Task from True to False or vice versa."""
     try:
         task = Task.objects.get(id=task_id)
         task.completed = not task.completed
@@ -161,7 +166,6 @@ def toggle_task_completed(task_id: int) -> bool:
 
 
 def remove_attachment_file(attachment_id: int) -> bool:
-    """Delete an Attachment object and its corresponding file from the filesystem."""
     try:
         attachment = Attachment.objects.get(id=attachment_id)
         if attachment.file:

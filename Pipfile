@@ -5,17 +5,18 @@ name = "pypi"
 
 [packages]
 django-extensions = "*"
-"psycopg2-binary" = "*"
+psycopg2-binary = "*"
 gunicorn = "*"
 factory-boy = "*"
 titlecase = "*"
 bleach = "*"
 django = ">=3.1"
 django-username-email = "*"
+pillow = ">=8.2"
 
 [dev-packages]
 pylint = "*"
-"flake8" = "*"
+flake8 = "*"
 pytest = "*"
 pytest-django = "*"
 mypy = "*"

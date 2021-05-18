@@ -15,8 +15,8 @@
       <br />
       <span class="minor">
         In list:
-        <a href="{% url 'todo:list_detail' f.book_list.id f.book_list.slug %}">
-          {{ f.book_list.name }}
+        <a href="{% url 'todo:list_detail' f.book.id f.book.slug %}">
+          {{ f.book.name }}
         </a>
         <br /> Assigned to: {% if f.assigned_to %}{{ f.assigned_to }}{% else %}Unassigned{% endif %}
         <br /> Complete: {{ f.completed|yesno:"Yes,No" }}

@@ -1,7 +1,7 @@
 {% extends "todo/base.html" %}
 {% load todo_tags %}
 
-{% block title %}Task:{{ task.title }}{% endblock %}
+{% block title %}Task detail{{ task.title }}{% endblock %}
 
 {% block extrahead %}
 <style>
@@ -24,8 +24,8 @@
     <div class="card col-sm-8">
       <div class="card-body">
         <h3 class="card-title">{{ task.title }}</h3>
-        {% if task.note %}
-        <div class="card-text">{{ task.note|safe|urlize|linebreaks }}</div>
+        {% if task.description %}
+        <div class="card-text">{{ task.description|safe|urlize|linebreaks }}</div>
         {% endif %}
       </div>
     </div>
@@ -64,6 +64,17 @@
             -->
           </li>
         {% endif %}
+        {% if not editor_view and task_type == task_revision %}
+          <form method="post" action="{% url "todo:task_toggle_done" task.id %}" role="form" class="d-inline">
+            {% csrf_token %}
+            <div style="display:inline;">
+              <button class="btn btn-info btn-sm" type="submit" name="toggle_done">
+                {% if task.completed %} Marcar como no completada {% else %} Marcar como completada {% endif %}
+              </button>
+            </div>
+          </form>
+        {% endif %}
+
 
         <li class="list-group-item">
           <strong>Asignada a:</strong>
@@ -88,8 +99,8 @@
 
         <li class="list-group-item">
           <strong>Libro asociado:</strong>
-          <a href="{% url 'todo:list_detail' task.book_list.id task.book_list.slug %}">
-            {{ task.book_list }}
+          <a href="{% url 'todo:list_detail' task.book.id task.book.slug %}">
+            {{ task.book }}
           </a>
         </li>
       </ul>

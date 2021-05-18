@@ -10,21 +10,20 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
+from django.core.mail import send_mail
 
 from todo.defaults import defaults
-from todo.features import HAS_TASK_MERGE
 from todo.forms import AddEditTaskForm
 from todo.models import Attachment, Comment, Task, Editor
 from todo.utils import (
     send_email_to_thread_participants,
+    get_thread_participants,
     staff_check,
     toggle_task_completed,
     user_can_read_task,
 )
-
-if HAS_TASK_MERGE:
-    from dal import autocomplete
-
 
 def handle_add_comment(request, task):
     if not request.POST.get("add_comment"):
@@ -61,51 +60,25 @@ def task_detail(request, task_id: int) -> HttpResponse:
     if not user_can_read_task(task, request.user):
         raise PermissionDenied
 
-    # Handle task merging
-    if not HAS_TASK_MERGE:
-        merge_form = None
-    else:
-
-        class MergeForm(forms.Form):
-            merge_target = forms.ModelChoiceField(
-                queryset=Task.objects.all(),
-                widget=autocomplete.ModelSelect2(
-                    url=reverse("todo:task_autocomplete", kwargs={"task_id": task_id})
-                ),
-            )
-
-        # Handle task merging
-        if not request.POST.get("merge_task_into"):
-            merge_form = MergeForm()
-        else:
-            merge_form = MergeForm(request.POST)
-            if merge_form.is_valid():
-                merge_target = merge_form.cleaned_data["merge_target"]
-            if not user_can_read_task(merge_target, request.user):
-                raise PermissionDenied
-
-            task.merge_into(merge_target)
-            return redirect(reverse("todo:task_detail", kwargs={"task_id": merge_target.pk}))
-
     # Save submitted comments
     handle_add_comment(request, task)
 
     # Save task edits
     if not request.POST.get("add_edit_task"):
-        form = AddEditTaskForm(instance=task, initial={"book_list": task.book_list})
+        form = AddEditTaskForm(instance=task, initial={"book": task.book})
     else:
         form = AddEditTaskForm(
-            request.POST, instance=task, initial={"book_list": task.book_list}
+            request.POST, instance=task, initial={"book": task.book}
         )
 
         if form.is_valid():
             item = form.save(commit=False)
-            item.note = bleach.clean(form.cleaned_data["note"], strip=True)
+            item.description = bleach.clean(form.cleaned_data["description"], strip=True)
             item.title = bleach.clean(form.cleaned_data["title"], strip=True)
             item.save()
             messages.success(request, "The task has been edited.")
             return redirect(
-                "todo:list_detail", list_id=task.book_list.id, list_slug=task.book_list.slug
+                "todo:list_detail", list_id=task.book.id, list_slug=task.book.slug
             )
 
     # Mark complete
@@ -139,15 +112,34 @@ def task_detail(request, task_id: int) -> HttpResponse:
             task=task, added_by=request.user, timestamp=datetime.datetime.now(), file=file
         )
         messages.success(request, f"Archivo correctamente adjuntado")
+
+        # Send mail new attachment
+        email_body = render_to_string(
+            "todo/email/new_attachment.txt",
+            {"task": task, "site": Site.objects.get_current(), "user_info": request.user.user_info},
+        )
+
+        recipients = get_thread_participants(task)
+
+        send_mail(
+            'Nuevo archivo adjunto',
+            email_body,
+            None,
+            recipients,
+            fail_silently=False,
+        )
+
         return redirect("todo:task_detail", task_id=task.id)
 
 
     context = {
+        "task_revision": task.REVISION,
+        "task_type": task.task_type,
         "editor_view": editor_view,
         "task": task,
         "comment_list": comment_list,
         "form": form,
-        "merge_form": merge_form,
+        "merge_form": None,
         "thedate": thedate,
         "comment_classes": defaults("TODO_COMMENT_CLASSES"),
         "attachments_enabled": defaults("TODO_ALLOW_FILE_ATTACHMENTS"),

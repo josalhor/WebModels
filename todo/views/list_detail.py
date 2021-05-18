@@ -16,7 +16,8 @@ from todo.utils import send_notify_mail, staff_check, user_can_read_book
 def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> HttpResponse:
 
     # Defaults
-    book_list = None
+    completed = False
+    book = None
     form = None
     editor_view = False
 
@@ -27,10 +28,17 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
         tasks = Task.objects.filter(assigned_to=request.user.user_info)
     else:
         # Show a specific list, ensuring permissions.
-        book_list = get_object_or_404(Book, id=list_id)
-        if not user_can_read_book(book_list, request.user):
+        book = get_object_or_404(Book, id=list_id)
+        if not user_can_read_book(book, request.user):
             raise PermissionDenied
-        tasks = Task.objects.filter(book_list=book_list.id)
+        tasks = Task.objects.filter(book=book.id)
+    
+    # Check if it can be published
+    can_publish = editor_view and \
+                 Task.objects.filter(
+                     task_type=Task.REVISION,
+                     completed=True
+                )
 
     # Additional filtering
     if view_completed:
@@ -45,39 +53,37 @@ def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> 
     if request.POST.getlist("add_edit_task"):
         form = AddEditTaskForm(
             request.POST,
-            initial={"priority": 999, "book_list": book_list},
+            initial={"priority": 999, "book": book},
         )
 
         if form.is_valid():
             new_task = form.save(commit=False)
             new_task.created_by = editor
-            if new_task.task_type == Task.WRITING:
-                new_task.assigned_to = UserInfo.objects.filter(user=book_list.author.user).first()
-            new_task.note = bleach.clean(form.cleaned_data["note"], strip=True)
+            if new_task.task_type == Task.WRITING or new_task.task_type == Task.REVISION:
+                new_task.assigned_to = UserInfo.objects.filter(user=book.author.user).first()
+            new_task.description = bleach.clean(form.cleaned_data["description"], strip=True)
             new_task.save()
 
-            # Send email alert only if Notify checkbox is checked AND assignee is not same as the submitter
-            if (
-                new_task.assigned_to
-                and new_task.assigned_to != request.user
-            ):
-                send_notify_mail(new_task)
+            send_notify_mail(new_task)
 
             messages.success(request, 'La nueva tarea "{t}" ha sido añadida.'.format(t=new_task.title))
             return redirect(request.path)
+        else:
+            print(form.errors)
 
     else:
         # Don't allow adding new tasks on some views
         if list_slug not in ["mine", "recent-add", "recent-complete"]:
             form = AddEditTaskForm(
-                initial={"priority": 999, "book_list": book_list},
+                initial={"priority": 999, "book": book},
             )
     
     context = {
+        "completed": can_publish,
         "editor_view": editor_view,
         "list_id": list_id,
         "list_slug": list_slug,
-        "book_list": book_list,
+        "book": book,
         "form": form,
         "tasks": tasks,
         "view_completed": view_completed,

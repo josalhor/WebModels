@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render
+from .book_assign import send_email_reject_book
 
 from todo.forms import SearchForm
 from todo.models import Task, Book, Editor, Writer
@@ -21,21 +22,25 @@ def accepted_petitions(request) -> HttpResponse:
     editor = Editor.objects.filter(user=request.user).first()
 
     if editor:
-        lists = Book.objects.exclude(editor=None).exclude(rejected=True).order_by("name")
-        print(lists)
+        lists = Book.objects.filter(completed=False)
+        if editor.chief:
+            lists = lists.exclude(editor=None)
+        else:
+            lists = lists.filter(editor=editor)
+        lists = lists.exclude(rejected=True).order_by("name")
         editor_view = True
     else:
         author = Writer.objects.filter(user=request.user)
-        lists = Book.objects.filter(rejected=False, author__in=author).exclude(editor=None).order_by("name")
+        lists = Book.objects.filter(completed=False, rejected=False, author__in=author).exclude(editor=None).order_by("name")
     
     list_count = lists.count()
 
     task_count = 0
     for book in lists:
-        tasks = Task.objects.filter(book_list=book).count()
+        tasks = Task.objects.filter(book=book, completed=False).count()
         task_count += tasks
-        
     
+
     if request.method == "POST":
         book = Book.objects.filter(name=request.POST['delete-book']).first()
         deleted = True
@@ -43,6 +48,8 @@ def accepted_petitions(request) -> HttpResponse:
         book.editor = None
         book.rejected = True
         book.save()
+
+        send_email_reject_book(book, reasons=request.POST['reasons'])
 
         messages.success(request, "La petición correspondiente al libro '{}' ha sido eliminada de su lista de peticiones aceptadas.".format(book.name))
 
