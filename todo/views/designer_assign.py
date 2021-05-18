@@ -57,7 +57,7 @@ def designer_assign(request, task_id: int) -> HttpResponse:
                 fail_silently=False,
             )
             
-        return redirect("todo:accepted_petitions")
+        return redirect("todo:task_lists")
     
 
     context = {
