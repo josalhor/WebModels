@@ -36,10 +36,39 @@
     </div>
 </div>
 
-	<div class="container"></div>
-		<h3 style='font-weight: bold;'>Libros del momento</h3>
-		
-	</div>
+<div class="container"></div>
+    <h3 style='font-weight: bold;'>Los libros del momento</h3>
+    {% for book in published_books %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <span vocab="http://schema.org/" typeof="Book">
+                        <a href="{% url 'book_detail' book.pk %}">
+                            <img class="card-img-top mx-auto d-block" style="border-radius:0;width:140px;height:200px;object-fit: contain"/>
+                        </a>
+                        <script>
+                            setBookImg(book.related_image);
+                        </script>
+                        <span property="name" style="display: none;">{{ book.title }}</span>
+                        <h4 class="card-title text-primary text-truncate text-center"><a href="{% url 'book_detail' book.pk %}" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">{{ book.author_text }}</span></h6>
+                        <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">{{ book.book.description }}</span></div>
+                        <div class="row pt-2">
+                            <div class="col">
+                                <p><a href="{% url 'book_detail' book.pk %}" class="btn btn-outline-info btn-block"> Leer más </a></p>
+                                <span style="display: none;" rel="discussionUrl">
+                                    <span typeof="URL">
+                                        {% url 'book_detail' book.pk %}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+	{% endfor %}
+</div>
 
 </body>
 </html>
