@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
+from .signup import signup
 
 urlpatterns = (
     [
@@ -12,6 +13,7 @@ urlpatterns = (
         path("logout", auth_views.LogoutView.as_view(), name="logout"),
         path("todoadmin/", admin.site.urls),
         path("todo/", include("todo.urls", namespace="todo")),
+        path('signup/', signup, name='signup'),
     ]
     # Static media in DEBUG mode:
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

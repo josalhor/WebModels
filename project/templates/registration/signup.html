@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Registrate</h2>
+
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+
+    
+    <div class="form-group">
+        <label for="id_email" name="email">Email</label>
+        <input type="email" class="form-control" id="id_email" name="email" required placeholder="algo@gmail.com">
+    </div>
+    <div class="form-group">
+        <p>
+            <label for="id_password1">Nueva contraseña:</label> <input class="form-control" type="password"
+                name="password1" autocomplete="new-password" required="" id="id_password1">
+        </p>
+    </div>
+
+    <div class="form-group">
+        <p>
+            <label for="id_password2">Confirme la nueva contraseña:</label> <input class="form-control"
+                type="password" name="password2" autocomplete="new-password" required="" id="id_password2">
+        </p>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrate</button>
+</form>
+{% endblock %}
