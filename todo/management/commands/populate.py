@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
-from todo.models import Editor, Book, UserInfo, Writer, Designer, Task 
+from todo.models import Editor, Book, UserInfo, Writer, Designer, Task, PublishedBook
 import datetime
 
 class Command(BaseCommand):
@@ -40,6 +40,12 @@ class Command(BaseCommand):
             author=w,
             editor=e,
             thematic='S'
+        )
+
+        pb = PublishedBook.objects.create(
+            book=b,
+            title="Super Book",
+            author_text="auth text"
         )
 
         u = User.objects.create_user('balma@g.com', 'pass')
