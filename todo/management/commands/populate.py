@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 from todo.models import Editor, Book, UserInfo, Writer, Designer, Task, PublishedBook
 import datetime
+from todo import static
 
 class Command(BaseCommand):
 
@@ -44,8 +45,9 @@ class Command(BaseCommand):
 
         pb = PublishedBook.objects.create(
             book=b,
-            title="Super Book",
-            author_text="auth text"
+            title="While Justice Sleeps",
+            author_text="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case.",
+            related_image= "static/portada_libro.jpg"
         )
 
         u = User.objects.create_user('balma@g.com', 'pass')
