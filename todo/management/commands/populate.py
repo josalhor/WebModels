@@ -41,11 +41,17 @@ class Command(BaseCommand):
             author=w,
             editor=e,
             thematic='S',
-            description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case."
         )
 
         pb = PublishedBook.objects.create(
-            book=b,
+            book= Book.objects.create(
+                name="Published Book",
+                author=w,
+                editor=e,
+                thematic='S',
+                completed=True,
+                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case."
+            ),
             title="While Justice Sleeps",
             author_text="Stacey Abrams",
             related_image= "static/portada_libro.jpg"

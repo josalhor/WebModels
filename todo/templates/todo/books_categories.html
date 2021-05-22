@@ -1,0 +1,33 @@
+{% extends "todo/base.html" %}
+{% block page_heading %}{% endblock %}
+{% block title %}Catálogo de libros{% endblock %}
+
+{% block content %}
+
+<section class="jumbotron" style="padding: 2rem 1rem;">
+	<div class="container">
+		{% if category == 0 %}
+		<h1 style='font-weight: bold;'>Todos los libros</h1>
+		{% endif %}
+		{% if category == 1 %}
+		<h1 style='font-weight: bold;'>Libros de Fantasía</h1>
+		{% endif %}
+		{% if category == 2 %}
+		<h1 style='font-weight: bold;'>Libros de Aventuras</h1>
+		{% endif %}
+		{% if category == 3 %}
+		<h1 style='font-weight: bold;'>Libros de Terror</h1>
+		{% endif %}
+		<hr class="my-4">
+		<h3 class="text-justify">Perderse en una novela es uno de los mejores placeres de la vida. ¿Estas preparado? </h3>
+		<hr class="my-4">
+		<h4 class="text-justify">Descubre los mejores libros editados, ilustrados y maquetados por Bookiernes.</h4>	
+	</div>
+</section>
+
+
+{% if category == 1 %}
+
+{% endif %}
+
+{% endblock %}

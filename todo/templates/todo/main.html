@@ -13,9 +13,10 @@
 <div class="w3-dropdown-hover w3-mobile">
 <button class="w3-button w3-light-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-dark-grey">
-        <a href="#" class="w3-bar-item w3-button w3-mobile">ROMANCE</a>
-        <a href="#" class="w3-bar-item w3-button w3-mobile">AVENTURAS</a>
-        <a href="#" class="w3-bar-item w3-button w3-mobile">TERROR</a>
+        <a href="{% url 'todo:book_category' 0 %}" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
+        <a href="{% url 'todo:book_category' 1 %}" class="w3-bar-item w3-button w3-mobile">FANTASIA</a>
+        <a href="{% url 'todo:book_category' 2 %}" class="w3-bar-item w3-button w3-mobile">AVENTURAS</a>
+        <a href="{% url 'todo:book_category' 3 %}" class="w3-bar-item w3-button w3-mobile">TERROR</a>
     </div>
 </div>
 <a href="#" style="margin-left: 36%;">¿Nuevo por aquí? SUSCRÍBETE</a> 
@@ -44,20 +45,20 @@
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <span vocab="http://schema.org/" typeof="Book">
-                        <a href="book/{{book.pk}}/publish">
+                        <a href="todo/book/{{book.pk}}/detail">
                             <img class="card-img-top mx-auto d-block" style="border-radius:0;width:140px;height:200px;object-fit: contain" src="{{book.related_image}}"/>
                         </a>
                         <span property="name" style="display: none;">{{ book.title }}</span>
-                         <h4 class="card-title text-primary text-truncate text-center"><a href="book/{{book.pk}}/publish" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
+                         <h4 class="card-title text-primary text-truncate text-center"><a href="todo/book/{{book.pk}}/detail" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
                         <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.author_text }}</span></h6>
                         <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Publicación: {{ book.publication_date }}</span></h6>
                         <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.book.description }}</span></div>
                         <div class="row pt-2">
                             <div class="col">
-                                 <p><a href="book/{{book.pk}}/publish" class="btn btn-outline-info btn-block"> Leer más </a></p>
+                                 <p><a href="todo/book/{{book.pk}}/detail" class="btn btn-outline-info btn-block"> Leer más </a></p>
                                 <span style="display: none;" rel="discussionUrl">
                                      <span typeof="URL">
-                                        book/{{book.pk}}/publish
+                                        todo/book/{{book.pk}}/detail
                                     </span>
                                 </span>
                             </div>

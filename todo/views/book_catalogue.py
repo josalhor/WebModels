@@ -10,6 +10,8 @@ from todo.models import Book, PublishedBook
 
 def book_catalogue(request) -> HttpResponse:
     books = PublishedBook.objects.all()
+    for book in books:
+        book.pk = book.pk-1
 
     context = {
         "published_books": books,
