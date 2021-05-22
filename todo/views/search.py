@@ -1,43 +1,42 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from todo.models import Task
-from todo.utils import staff_check
+from todo.models import PublishedBook
 
-
-@login_required
-@user_passes_test(staff_check)
-def search(request) -> HttpResponse:
-    """Search for tasks user has permission to see.
+def search(request):
+    """Filters books by category and/or date and/or name.
+    Parameters:
+    request (request): Browser request for the view.
     """
+    
+    success = True
+    books = []
+    name = request.GET.get('n')
 
-    query_string = ""
-
-    if request.GET:
-
-        found_tasks = None
-        if ("q" in request.GET) and request.GET["q"].strip():
-            query_string = request.GET["q"]
-
-            found_tasks = Task.objects.filter(
-                Q(title__icontains=query_string) | Q(note__icontains=query_string)
-            )
-        else:
-            # What if they selected the "completed" toggle but didn't enter a query string?
-            # We still need found_tasks in a queryset so it can be "excluded" below.
-            found_tasks = Task.objects.all()
-
-        if "inc_complete" in request.GET:
-            found_tasks = found_tasks.exclude(completed=True)
-
+    if (name is None):
+        return redirect('/')
     else:
-        found_tasks = None
+        books = PublishedBook.objects.filter(book__name__icontains=name)
 
-    # Only include tasks that are in groups of which this user is a member:
-    if not request.user.is_superuser:
-        found_tasks = found_tasks.filter(book__group__in=request.user.groups.all())
+    if not books:
+        success = False
+        books = PublishedBook.objects.all()
 
-    context = {"query_string": query_string, "found_tasks": found_tasks}
-    return render(request, "todo/search_results.html", context)
+    page = request.GET.get('page', 1)
+
+    paginator = Paginator(books, 6) # Show 6 books per page
+    
+    try:
+        books = paginator.page(page)
+    except PageNotAnInteger:
+        books = paginator.page(1)
+    except EmptyPage:
+        books = paginator.page(paginator.num_pages)
+
+    context = {
+        'success': success,
+        'books': books
+    }
+
+    return render(request, 'home.html', context)

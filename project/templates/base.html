@@ -59,6 +59,11 @@
               {% else %}
                 <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Libros en edición</a></li>
               {% endif %}
+            {% else %}
+              <form method="get" action="{% url 'todo:search'  %}" class="form-inline my-2 my-lg-0" style="margin-right:auto; margin-left:auto;">
+                <input class="form-control mr-sm-2" name="n" type="text" placeholder="Buscar por título..." aria-label="Search" style="width: 500px">
+                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
+              </form>
             {% endif %}
           </ul>
           <ul class="navbar-nav">
