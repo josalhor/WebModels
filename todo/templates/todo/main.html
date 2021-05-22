@@ -49,9 +49,9 @@
                         </a>
                         <span property="name" style="display: none;">{{ book.title }}</span>
                          <h4 class="card-title text-primary text-truncate text-center"><a href="book/{{book.pk}}/publish" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
-                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.book.author }}</span></h6>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.author_text }}</span></h6>
                         <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Publicación: {{ book.publication_date }}</span></h6>
-                        <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.author_text }}</span></div>
+                        <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.book.description }}</span></div>
                         <div class="row pt-2">
                             <div class="col">
                                  <p><a href="book/{{book.pk}}/publish" class="btn btn-outline-info btn-block"> Leer más </a></p>
