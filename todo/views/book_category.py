@@ -8,14 +8,13 @@ from project import templates
 
 from todo.models import Book, PublishedBook
 
-def book_category(request, category_id: int) -> HttpResponse:
-    books = Book.objects.all()
-    category_books = books.filter(thematic=category_id)
-    published_books_category = PublishedBook.objects.filter(book=category_books)
+def book_category(request, category_id: str) -> HttpResponse:
+    books = PublishedBook.objects.all()
+
 
     context = {
-        "category_books": category_books,
-        "category": category_id,
+        "books": books,
+        "category": category_id
     }
 
 

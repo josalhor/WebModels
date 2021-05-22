@@ -13,10 +13,10 @@
 <div class="w3-dropdown-hover w3-mobile">
 <button class="w3-button w3-light-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-dark-grey">
-        <a href="{% url 'todo:book_category' 0 %}" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
-        <a href="{% url 'todo:book_category' 1 %}" class="w3-bar-item w3-button w3-mobile">FANTASIA</a>
-        <a href="{% url 'todo:book_category' 2 %}" class="w3-bar-item w3-button w3-mobile">AVENTURAS</a>
-        <a href="{% url 'todo:book_category' 3 %}" class="w3-bar-item w3-button w3-mobile">TERROR</a>
+        <a href="todo/categories/Todos" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
+        <a href="todo/categories/Fantasia" class="w3-bar-item w3-button w3-mobile">FANTASIA</a>
+        <a href="todo/categories/Aventuras" class="w3-bar-item w3-button w3-mobile">AVENTURAS</a>
+        <a href="todo/categories/Miedo" class="w3-bar-item w3-button w3-mobile">MIEDO</a>
     </div>
 </div>
 <a href="#" style="margin-left: 36%;">¿Nuevo por aquí? SUSCRÍBETE</a> 
@@ -51,6 +51,7 @@
                         <span property="name" style="display: none;">{{ book.title }}</span>
                          <h4 class="card-title text-primary text-truncate text-center"><a href="todo/book/{{book.pk}}/detail" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
                         <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.author_text }}</span></h6>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Categoria: {{ book.thematic }}</span></h6>
                         <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Publicación: {{ book.publication_date }}</span></h6>
                         <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.book.description }}</span></div>
                         <div class="row pt-2">

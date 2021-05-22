@@ -6,17 +6,10 @@
 
 <section class="jumbotron" style="padding: 2rem 1rem;">
 	<div class="container">
-		{% if category == 0 %}
+		{% if category == "Todos" %}
 		<h1 style='font-weight: bold;'>Todos los libros</h1>
-		{% endif %}
-		{% if category == 1 %}
-		<h1 style='font-weight: bold;'>Libros de Fantasía</h1>
-		{% endif %}
-		{% if category == 2 %}
-		<h1 style='font-weight: bold;'>Libros de Aventuras</h1>
-		{% endif %}
-		{% if category == 3 %}
-		<h1 style='font-weight: bold;'>Libros de Terror</h1>
+		{% else %}
+		<h1 style='font-weight: bold;'>Libros de {{category}}</h1>
 		{% endif %}
 		<hr class="my-4">
 		<h3 class="text-justify">Perderse en una novela es uno de los mejores placeres de la vida. ¿Estas preparado? </h3>
@@ -25,9 +18,36 @@
 	</div>
 </section>
 
-
-{% if category == 1 %}
-
-{% endif %}
+<div class="container"></div>
+    {% for book in books %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <span vocab="http://schema.org/" typeof="Book">
+                        <a href="todo/book/{{book.pk}}/detail">
+                            <img class="card-img-top mx-auto d-block" style="border-radius:0;width:140px;height:200px;object-fit: contain" src="{{book.related_image}}"/>
+                        </a>
+                        <span property="name" style="display: none;">{{ book.title }}</span>
+                         <h4 class="card-title text-primary text-truncate text-center"><a href="todo/book/{{book.pk}}/detail" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.author_text }}</span></h6>
+						<h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Categoria: {{ book.thematic }}</span></h6>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Publicación: {{ book.publication_date }}</span></h6>
+                        <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.book.description }}</span></div>
+                        <div class="row pt-2">
+                            <div class="col">
+                                 <p><a href="todo/book/{{book.pk}}/detail" class="btn btn-outline-info btn-block"> Leer más </a></p>
+                                <span style="display: none;" rel="discussionUrl">
+                                     <span typeof="URL">
+                                        todo/book/{{book.pk}}/detail
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+	{% endfor %}
+</div>
 
 {% endblock %}
