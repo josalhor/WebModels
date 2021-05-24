@@ -1,4 +1,4 @@
-{% extends "todo/base.html" %}
+{% extends "todo/main.html" %}
 {% block page_heading %}{% endblock %}
 {% block title %}Creación subscripción{% endblock %}
 
@@ -21,17 +21,17 @@
     {% csrf_token %}
     <div class="mt-3">
       <div class="form-group">
-        <label for="card_number" name="card_number">NÚMERO DE TARJETA</label>
-        <input required type="number" class="form-control" id="card_number" name="card_number" placeholder="{% if reader.card_number is null or blank %} Indique el número de tarjeta {% endif %}"
-          value="{% if reader.card_number %}{{ reader.card_number }}{% endif %}">
+        <label for="card_holder" name="card_holder">TITULAR DE LA TARJETA</label>
+        <input required type="text" class="form-control" id="card_holder" name="card_holder" placeholder="{% if reader.card_holder is null or blank %} Indique el nombre del titular de la trajeta {% endif %}"
+          value="{% if reader.card_holder %}{{ reader.card_holder }}{% endif %}">
       </div>
     </div>
 
     <div class="mt-3">
       <div class="form-group">
-        <label for="card_holder" name="card_holder">TITULAR DE LA TARJETA</label>
-        <input required type="text" class="form-control" id="card_holder" name="card_holder" placeholder="{% if reader.card_holder is null or blank %} Indique el nombre del titular de la trajeta {% endif %}"
-          value="{% if reader.card_holder %}{{ reader.card_holder }}{% endif %}">
+        <label for="card_number" name="card_number">NÚMERO DE TARJETA</label>
+        <input required type="number" class="form-control" id="card_number" name="card_number" placeholder="{% if reader.card_number is null or blank %} Indique el número de tarjeta {% endif %}"
+          value="{% if reader.card_number %}{{ reader.card_number }}{% endif %}">
       </div>
     </div>
 
@@ -45,7 +45,7 @@
 
     <div class="mt-3">
         <div class="form-group">
-          <label for="card_cvv" name="card_cvv">NÚMERO DE TARJETA</label>
+          <label for="card_cvv" name="card_cvv">CVV</label>
           <input required type="number" class="form-control" id="card_cvv" name="card_cvv" placeholder="{% if reader.card_number is null or blank %} Indique el CVV de tarjeta {% endif %}"
             value="{% if reader.card_cvv %}{{ reader.card_cvv }}{% endif %}">
         </div>
@@ -57,7 +57,7 @@
     </div>
 
     <br/>
-    <input id="submitBtn" type="button" class="btn btn-primary pull-right" name="subscribe" onclick="checkImage(this.form)" value="SUBSCRIBIRME">
+    <input id="submitBtn" type="button" class="btn btn-primary pull-right" name="subscribe" onclick="checkImage(this.form)" value="SUBSCRIBIR">
     <br/>
     <br/>
     <br/>

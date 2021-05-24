@@ -16,3 +16,4 @@ from todo.views.set_ft_pass import set_ft_pass
 from todo.views.designer_assign import designer_assign
 from todo.views.book_catalogue import book_catalogue
 from todo.views.book_category import book_category
+from todo.views.create_subscription import create_subscription
