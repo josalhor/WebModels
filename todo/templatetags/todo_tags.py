@@ -14,6 +14,10 @@ def can_see_not_accepted(u):
 def is_graphic_designer(u):
     return Designer.objects.filter(user=u).first() is not None
 
+@register.filter(name='is_editor')
+def is_editor(u):
+    return Editor.objects.filter(user=u).first() is not None
+
 @register.filter(name='is_chief_designer')
 def is_chief_designer(u):
     return Designer.objects.filter(user=u, chief=True).first() is not None
@@ -31,3 +35,11 @@ def get_book_categories(dummy):
         )
     )
     return l
+
+@register.filter(name='is_staff')
+def is_staff(u):
+    return u.is_authenticated and \
+        (
+            is_graphic_designer(u) or 
+            is_editor(u)
+        )
