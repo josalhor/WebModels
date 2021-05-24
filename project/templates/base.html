@@ -118,6 +118,9 @@
                 {% endif %}
               </li>
               <div class="w3-dropdown-hover w3-mobile" style="margin-left: 7.5%; margin-top: 3.5%;">
+                {% for cat in None|get_book_categories %}
+                  <p>{{ cat }}</p>
+                {% endfor %}
                 {% if "categories" in request.path %}
                   <button class="w3-button w3-dark-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
                 {% else %}

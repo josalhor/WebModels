@@ -1,5 +1,5 @@
 from django import template
-from todo.models import Editor, UserInfo, Writer, Designer
+from todo.models import Editor, UserInfo, Writer, Designer, Book
 
 register = template.Library()
 
@@ -21,3 +21,13 @@ def is_chief_designer(u):
 @register.filter(name='get_full_name')
 def get_full_name(u):
     return UserInfo.objects.filter(user=u).first().full_name
+
+@register.filter(name='get_book_categories')
+def get_book_categories(dummy):
+    l = list(
+        map(
+            lambda x: x[1],
+            Book.THEMATIC
+        )
+    )
+    return l
