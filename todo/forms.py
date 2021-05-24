@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import Group
 from django.forms import ModelForm
-from todo.models import Task, Book, UserInfo, Editor, Designer, PublishedBook
+from todo.models import Task, Book, UserInfo, Editor, Designer, PublishedBook, Reader 
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 
@@ -84,3 +84,10 @@ class AssignFormDesigner(forms.Form):
         self.fields["designer"].label = ""
 
     designer = forms.ModelChoiceField(queryset=Designer.objects.all())
+
+class PaymentSubscriptionForm(ModelForm):
+    class Meta:
+        model = Reader
+        exclude = (
+            "user",
+        )
