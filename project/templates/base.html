@@ -25,7 +25,9 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Custom styles for this template -->
     <link href="/static/css/sticky-footer-navbar.css" rel="stylesheet">
@@ -33,6 +35,15 @@
     {# Additional CSS or html head data inserted by templates here. #}
     {% block extrahead %}{% endblock extrahead %}
 
+    <style>
+      body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+      body {font-size: 16px;}
+      .w3-xxxlarge {font-family: 'BebasNeueRegular'; font-size: 60px!important;}
+      .w3-xlarge { font-family: 'BebasNeueRegular'; font-size: 30px!important;}
+      .w3-jumbo > b { font-family: 'BebasNeueRegular'; font-size: 80px!important;}
+      img {margin-bottom: -8px;}
+      .mySlides {display: none;}
+    </style>
   </head>
 
   <body>
@@ -71,6 +82,7 @@
             <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
             {% else %}
             <li style="padding: 10px" button class="w3-btn w3-round w3-medium"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></button></li>
+            <li style="padding: 10px" button class="btn btn-outline-secondary btn-md"><a href="{% url 'signup' %}" class="nav-link"><b>¿Quieres leer? Registrate</b></a></button></li>
             <li button class="btn btn-outline-secondary btn-md"><a href="{% url 'todo:external_add' %}" class="nav-link"><b>¿Eres escritor? Envíanos tu obra</b></a></button></li>
             {% endif %}
           </ul>

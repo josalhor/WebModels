@@ -2,22 +2,28 @@
 
 {% block content %}
 
-<meta charset="UTF-8">
+<!-- This code should be shown extending the submenu.html-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><body>
 
-<style>
-body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
-body {font-size: 16px;}
-.w3-xxxlarge {font-family: 'BebasNeueRegular'; font-size: 60px!important;}
-.w3-xlarge { font-family: 'BebasNeueRegular'; font-size: 30px!important;}
-.w3-jumbo > b { font-family: 'BebasNeueRegular'; font-size: 80px!important;}
-img {margin-bottom: -8px;}
-.mySlides {display: none;}
-</style>
-<body class="w3-content w3-black" style="max-width:1500px;">
+<a href="init" class="w3-bar-item w3-button w3-mobile w3-light-grey">INICIO</a>
+<a href="home" class="w3-bar-item w3-button w3-mobile w3-dark-grey">¿QUÉ ES BOOKIERNES?</a>
+<div class="w3-dropdown-hover w3-mobile">
+<button class="w3-button w3-light-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
+    <div class="w3-dropdown-content w3-bar-block w3-dark-grey">
+        <a href="todo/categories/Todos" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
+        <a href="todo/categories/Fantasia" class="w3-bar-item w3-button w3-mobile">FANTASIA</a>
+        <a href="todo/categories/Aventuras" class="w3-bar-item w3-button w3-mobile">AVENTURAS</a>
+        <a href="todo/categories/Miedo" class="w3-bar-item w3-button w3-mobile">MIEDO</a>
+    </div>
+</div>
+<a href="#" style="margin-left: 36%;">¿Nuevo por aquí? SUSCRÍBETE</a> 
+<br><br>
+<!---->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Header -->
 <header class="w3-display-container w3-center">
@@ -34,7 +40,6 @@ img {margin-bottom: -8px;}
   </div>
   <div class="w3-button w3-block w3-black w3-hide-large w3-hide-medium"></div>
     {% if user.is_authenticated %}
-      <!--You are already logged in.-->
     {% else %}
     <a class="w3-button w3-black w3-display-right w3-margin-right w3-round w3-hide-small w3-hover-light-grey" href="{% url 'login' %}">ACCEDE <i class="fa fa-angle-right"></i></a>
     {% endif %}

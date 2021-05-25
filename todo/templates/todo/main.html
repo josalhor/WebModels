@@ -1,0 +1,77 @@
+{% extends "todo/submenu_bar.html" %} 
+{% block title %}main page{% endblock %}
+
+{% block content %}
+
+<!-- This code should be shown extending the submenu.html-->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><body>
+
+<a href="init" class="w3-bar-item w3-button w3-mobile w3-dark-grey">INICIO</a>
+<a href="home" class="w3-bar-item w3-button w3-mobile w3-light-grey">¿QUÉ ES BOOKIERNES?</a>
+<div class="w3-dropdown-hover w3-mobile">
+<button class="w3-button w3-light-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
+    <div class="w3-dropdown-content w3-bar-block w3-dark-grey">
+        <a href="todo/categories/Todos" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
+        <a href="todo/categories/Fantasia" class="w3-bar-item w3-button w3-mobile">FANTASIA</a>
+        <a href="todo/categories/Aventuras" class="w3-bar-item w3-button w3-mobile">AVENTURAS</a>
+        <a href="todo/categories/Miedo" class="w3-bar-item w3-button w3-mobile">MIEDO</a>
+    </div>
+</div>
+<a href="#" style="margin-left: 36%;">¿Nuevo por aquí? SUSCRÍBETE</a> 
+<br><br>
+<!---->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"><body>
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-8" align=center style="font-weight: bold;">SUSCRÍBETE PARA DISFRUTAR DE TUS LIBROS FAVORITOS</h1>
+        <p class="lead" align=center >Obtén acceso ilimitado a ebooks de todas las categorías por solo 9,99€/mes .</p>
+        <button class="w3-button w3-red w3-border w3-border-black w3-round-large" style="width:33.3%; margin-left: 33%;">SUSCRÍBETE</button>
+        <br><br>
+        <p style="font-size:12px" align=center>Puedes cancelar en qualquier momento</p> 
+    </div>
+</div>
+
+
+<div class="container"></div>
+    <h3 style='font-weight: bold;'>Los libros del momento</h3>
+    {% for book in published_books %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <span vocab="http://schema.org/" typeof="Book">
+                        <a href="todo/book/{{book.pk}}/detail">
+                            <img class="card-img-top mx-auto d-block" style="border-radius:0;width:140px;height:200px;object-fit: contain" src="{{book.related_image}}"/>
+                        </a>
+                        <span property="name" style="display: none;">{{ book.title }}</span>
+                         <h4 class="card-title text-primary text-truncate text-center"><a href="todo/book/{{book.pk}}/detail" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.author_text }}</span></h6>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Categoria: {{ book.thematic }}</span></h6>
+                        <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Publicación: {{ book.publication_date }}</span></h6>
+                        <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.book.description }}</span></div>
+                        <div class="row pt-2">
+                            <div class="col">
+                                 <p><a href="todo/book/{{book.pk}}/detail" class="btn btn-outline-info btn-block"> Leer más </a></p>
+                                <span style="display: none;" rel="discussionUrl">
+                                     <span typeof="URL">
+                                        todo/book/{{book.pk}}/detail
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+	{% endfor %}
+</div>
+
+</body>
+</html>
+
+{% endblock %}

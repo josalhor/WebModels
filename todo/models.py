@@ -127,7 +127,7 @@ class Reader(UserRole):
     )
 
 class Book(models.Model):
-    name = models.CharField(max_length=60, unique=True)
+    name = models.CharField(max_length=80)
     slug = models.SlugField(default="", unique=True)
     author = models.ForeignKey(Writer, on_delete=models.RESTRICT, related_name='book_author')
     editor = models.ForeignKey(Editor, null=True, blank=True, on_delete=models.CASCADE, related_name='book_editor')
@@ -175,6 +175,7 @@ class PublishedBook(models.Model):
         related_name="published_book",
         on_delete=models.CASCADE,
     )
+    title = models.CharField(max_length=80)
 
     publication_date = models.DateField(auto_now_add=True)
     author_text = models.TextField()
