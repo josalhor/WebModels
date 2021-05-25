@@ -1,5 +1,5 @@
 from django import template
-from todo.models import Editor, UserInfo, Writer, Designer
+from todo.models import Editor, UserInfo, Writer, Designer, Book
 
 register = template.Library()
 
@@ -14,6 +14,10 @@ def can_see_not_accepted(u):
 def is_graphic_designer(u):
     return Designer.objects.filter(user=u).first() is not None
 
+@register.filter(name='is_editor')
+def is_editor(u):
+    return Editor.objects.filter(user=u).first() is not None
+
 @register.filter(name='is_chief_designer')
 def is_chief_designer(u):
     return Designer.objects.filter(user=u, chief=True).first() is not None
@@ -21,3 +25,21 @@ def is_chief_designer(u):
 @register.filter(name='get_full_name')
 def get_full_name(u):
     return UserInfo.objects.filter(user=u).first().full_name
+
+@register.filter(name='get_book_categories')
+def get_book_categories(dummy):
+    l = list(
+        map(
+            lambda x: x[1],
+            Book.THEMATIC
+        )
+    )
+    return l
+
+@register.filter(name='is_staff')
+def is_staff(u):
+    return u.is_authenticated and \
+        (
+            is_graphic_designer(u) or 
+            is_editor(u)
+        )

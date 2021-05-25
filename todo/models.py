@@ -26,8 +26,6 @@ def get_attachment_upload_dir(instance, filename):
 def get_attachment_upload_dir_book(instance, filename):
     return "/".join(["books", "attachments", str(instance.id), filename])
 
-
-
 class LockedAtomicTransaction(Atomic):
     """
     modified from https://stackoverflow.com/a/41831049
@@ -118,6 +116,13 @@ class Designer(UserRole):
     )
     chief = models.BooleanField(default=False)
 
+
+class CreditCardInfo(models.Model):
+    card_number = models.PositiveIntegerField(blank=False)
+    card_holder = models.TextField(blank=False)
+    expiration_date = models.DateField(blank=False)
+    card_cvv = models.PositiveIntegerField(blank=False)
+
 class Reader(UserRole):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -125,6 +130,8 @@ class Reader(UserRole):
         null=False,
         on_delete=models.CASCADE
     )
+    subscribed = models.BooleanField(default=False)
+    credit_card = models.OneToOneField(CreditCardInfo, on_delete=models.CASCADE, null=True)
 
 class Book(models.Model):
     name = models.CharField(max_length=80)

@@ -1,3 +1,4 @@
+from todo.utils import create_reader
 from django.contrib.auth import login, authenticate
 from .forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -12,6 +13,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(email=email, password=raw_password)
             login(request, user)
+            create_reader(user)
             return redirect('home')
         else:
             print(form.errors)

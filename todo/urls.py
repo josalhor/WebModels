@@ -36,5 +36,6 @@ urlpatterns = [
     path("delete/<int:task_id>/", views.delete_task, name="delete_task"),
     path("search/", views.search, name="search"),
     path("categories/<str:category_id>/", views.book_category, name="book_category"),
+    path("createsubscription", views.create_subscription, name="create_subscription"),
 ]
 
