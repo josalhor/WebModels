@@ -13,7 +13,7 @@
                     {% if published_book.related_image %}
                         <img class="card-img-top" style="height:420px;object-fit: contain" id="book-img" src="{{ published_book.related_image.url }}"/> 
                     {% else %}
-                        <img class="card-img-top" style="height:420px;object-fit: contain" id="book-img" src="{% static '/images/no_image.jpg' %}"/>
+                        <img class="card-img-top" style="height:420px;object-fit: contain"  id="book-img" src="{% static '/images/no_image.jpg' %}"/>
                     {% endif %}
                     <h5 class="card-text bar-text-d">  Publicado: {{ published_book.publication_date|date:'d/m/Y'  }}</h5>
                     <a href="{{ published_book.final_version.url }}" download><i class="fa fa-download"></i>   Descargar PDF</a><br>
