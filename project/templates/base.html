@@ -108,20 +108,16 @@
                 {% endif %}
               </li>
               <div class="w3-dropdown-hover w3-mobile" style="margin-left: 7.5%; margin-top: 3.5%;">
-                {% for cat in None|get_book_categories %}
-                  <p>{{ cat }}</p>
-                {% endfor %}
                 {% if "categories" in request.path %}
                   <button class="w3-button w3-dark-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
                 {% else %}
                 <button class="w3-button w3-light-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
                 {% endif %}
-                    <div class="w3-dropdown-content w3-bar-block w3-dark-grey">
-                        <a href="{% url 'todo:book_category' 'Todos' %}" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
-                        <a href="{% url 'todo:book_category' 'Fantasia' %}" class="w3-bar-item w3-button w3-mobile">FANTASIA</a>
-                        <a href="{% url 'todo:book_category' 'Aventuras' %}" class="w3-bar-item w3-button w3-mobile">AVENTURAS</a>
-                        <a href="{% url 'todo:book_category' 'Miedo' %}" class="w3-bar-item w3-button w3-mobile">MIEDO</a>
-                    </div>
+                <div class="w3-dropdown-content w3-bar-block w3-dark-grey">
+                  <a href="{% url 'todo:book_category' 'Todos' %}" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
+                  {% for cat in None|get_book_categories %}
+                    <a href="{% url 'todo:book_category' cat %}" class="w3-bar-item w3-button w3-mobile">{{cat}}</a>
+                  {% endfor %}
                 </div>
             </ul>
             <form class="d-flex" style="margin-left: 29%; margin-top: 1.5%;">

@@ -17,7 +17,7 @@ def book_category(request, category_id: str) -> HttpResponse:
         books = PublishedBook.objects.all()
     else:
         for book in PublishedBook.objects.all():
-            if book.book.thematic == category_id:
+            if book.book.get_thematic_display() == category_id:
                 books.append(book)
 
 
