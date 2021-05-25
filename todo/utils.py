@@ -187,3 +187,10 @@ def create_reader(user):
         return
     
     return Reader.objects.create(user=user)
+
+def create_editor(user):
+    editor = Editor.objects.filter(user=user).first()
+    if editor:
+        return
+    
+    return Reader.objects.create(user=user)

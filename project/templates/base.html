@@ -58,7 +58,11 @@
                 {% endif %}
                 <li id="tareas-personales" class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
               {% else %}
+                {% if user|is_management %}
+                <li id="management" class="nav-item"><a href="{% url 'todo:users_management' %}" class="nav-link">Gestión de usuarios</a></li>
+                {% else %}
                 <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Libros en edición</a></li>
+                {% endif %}
               {% endif %}
             {% endif %}
           </ul>

@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
-from django.core.management.base import BaseCommand, CommandError
-from todo.models import Editor, Book, UserInfo, Writer, Designer, Task, PublishedBook
+from django.core.management.base import BaseCommand
+from todo.models import Editor, Book, UserInfo, Writer, Designer, Task, PublishedBook, Management
 import datetime
 from todo import static
 
@@ -67,6 +67,16 @@ class Command(BaseCommand):
         e = Editor.objects.create(
             user=u,
             chief=True
+        )
+
+        u = User.objects.create_user('manager@g.com', 'pass')
+        UserInfo.objects.create(
+            full_name="ManagerIT",
+            user=u
+        )
+
+        m = Management.objects.create(
+            user=u,
         )
 
         u = User.objects.create_superuser('writer2@g.com', 'pass')
