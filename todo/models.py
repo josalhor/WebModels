@@ -26,20 +26,6 @@ def get_attachment_upload_dir(instance, filename):
 def get_attachment_upload_dir_book(instance, filename):
     return "/".join(["books", "attachments", str(instance.id), filename])
 
-def validate_card_length(value):
-    if len(value) != 16:
-        raise ValidationError(
-            _('%(value)s no és un número de targeta vàlid'),
-            params={'value': value},
-        )
-
-def validate_cvv_length(value):
-    if len(value) != 3:
-        raise ValidationError(
-            _('%(value)s no és un CVV vàlid'),
-            params={'value': value},
-        )
-
 class LockedAtomicTransaction(Atomic):
     """
     modified from https://stackoverflow.com/a/41831049
@@ -138,10 +124,10 @@ class Reader(UserRole):
         on_delete=models.CASCADE
     )
     subscribed = models.BooleanField(default=False)
-    card_number = models.PositiveIntegerField(blank=False, validators=[validate_card_length])
+    card_number = models.PositiveIntegerField(blank=False)
     card_holder = models.TextField(blank=False)
     expiration_date = models.DateField(blank=False, null=True)
-    card_cvv = models.PositiveIntegerField(blank=False, validators=[validate_cvv_length])
+    card_cvv = models.PositiveIntegerField(blank=False)
 
 class Book(models.Model):
     name = models.CharField(max_length=80)

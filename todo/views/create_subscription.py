@@ -20,13 +20,17 @@ from todo.forms import PaymentSubscriptionForm
 
 @login_required
 def create_subscription(request) -> HttpResponse:
+    reader = Reader.objects.filter(user=request.user).first()
+
+    #TODO: check if user is subcribed already 
     
     if request.POST:
         form = PaymentSubscriptionForm(request.POST)
         
         if form.is_valid():
-            reader = form.save(commit=False)
-            # reader.user = reader
+            item = form.save(commit=False)
+            item.user = reader
+            item.save()
 
             messages.success(request, "La subscripción ha sido correctamente creada.")
             email_body = render_to_string(
