@@ -4,7 +4,7 @@ from django.shortcuts import redirect
 from todo.models import UserInfo
 from todo.utils import staff_check, is_reader
 
-def home3(request) -> HttpResponse:
+def main(request) -> HttpResponse:
     if request.user.is_authenticated:
 
         if is_reader(request.user):
