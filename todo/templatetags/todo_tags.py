@@ -1,5 +1,5 @@
 from django import template
-from todo.models import Editor, UserInfo, Writer, Designer, Book
+from todo.models import Editor, UserInfo, Writer, Designer, Book, Reader
 
 register = template.Library()
 
@@ -21,6 +21,10 @@ def is_editor(u):
 @register.filter(name='is_chief_designer')
 def is_chief_designer(u):
     return Designer.objects.filter(user=u, chief=True).first() is not None
+
+@register.filter(name='is_subscribed')
+def is_subscribed(u):
+    return Reader.objects.filter(user=u, subscribed=True).first() is not None
 
 @register.filter(name='get_full_name')
 def get_full_name(u):
