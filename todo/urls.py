@@ -37,6 +37,7 @@ urlpatterns = [
     path("search/", views.search, name="search"),
     path("categories/<str:category_id>/", views.book_category, name="book_category"),
     path("createsubscription", views.create_subscription, name="create_subscription"),
+    path("cancelsubscription", views.cancel_subscription, name="cancel_subscription"),
     
     path("profile/", views.profile, name="profile"),
     path("changepassword/", views.change_password, name="change_password"),

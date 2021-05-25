@@ -21,7 +21,7 @@
                         <div class="text-center">
                             <h3 style="text-align:left;font-family: 'BebasNeueRegular';color: gray; margin-top: 0%;">SUBSCRIPCIÓN Y FACTURACIÓN</h3>
                             {% if reader.subscribed %}
-                                <a href="{% url 'todo:create_subscription' %}"><button class="w3-button w3-black w3-border w3-border-black w3-round-large">CANCELAR SUBSCRIPCIÓN</button></a>
+                                <a href="{% url 'todo:cancel_subscription' %}"><button class="w3-button w3-black w3-border w3-border-black w3-round-large">CANCELAR SUBSCRIPCIÓN</button></a>
                             {% else %}
                                 <a href="{% url 'todo:create_subscription' %}"><button class="w3-button w3-red w3-border w3-border-black w3-round-large">ACTIVAR SUBSCRIPCIÓN</button></a>
                             {% endif %}
