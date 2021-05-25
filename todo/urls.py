@@ -41,5 +41,6 @@ urlpatterns = [
     
     path("profile/", views.profile, name="profile"),
     path("changepassword/", views.change_password, name="change_password"),
+    path("home3", views.home3, name="home3"),
 ]
 

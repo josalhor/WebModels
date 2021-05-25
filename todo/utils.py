@@ -30,6 +30,8 @@ def chief_check(user):
     u = Editor.objects.filter().first()
     return u.chief
 
+def is_reader(user):
+    return Reader.objects.filter(user=user).first() is not None
 
 def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()

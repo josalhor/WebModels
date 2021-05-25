@@ -20,3 +20,4 @@ from todo.views.book_category import book_category
 from todo.views.create_subscription import create_subscription
 from todo.views.cancel_subscription import cancel_subscription
 from todo.views.profile import profile
+from todo.views.home3 import home3

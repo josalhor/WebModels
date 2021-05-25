@@ -5,11 +5,12 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from django.views.generic import TemplateView
 from .signup import signup
-from todo.views import book_catalogue
+from todo.views import book_catalogue, home3
 
 urlpatterns = (
     [
-        path("", book_catalogue, name="main"),
+        path("", home3, name="main"),
+        path("book_catalogue", book_catalogue, name="book_catalogue"),
         path("home", TemplateView.as_view(template_name="home.html"), name="home"),
         path("login", auth_views.LoginView.as_view(), name="login"),
         path("logout", auth_views.LogoutView.as_view(), name="logout"),
