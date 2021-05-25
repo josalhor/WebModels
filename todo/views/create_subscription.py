@@ -28,9 +28,10 @@ def create_subscription(request) -> HttpResponse:
         form = PaymentSubscriptionForm(request.POST)
         
         if form.is_valid():
-            item = form.save(commit=False)
-            item.user = reader
-            item.save()
+            item = form.save()
+            reader.subscribed = True
+            reader.credit_card = item
+            reader.save()
 
             messages.success(request, "La subscripción ha sido correctamente creada.")
             email_body = render_to_string(
@@ -47,6 +48,9 @@ def create_subscription(request) -> HttpResponse:
 
             return redirect("home")
             #TODO: should redirect to the reader's profile once we created
+
+        else:
+            print(form.errors)
     else:
         form = PaymentSubscriptionForm()
     

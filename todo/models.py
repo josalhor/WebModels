@@ -116,6 +116,13 @@ class Designer(UserRole):
     )
     chief = models.BooleanField(default=False)
 
+
+class CreditCardInfo(models.Model):
+    card_number = models.PositiveIntegerField(blank=False)
+    card_holder = models.TextField(blank=False)
+    expiration_date = models.DateField(blank=False)
+    card_cvv = models.PositiveIntegerField(blank=False)
+
 class Reader(UserRole):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -124,10 +131,7 @@ class Reader(UserRole):
         on_delete=models.CASCADE
     )
     subscribed = models.BooleanField(default=False)
-    card_number = models.PositiveIntegerField(blank=False)
-    card_holder = models.TextField(blank=False)
-    expiration_date = models.DateField(blank=False, null=True)
-    card_cvv = models.PositiveIntegerField(blank=False)
+    credit_card = models.OneToOneField(CreditCardInfo, on_delete=models.CASCADE, null=True)
 
 class Book(models.Model):
     name = models.CharField(max_length=80)

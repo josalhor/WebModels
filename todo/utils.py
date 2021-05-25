@@ -9,7 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo, Designer
+from todo.models import Attachment, Comment, Reader, Task, Writer, Editor, UserInfo, Designer
 
 log = logging.getLogger(__name__)
 
@@ -178,3 +178,10 @@ def remove_attachment_file(attachment_id: int) -> bool:
     except Attachment.DoesNotExist:
         log.info(f"Attachment {attachment_id} not found.")
         return False
+
+def create_reader(user):
+    reader = Reader.objects.filter(user=user).first()
+    if reader:
+        return
+    
+    return Reader.objects.create(user=user)
