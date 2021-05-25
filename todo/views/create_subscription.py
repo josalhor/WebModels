@@ -21,10 +21,12 @@ from todo.forms import PaymentSubscriptionForm
 @login_required
 def create_subscription(request) -> HttpResponse:
     reader = Reader.objects.filter(user=request.user).first()
-
-    #TODO: check if user is subcribed already 
     
     if request.POST:
+        if reader.subscribed:
+            messages.error(request, f"Ya está subscrito a Bookiernes, S.A.")
+            return redirect("home")
+
         form = PaymentSubscriptionForm(request.POST)
         
         if form.is_valid():
