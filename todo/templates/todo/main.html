@@ -19,38 +19,47 @@
 
 
 <div class="container"></div>
-    <h3 style='font-weight: bold;'>Los libros del momento</h3>
+    {% if words is not null %}
+        <h3 style='font-weight: bold;'>Resultados para "{{ words }}":</h3>
+        <p>{{number_of_results}} ebook{{ number_of_results|pluralize }} coincide{% if number_of_results != 1 %}n{% endif %} con tu búsqueda</p>
+    {% else %}
+        <h3 style='font-weight: bold;'>Los libros del momento</h3>
+    {% endif %}
     <div class="col">
         <div class="row">
-            {% for book in published_books %}
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <span vocab="http://schema.org/" typeof="Book">
-                                <a href="todo/book/{{book.pk}}/detail">
-                                    <img class="card-img-top mx-auto d-block" style="border-radius:0;width:140px;height:200px;object-fit: contain" src="{{book.related_image}}"/>
-                                </a>
-                                <span property="name" style="display: none;">{{ book.title }}</span>
-                                <h4 class="card-title text-primary text-truncate text-center"><a href="todo/book/{{book.pk}}/detail" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
-                                <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.author_text }}</span></h6>
-                                <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Categoria: {{ book.book.get_thematic_display }}</span></h6>
-                                <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Publicación: {{ book.publication_date }}</span></h6>
-                                <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.book.description }}</span></div>
-                                <div class="row pt-2">
-                                    <div class="col">
-                                        <p><a href="todo/book/{{book.pk}}/detail" class="btn btn-outline-info btn-block"> Leer más </a></p>
-                                        <span style="display: none;" rel="discussionUrl">
-                                            <span typeof="URL">
-                                                todo/book/{{book.pk}}/detail
+            {% if success %}
+                {% for book in published_books %}
+                    <div class="col-12 col-md-6 col-lg-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <span vocab="http://schema.org/" typeof="Book">
+                                    <a href="todo/book/{{book.pk}}/detail">
+                                        <img class="card-img-top mx-auto d-block" style="border-radius:0;width:140px;height:200px;object-fit: contain" src="{{book.related_image}}"/>
+                                    </a>
+                                    <span property="name" style="display: none;">{{ book.title }}</span>
+                                    <h4 class="card-title text-primary text-truncate text-center"><a href="todo/book/{{book.pk}}/detail" title="View Book" style="text-decoration: none;">{{ book.title }}</a></h4>
+                                    <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Autor/a: {{ book.author_text }}</span></h6>
+                                    <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Categoria: {{ book.book.get_thematic_display }}</span></h6>
+                                    <h6 class="card-subtitle mb-2 text-muted text-truncate"><span property="author">Publicación: {{ book.publication_date }}</span></h6>
+                                    <div class="card-text" style="line-height: 1.5em;height: 6em;overflow: hidden;"><span property="abstract">Sinopsis: {{ book.book.description }}</span></div>
+                                    <div class="row pt-2">
+                                        <div class="col">
+                                            <p><a href="todo/book/{{book.pk}}/detail" class="btn btn-outline-info btn-block"> Leer más </a></p>
+                                            <span style="display: none;" rel="discussionUrl">
+                                                <span typeof="URL">
+                                                    todo/book/{{book.pk}}/detail
+                                                </span>
                                             </span>
-                                        </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p class="bar-text">Lo sentimos, no hemos podido encontrar resultados para la búsqueda: "{{ words }}". Por favor, prueba de nuevo con otras palabras o revisa la ortografía.</p>   
+            {% endif %}
         </div>
     </div>
 </div>

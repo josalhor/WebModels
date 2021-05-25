@@ -1,8 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from todo.models import PublishedBook
+from todo.models import PublishedBook, UserInfo
 
 def search(request):
     """Filters books by category and/or date and/or name.
@@ -12,31 +11,27 @@ def search(request):
     
     success = True
     books = []
-    name = request.GET.get('n')
+    words = request.GET.get('w')
 
-    if (name is None):
+    if (words == ""):
         return redirect('/')
     else:
-        books = PublishedBook.objects.filter(book__name__icontains=name)
+        # By title
+        books_bytitle = PublishedBook.objects.filter(title__icontains=words)
+        # By author's name
+        books_byauthor = PublishedBook.objects.filter(author_text__icontains=words)
+        books = books_bytitle.union(books_byauthor)
+        number_of_results = books.count
 
     if not books:
         success = False
         books = PublishedBook.objects.all()
-
-    page = request.GET.get('page', 1)
-
-    paginator = Paginator(books, 6) # Show 6 books per page
     
-    try:
-        books = paginator.page(page)
-    except PageNotAnInteger:
-        books = paginator.page(1)
-    except EmptyPage:
-        books = paginator.page(paginator.num_pages)
-
     context = {
-        'success': success,
-        'books': books
+        "words": words,
+        "success": success,
+        "published_books": books,
+        "number_of_results": number_of_results,
     }
 
-    return render(request, 'home.html', context)
+    return render(request, "todo/main.html", context)

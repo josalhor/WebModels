@@ -60,11 +60,6 @@
               {% else %}
                 <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Libros en edición</a></li>
               {% endif %}
-            {% else %}
-              <form method="get" action="{% url 'todo:search'  %}" class="form-inline my-2 my-lg-0" style="margin-right:auto; margin-left:auto;">
-                <input class="form-control mr-sm-2" name="n" type="text" placeholder="Buscar por título..." aria-label="Search" style="width: 500px">
-                <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
-              </form>
             {% endif %}
           </ul>
           <ul class="navbar-nav">
@@ -72,8 +67,8 @@
             <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
             {% else %}
               <li style="padding: 10px" button class="w3-btn w3-round w3-medium"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></button></li>
-              <li style="padding: 10px" button class="btn btn-outline-secondary btn-md"><a href="{% url 'signup' %}" class="nav-link"><b>¿Quieres leer? Registrate</b></a></button></li>
-              <li button class="btn btn-outline-secondary btn-md"><a href="{% url 'todo:external_add' %}" class="nav-link"><b>¿Eres escritor? Envíanos tu obra</b></a></button></li>
+              <li style="padding: 10px" button class="btn btn-outline-secondary btn-md"><a href="{% url 'signup' %}" class="nav-link"><b>¿Quieres leer? Regístrate</b></a></button></li>&nbsp
+              <li style="padding: 10px" button class="btn btn-outline-secondary btn-md"><a href="{% url 'todo:external_add' %}" class="nav-link"><b>¿Eres escritor? Envíanos tu obra</b></a></button></li>
             {% endif %}
           </ul>
 
@@ -90,7 +85,7 @@
       </nav>
       <br><br><br><br>
       
-      {% if request.get_full_path == "/" or request.get_full_path == "/home" or "categories" in request.path %}
+      {% if request.get_full_path == "/" or request.get_full_path == "/home" or "categories" in request.path or "search" in request.path %}
       <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white" style="margin-left: 3.5%; margin-top: 5.85%;" id="submenu">
         <div class="container-fluid">
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -125,8 +120,8 @@
                   {% endfor %}
                 </div>
             </ul>
-            <form class="d-flex" style="margin-left: 29%; margin-top: 1.5%;">
-              <input class="form-control me-2" type="search" placeholder="Título o autor del libro" aria-label="Search">
+            <form method="get" action="{% url 'todo:search'  %}" class="d-flex" style="margin-left: 29%; margin-top: 1.5%;">
+              <input class="form-control me-2" name="w" type="text" placeholder="Título o autor del libro..." aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Buscar libro</button>
             </form>
           </div>
