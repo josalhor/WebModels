@@ -131,7 +131,12 @@ class Reader(UserRole):
         on_delete=models.CASCADE
     )
     subscribed = models.BooleanField(default=False)
-    credit_card = models.OneToOneField(CreditCardInfo, on_delete=models.CASCADE, null=True)
+    credit_card = models.OneToOneField(
+        CreditCardInfo,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
 
 class Book(models.Model):
     name = models.CharField(max_length=80)
