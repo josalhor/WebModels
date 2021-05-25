@@ -17,3 +17,4 @@ from todo.views.designer_assign import designer_assign
 from todo.views.book_catalogue import book_catalogue
 from todo.views.book_category import book_category
 from todo.views.create_subscription import create_subscription
+from todo.views.profile import profile

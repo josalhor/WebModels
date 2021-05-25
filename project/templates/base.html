@@ -64,7 +64,7 @@
           </ul>
           <ul class="navbar-nav">
             {% if user.is_authenticated %}
-            <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+            <li style="display: flex;" class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a>&nbsp&nbsp<a href="{% url 'todo:profile' %}"><img src="/static/images/avatar.png" style="height: 40px;" class="rounded-circle"></a></li>
             {% else %}
               <li style="padding: 10px" button class="w3-btn w3-round w3-medium"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></button></li>
               <li style="padding: 10px" button class="btn btn-outline-secondary btn-md"><a href="{% url 'signup' %}" class="nav-link"><b>¿Quieres leer? Regístrate</b></a></button></li>&nbsp
