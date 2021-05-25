@@ -24,7 +24,7 @@ def create_subscription(request) -> HttpResponse:
     
     if request.POST:
         if reader.subscribed:
-            messages.error(request, f"Ya está subscrito a Bookiernes, S.A.")
+            messages.error(request, "Ya está subscrito a Bookiernes, S.A.")
             return redirect("home")
 
         form = PaymentSubscriptionForm(request.POST)
