@@ -1,0 +1,40 @@
+{% extends "todo/base.html" %}
+{% load static %}
+
+{% block title %}Users detail{{ book.name }}{% endblock %}
+
+{% block content %}
+  
+<div style="display:flex; justify-content: space-between; margin-top: 40px;">
+    {% if list_slug == "editors" %}
+        <h1 style="font-family: 'BebasNeueRegular';">Editores</h1>
+    {% elif list_slug == "designers" %}
+        <h1 style="font-family: 'BebasNeueRegular';">Diseñadores gráficos</h1>
+    {% elif list_slug == "management" %}
+        <h1 style="font-family: 'BebasNeueRegular';">Responsables IT</h1>
+    {% else %}
+        <h1 style="font-family: 'BebasNeueRegular';">Escritores</h1>
+    {% endif %}
+</div>
+
+{% if active_users %}
+    <table class="table" id="tasktable">
+      <tr class="nodrop">
+        <th>Nombre completo</th>
+        <th>Email</th>
+      </tr>
+
+      {% for user in active_users %}
+        <tr>
+          <td>
+                {{ user }}
+          </td>
+          <td>
+                {{ user.user }}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+{% endif %}
+
+{% endblock %}

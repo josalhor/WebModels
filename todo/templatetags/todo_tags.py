@@ -1,5 +1,5 @@
 from django import template
-from todo.models import Editor, UserInfo, Writer, Designer, Book, Reader
+from todo.models import Editor, Management, UserInfo, Writer, Designer, Book, Reader
 
 register = template.Library()
 
@@ -18,9 +18,17 @@ def is_graphic_designer(u):
 def is_editor(u):
     return Editor.objects.filter(user=u).first() is not None
 
+@register.filter(name='is_management')
+def is_management(u):
+    return Management.objects.filter(user=u).first() is not None
+
 @register.filter(name='is_chief_designer')
 def is_chief_designer(u):
     return Designer.objects.filter(user=u, chief=True).first() is not None
+
+@register.filter(name='is_chief_editor')
+def is_chief_editor(u):
+    return Editor.objects.filter(user=u, chief=True).first() is not None
 
 @register.filter(name='is_subscribed')
 def is_subscribed(u):
@@ -47,5 +55,6 @@ def is_staff(u):
     return u.is_authenticated and \
         (
             is_graphic_designer(u) or 
-            is_editor(u)
+            is_editor(u) or
+            is_management(u)
         )

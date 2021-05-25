@@ -116,6 +116,13 @@ class Designer(UserRole):
     )
     chief = models.BooleanField(default=False)
 
+class Management(UserRole):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        null=False,
+        on_delete=models.CASCADE
+    )
 
 class CreditCardInfo(models.Model):
     card_number = models.PositiveIntegerField(blank=False)
