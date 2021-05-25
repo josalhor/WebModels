@@ -54,7 +54,8 @@ class Command(BaseCommand):
             ),
             title="While Justice Sleeps",
             author_text="Stacey Abrams",
-            related_image= "static/portada_libro.jpg"
+            related_image= "static/portada_libro.jpg",
+            final_version="static/sample_book.pdf"
         )
 
         u = User.objects.create_user('balma@g.com', 'pass')
