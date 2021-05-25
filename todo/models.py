@@ -138,6 +138,9 @@ class Reader(UserRole):
         blank=True
     )
 
+    def __str__(self):
+        return f'Reader {self.pk}'
+
 class Book(models.Model):
     name = models.CharField(max_length=80)
     slug = models.SlugField(default="", unique=True)
