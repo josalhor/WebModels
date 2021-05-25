@@ -9,7 +9,6 @@ from todo.models import Book, PublishedBook
 
 
 def book_detail(request, book_id: int) -> HttpResponse:
-    print(book_id)
     book = get_object_or_404(Book, pk=book_id)
     published_book = PublishedBook.objects.filter(book=book).first()
     

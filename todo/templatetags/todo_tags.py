@@ -24,6 +24,8 @@ def is_chief_designer(u):
 
 @register.filter(name='is_subscribed')
 def is_subscribed(u):
+    if not u.is_authenticated:
+        return False
     return Reader.objects.filter(user=u, subscribed=True).first() is not None
 
 @register.filter(name='get_full_name')
