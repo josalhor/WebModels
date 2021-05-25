@@ -22,6 +22,10 @@ from todo.forms import PaymentSubscriptionForm
 def create_subscription(request) -> HttpResponse:
     reader = Reader.objects.filter(user=request.user).first()
     
+    # Permissions: only readers can get a subscription
+    if reader is None:
+        raise PermissionDenied
+
     if request.POST:
         if reader.subscribed:
             messages.error(request, "Ya está subscrito a Bookiernes, S.A.")
