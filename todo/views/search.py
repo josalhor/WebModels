@@ -1,43 +1,37 @@
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
-from todo.models import Task
-from todo.utils import staff_check
+from todo.models import PublishedBook, UserInfo
 
-
-@login_required
-@user_passes_test(staff_check)
-def search(request) -> HttpResponse:
-    """Search for tasks user has permission to see.
+def search(request):
+    """Filters books by category and/or date and/or name.
+    Parameters:
+    request (request): Browser request for the view.
     """
+    
+    success = True
+    books = []
+    words = request.GET.get('w')
 
-    query_string = ""
-
-    if request.GET:
-
-        found_tasks = None
-        if ("q" in request.GET) and request.GET["q"].strip():
-            query_string = request.GET["q"]
-
-            found_tasks = Task.objects.filter(
-                Q(title__icontains=query_string) | Q(note__icontains=query_string)
-            )
-        else:
-            # What if they selected the "completed" toggle but didn't enter a query string?
-            # We still need found_tasks in a queryset so it can be "excluded" below.
-            found_tasks = Task.objects.all()
-
-        if "inc_complete" in request.GET:
-            found_tasks = found_tasks.exclude(completed=True)
-
+    if (words == ""):
+        return redirect('/')
     else:
-        found_tasks = None
+        # By title
+        books_bytitle = PublishedBook.objects.filter(title__icontains=words)
+        # By author's name
+        books_byauthor = PublishedBook.objects.filter(author_text__icontains=words)
+        books = books_bytitle.union(books_byauthor)
+        number_of_results = books.count
 
-    # Only include tasks that are in groups of which this user is a member:
-    if not request.user.is_superuser:
-        found_tasks = found_tasks.filter(book__group__in=request.user.groups.all())
+    if not books:
+        success = False
+        books = PublishedBook.objects.all()
+    
+    context = {
+        "words": words,
+        "success": success,
+        "published_books": books,
+        "number_of_results": number_of_results,
+    }
 
-    context = {"query_string": query_string, "found_tasks": found_tasks}
-    return render(request, "todo/search_results.html", context)
+    return render(request, "todo/main.html", context)
