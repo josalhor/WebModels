@@ -4,6 +4,7 @@
 # todo
 /project/secrets.py
 /todo/migrations
+/staticfiles/*
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,django,venv,vscode,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,django,venv,vscode,visualstudiocode

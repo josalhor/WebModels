@@ -191,4 +191,4 @@ def create_editor(user):
     if editor:
         return
     
-    return Reader.objects.create(user=user)
+    return Editor.objects.create(user=user)
