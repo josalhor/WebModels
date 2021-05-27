@@ -90,8 +90,11 @@ class PaymentSubscriptionForm(ModelForm):
         exclude = []
 
 
+
 class profileForm(auth_forms.UserChangeForm):
-	# A form for updating new users.
-	class Meta:
-		fields = ('full_name', 'user',)
-		model = UserInfo
+    class Meta:
+        model = UserInfo
+        fields = (
+            'full_name',
+            'user',
+            )

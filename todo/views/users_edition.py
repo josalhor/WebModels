@@ -15,17 +15,18 @@ from todo.utils import staff_check
 def users_edition(request, list_slug=None, user_edit=None) -> HttpResponse:
 
     if request.method == 'POST':
-        form = profileForm(data=request.POST, instance=request.user_edit)
+        form = profileForm(data=request.POST, instance=request.user) #should be user_edit
         if form.is_valid():
             form.save()
-            return redirect('/users_management/'+list_slug)
+            return redirect('todo/users_management/'+list_slug)
         else:
-            form = profileForm(instance=request.user_edit)
+            form = profileForm(instance=request.user) #should be user_edit
             args={'form': form}
             return render(request, 'todo/users_edition.html', args)
     
     context = {
-        "user": user_edit
+        "user": request.user, #should be user_edit
+        "user_edit": user_edit
     }
 
     return render(request, "todo/users_edition.html", context)
