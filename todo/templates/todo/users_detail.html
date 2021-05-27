@@ -1,5 +1,6 @@
 {% extends "todo/base.html" %}
 {% load static %}
+{% load todo_tags %}
 
 {% block title %}Users detail{{ book.name }}{% endblock %}
 
@@ -22,6 +23,7 @@
       <tr class="nodrop">
         <th>Nombre completo</th>
         <th>Email</th>
+        <th></th>
       </tr>
 
       {% for user in active_users %}
@@ -32,9 +34,46 @@
           <td>
                 {{ user.user }}
           </td>
+          <td>
+            <form method="post" action="{% url "todo:users_management" %}" role="form" class="d-inline">
+              {% csrf_token %}
+              <input type="hidden" name="reasons" id="motivo" value=""/>
+              <button type="submit" class="btn btn-danger btn-sm" name="deactivate-user" value='{{ user }}' onclick="deactivateUser(this.form)"><b>DESACTIVAR</b></button>
+            </form>
+          </td>
         </tr>
       {% endfor %}
     </table>
 {% endif %}
+
+<!---
+<script>
+  function deactivateUser(formToPost) {
+    print("deactivate")
+    formToPost.manager.selectedIndex = 0;
+    hideOrShowBtn();
+    var minlength = 1;
+    var motivo;
+    do{
+      motivo = prompt("¿Está seguro/a que quiere desactivar este usuario? MOTIVO:");
+    } while(motivo === null || motivo === "" || motivo.length < minlength) 
+    formToPost.getElementById("motivo").value = motivo;
+    user = UserInfo.objects.filter(formToPost.user=user).first()
+    user.user.isActive = false
+    user.save()
+    formToPost.submit();
+  }
+  document.getElementById("section").style.borderBottom = "4px solid rgb(133, 5, 5)";
+
+  function hideOrShowBtn() { 
+
+    if(document.getElementById("section").value >= 1){
+      document.getElementById("submitBtn").removeAttribute("hidden");
+    }else{
+      document.getElementById("submitBtn").setAttribute("hidden", true);
+    }
+  }
+</script>
+--->
 
 {% endblock %}
