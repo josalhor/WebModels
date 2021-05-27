@@ -13,4 +13,4 @@ def main(request) -> HttpResponse:
             return redirect("home")
 
     else:
-        return redirect("home")
+        return redirect("book_catalogue")

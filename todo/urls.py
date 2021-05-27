@@ -13,6 +13,7 @@ urlpatterns = [
     path("users_management/", views.users_management, name="users_management"),
     path("users_management/<str:list_slug>/", views.users_detail, name="users_detail"),
     path("users_management/<str:list_slug>/add", views.add_user, name="add_user"),
+    path("users_management/<str:user_edit>/edit", views.users_edition, name="users_edition"),
     path("reorder_tasks/", views.reorder_tasks, name="reorder_tasks"),
     path("set_firstime_password/<str:uuid>/", views.set_ft_pass, name="set_ft_pass"),
     # Allow users to post tasks from outside django-todo (e.g. for filing tickets - see docs)
@@ -41,7 +42,7 @@ urlpatterns = [
     path("categories/<str:category_id>/", views.book_category, name="book_category"),
     path("createsubscription", views.create_subscription, name="create_subscription"),
     path("cancelsubscription", views.cancel_subscription, name="cancel_subscription"),
-    
+    path("deactivateuser", views.deactivate_user, name="deactivate_user"),
     path("profile/", views.profile, name="profile"),
     path("changepassword/", views.change_password, name="change_password"),
 ]

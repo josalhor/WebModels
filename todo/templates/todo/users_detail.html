@@ -36,10 +36,17 @@
                 {{ user.user }}
           </td>
           <td>
-            <form method="post" action="{% url "todo:users_management" %}" role="form" class="d-inline">
+            <form method="post" action="{% url "todo:users_edition" user %}" role="form" class="d-inline">
               {% csrf_token %}
-              <input type="hidden" name="reasons" id="motivo" value=""/>
-              <button type="submit" class="btn btn-danger btn-sm" name="deactivate-user" value='{{ user }}' onclick="deactivateUser(this.form)"><b>DESACTIVAR</b></button>
+              <button type="submit" class="btn btn-sm"><b>EDITAR</b></button>
+              <!--- <button type="submit" class="btn btn-danger btn-sm" onclick="deactivateUser(this.formToPost)"><b>DESACTIVAR</b></button> --->
+            </form>
+            <form method="post" action="{% url "todo:deactivate_user" %}" role="form" class="d-inline">
+              {% csrf_token %}
+              <input type="hidden" name="reasons" value=""/>
+              <input type="hidden" name="deactivate-user" value="{{ user.user.email }}"/>
+              <button type="submit" class="btn btn-danger btn-sm"><b>DESACTIVAR</b></button>
+              <!--- <button type="submit" class="btn btn-danger btn-sm" onclick="deactivateUser(this.formToPost)"><b>DESACTIVAR</b></button> --->
             </form>
           </td>
         </tr>
@@ -47,10 +54,10 @@
     </table>
 {% endif %}
 
-<!---
+
 <script>
   function deactivateUser(formToPost) {
-    print("deactivate")
+    console.log("deactivateUser");
     formToPost.manager.selectedIndex = 0;
     hideOrShowBtn();
     var minlength = 1;
@@ -59,14 +66,12 @@
       motivo = prompt("¿Está seguro/a que quiere desactivar este usuario? MOTIVO:");
     } while(motivo === null || motivo === "" || motivo.length < minlength) 
     formToPost.getElementById("motivo").value = motivo;
-    user = UserInfo.objects.filter(formToPost.user=user).first()
-    user.user.isActive = false
-    user.save()
     formToPost.submit();
+    console.log("submit");
   }
   document.getElementById("section").style.borderBottom = "4px solid rgb(133, 5, 5)";
 
-  function hideOrShowBtn() { 
+    function hideOrShowBtn() { 
 
     if(document.getElementById("section").value >= 1){
       document.getElementById("submitBtn").removeAttribute("hidden");
@@ -75,6 +80,5 @@
     }
   }
 </script>
---->
 
 {% endblock %}

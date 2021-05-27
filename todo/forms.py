@@ -87,3 +87,25 @@ class PaymentSubscriptionForm(ModelForm):
     class Meta:
         model = CreditCardInfo
         exclude = []
+
+class profileForm(forms.ModelForm):
+    name1 = forms.CharField(label='Name', widget=forms.PasswordInput)
+
+    class Meta:
+        model = UserInfo
+        fields = ('full_name', 'user')
+
+    def clean_password2(self):
+        # Check that the two password entries match
+        password1 = self.cleaned_data.get("password1")
+        if password1:
+            raise forms.ValidationError("Passwords don't match")
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super(profileForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        # user.active = False # send confirmation email
+        if commit:
+            user.save()
+        return user

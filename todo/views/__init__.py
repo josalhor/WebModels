@@ -24,3 +24,5 @@ from todo.views.create_subscription import create_subscription
 from todo.views.cancel_subscription import cancel_subscription
 from todo.views.profile import profile
 from todo.views.main import main
+from todo.views.deactivate_user import deactivate_user
+from todo.views.users_edition import users_edition
