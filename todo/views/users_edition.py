@@ -5,18 +5,24 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from todo.forms import profileForm
 
+
 from todo.models import Designer, Management, Writer, Editor
 from todo.utils import staff_check
 
 @login_required
 @user_passes_test(staff_check)
 @user_passes_test(is_management)
-def users_edition(request, user_edit=None) -> HttpResponse:
+def users_edition(request, list_slug=None, user_edit=None) -> HttpResponse:
 
     if request.method == 'POST':
-        form = profileForm(data=request.POST, instance=request.user)
+        form = profileForm(data=request.POST, instance=request.user_edit)
         if form.is_valid():
             form.save()
+            return redirect('/users_management/'+list_slug)
+        else:
+            form = profileForm(instance=request.user_edit)
+            args={'form': form}
+            return render(request, 'todo/users_edition.html', args)
     
     context = {
         "user": user_edit

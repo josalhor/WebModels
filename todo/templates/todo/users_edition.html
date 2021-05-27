@@ -4,7 +4,24 @@
 
 {% block title %}Users detail{{ book.name }}{% endblock %}
 <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Gestión de usuarios</h1>
-<h4 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Editar usuario {{user}}</h4>
 {% block content %}
+
+<div class="jumbotron" style="padding: 2rem 1rem;">
+	<div class="container">
+		<div class="row d-flex justify-content-center">
+			<div class="col-10">
+				<form method="post">
+                    <h4 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Editar usuario {{user}}</h4>
+                    <br>
+					<form method="post">
+						{% csrf_token %}
+						{{ form.as_p }}
+                        <button class="btn btn-warning" type="submit">Guardar cambios</button>
+					</form>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 
 {% endblock %}
