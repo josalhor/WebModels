@@ -35,6 +35,11 @@
                 {{ user.user }}
           </td>
           <td>
+            <form method="post" action="{% url "todo:users_management" %}" role="form" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm"><b>EDITAR</b></button>
+              <!--- <button type="submit" class="btn btn-danger btn-sm" onclick="deactivateUser(this.formToPost)"><b>DESACTIVAR</b></button> --->
+            </form>
             <form method="post" action="{% url "todo:deactivate_user" %}" role="form" class="d-inline">
               {% csrf_token %}
               <input type="hidden" name="reasons" value=""/>
