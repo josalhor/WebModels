@@ -35,4 +35,6 @@ def users_detail(request, list_slug=None) -> HttpResponse:
         "unactive_users":  unactive_users,
     }
 
+    print(users)
+
     return render(request, "todo/users_detail.html", context)

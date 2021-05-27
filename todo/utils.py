@@ -9,7 +9,7 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Reader, Task, Writer, Editor, UserInfo, Designer
+from todo.models import Attachment, Comment, Management, Reader, Task, Writer, Editor, UserInfo, Designer
 
 log = logging.getLogger(__name__)
 
@@ -188,9 +188,59 @@ def create_reader(user):
     
     return Reader.objects.create(user=user)
 
-def create_editor(user):
+def create_editor(user, full_name):
     editor = Editor.objects.filter(user=user).first()
     if editor:
         return
+    UserInfo.objects.create(
+        full_name=full_name,
+        user=user,
+    )
+    editor = Editor.objects.create(
+            user=user,
+            chief=False
+        )
+    return editor
+
+def create_designer(user, full_name):
+    designer = Designer.objects.filter(user=user).first()
+    if designer:
+        return
+    UserInfo.objects.create(
+            full_name=full_name,
+            user=user
+        )
+    designer = Designer.objects.create(
+            user=user,
+            chief=False
+        )
     
-    return Editor.objects.create(user=user)
+    return designer
+
+def create_manager(user, full_name):
+    manager = Management.objects.filter(user=user).first()
+    if manager:
+        return
+    UserInfo.objects.create(
+            full_name=full_name,
+            user=user
+        )
+    manager = Designer.objects.create(
+            user=user
+        )
+    
+    return manager
+
+def create_writer(user, full_name):
+    writer = Writer.objects.filter(user=user).first()
+    if writer:
+        return
+    UserInfo.objects.create(
+            full_name=full_name,
+            user=user
+        )
+    writer = Designer.objects.create(
+            user=user
+        )
+    
+    return writer

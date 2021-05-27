@@ -16,6 +16,7 @@
     {% else %}
         <h1 style="font-family: 'BebasNeueRegular';">Escritores</h1>
     {% endif %}
+    <div><a style="margin-top: 10px;" href="{% url 'todo:add_user' list_slug %}" class="btn btn-warning">Añadir usuario</a></div>
 </div>
 
 {% if active_users %}

@@ -33,6 +33,15 @@ class UserCreationForm(forms.ModelForm):
         strip=False,
         help_text=_("Enter the same password as before, for verification."),
     )
+    full_name = forms.CharField(
+        label=_("Full name"),
+        strip=False,
+        required=False,
+    )
+    chief = forms.BooleanField(
+        label=_("Chief"),
+        required=False,
+    )
 
     class Meta:
         model = get_user_model()
