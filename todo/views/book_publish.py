@@ -17,12 +17,6 @@ from django.template.loader import render_to_string
 from todo.defaults import defaults
 from todo.models import Attachment, Comment, Book, Editor, UserInfo
 from todo.forms import PublishedBookForm
-from todo.utils import (
-    send_email_to_thread_participants,
-    staff_check,
-    toggle_task_completed,
-    user_can_read_task,
-)
 
 @login_required
 def book_publish(request, book_id: int) -> HttpResponse:
@@ -50,8 +44,6 @@ def book_publish(request, book_id: int) -> HttpResponse:
                 if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
                     messages.error(request, f"El archivo excede el tamaño máximo permitido.")
                     return redirect(request.path)
-
-                name, extension = os.path.splitext(file.name)
 
                 published_book.final_version = file
 

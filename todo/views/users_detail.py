@@ -4,10 +4,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from todo.models import Designer, Management, Writer, Editor
-from todo.utils import staff_check
 
 @login_required
-@user_passes_test(staff_check)
 @user_passes_test(is_management)
 def users_detail(request, list_slug=None) -> HttpResponse:
 

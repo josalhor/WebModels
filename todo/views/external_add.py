@@ -12,10 +12,8 @@ from django.contrib.auth import get_user_model
 from todo.defaults import defaults
 from todo.forms import AddExternalBookForm, AddBookForm
 from todo.models import Book, Editor, Writer, UserInfo
-from todo.utils import staff_check
 import os
 
-@user_passes_test(staff_check)
 def external_add(request) -> HttpResponse:
 
     if request.POST:

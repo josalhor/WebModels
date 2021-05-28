@@ -8,11 +8,9 @@ from django.shortcuts import render
 
 from todo.forms import SearchForm
 from todo.models import Task, Book, Editor, Writer, Designer
-from todo.utils import staff_check
 
 
 @login_required
-@user_passes_test(staff_check)
 def task_lists(request) -> HttpResponse:
 
     designer = Designer.objects.filter(user=request.user).first()

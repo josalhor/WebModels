@@ -8,11 +8,9 @@ from .book_assign import send_email_reject_book
 
 from todo.forms import SearchForm
 from todo.models import Task, Book, Editor, Writer
-from todo.utils import staff_check
 
 
 @login_required
-@user_passes_test(staff_check)
 def accepted_petitions(request) -> HttpResponse:
     deleted, editor_view = False, False
 

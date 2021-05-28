@@ -8,10 +8,8 @@ from todo.utils import create_designer, create_editor, create_manager, create_re
 from django.contrib.auth import authenticate
 
 from todo.models import Designer, Management, Writer, Editor
-from todo.utils import staff_check
 
 @login_required
-@user_passes_test(staff_check)
 @user_passes_test(is_management)
 def add_user(request, list_slug=None) -> HttpResponse:
 

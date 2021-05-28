@@ -8,11 +8,10 @@ from django.utils import timezone
 
 from todo.forms import AddEditTaskForm
 from todo.models import Task, Book, Writer, Editor, UserInfo
-from todo.utils import send_notify_mail, staff_check, user_can_read_book
+from todo.utils import send_notify_mail, user_can_read_book
 
 
 @login_required
-@user_passes_test(staff_check)
 def list_detail(request, list_id=None, list_slug=None, view_completed=False) -> HttpResponse:
 
     # Defaults

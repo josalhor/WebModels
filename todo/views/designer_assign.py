@@ -17,12 +17,6 @@ from django.template.loader import render_to_string
 from todo.defaults import defaults
 from todo.models import Attachment, Comment, UserInfo, Task, Designer
 from todo.forms import AssignFormDesigner
-from todo.utils import (
-    send_email_to_thread_participants,
-    staff_check,
-    toggle_task_completed,
-    user_can_read_task,
-)
 
 
 @login_required
