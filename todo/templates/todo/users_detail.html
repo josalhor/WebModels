@@ -18,66 +18,40 @@
     {% endif %}
 </div>
 
-{% if active_users %}
-    <table class="table" id="tasktable">
-      <tr class="nodrop">
-        <th>Nombre completo</th>
-        <th>Email</th>
-        <th></th>
-      </tr>
+<table class="table" id="tasktable">
+  <tr class="nodrop">
+    <th>Nombre completo</th>
+    <th>Email</th>
+    <th></th>
+  </tr>
 
-      {% for user in active_users %}
-        <tr>
-          <td>
-                {{ user }}
-          </td>
-          <td>
-                {{ user.user }}
-          </td>
-          <td>
-            <form method="post" action="{% url "todo:users_edition" list_slug user %}" role="form" class="d-inline">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-sm"><b>EDITAR</b></button>
-              <!--- <button type="submit" class="btn btn-danger btn-sm" onclick="deactivateUser(this.formToPost)"><b>DESACTIVAR</b></button> --->
-            </form>
-            <form method="post" action="{% url "todo:deactivate_user" %}" role="form" class="d-inline">
-              {% csrf_token %}
-              <input type="hidden" name="reasons" value=""/>
-              <input type="hidden" name="deactivate-user" value="{{ user.user.email }}"/>
-              <button type="submit" class="btn btn-danger btn-sm"><b>DESACTIVAR</b></button>
-              <!--- <button type="submit" class="btn btn-danger btn-sm" onclick="deactivateUser(this.formToPost)"><b>DESACTIVAR</b></button> --->
-            </form>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-{% endif %}
-
-
-<script>
-  function deactivateUser(formToPost) {
-    console.log("deactivateUser");
-    formToPost.manager.selectedIndex = 0;
-    hideOrShowBtn();
-    var minlength = 1;
-    var motivo;
-    do{
-      motivo = prompt("¿Está seguro/a que quiere desactivar este usuario? MOTIVO:");
-    } while(motivo === null || motivo === "" || motivo.length < minlength) 
-    formToPost.getElementById("motivo").value = motivo;
-    formToPost.submit();
-    console.log("submit");
-  }
-  document.getElementById("section").style.borderBottom = "4px solid rgb(133, 5, 5)";
-
-    function hideOrShowBtn() { 
-
-    if(document.getElementById("section").value >= 1){
-      document.getElementById("submitBtn").removeAttribute("hidden");
-    }else{
-      document.getElementById("submitBtn").setAttribute("hidden", true);
-    }
-  }
-</script>
+  {% for user in users %} 
+  <tr>
+    <td>
+          {{ user }}
+    </td>
+    <td>
+          {{ user.user }}
+    </td>
+    <td>
+    {% if user in active_users %} 
+      <form method="post" action="{% url "todo:deactivate_user" %}" role="form" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="reasons" value=""/>
+        <input type="hidden" name="deactivate-user" value="{{ user.user.email }}"/>
+        <button type="submit" class="btn btn-danger btn-sm"><b>DESACTIVAR</b></button>
+      </form>
+    {% elif user in unactive_users %} 
+      <form method="post" action="{% url "todo:activate_user" %}" role="form" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="reasons" value=""/>
+        <input type="hidden" name="activate-user" value="{{ user.user.email }}"/>
+        <button type="submit" class="btn btn-success btn-sm"><b>ACTIVAR</b></button>
+      </form>
+    {% endif %} 
+    </td>
+  </tr>
+  {% endfor %} 
+</table>
 
 {% endblock %}
