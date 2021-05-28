@@ -6,6 +6,7 @@ from todo.views.task_lists import task_lists
 from todo.views.accepted_petitions import accepted_petitions  # noqa: F401
 from todo.views.users_management import users_management 
 from todo.views.users_detail import users_detail
+from todo.views.add_user import add_user
 from todo.views.remove_attachment import remove_attachment  # noqa: F401
 from todo.views.reorder_tasks import reorder_tasks  # noqa: F401
 from todo.views.search import search  # noqa: F401
