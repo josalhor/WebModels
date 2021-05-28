@@ -200,6 +200,7 @@ def create_editor(user, full_name, chief):
             user=user,
             chief=chief
         )
+    print(editor)
     return editor
 
 def create_designer(user, full_name, chief):
@@ -225,7 +226,7 @@ def create_manager(user, full_name):
             full_name=full_name,
             user=user
         )
-    manager = Designer.objects.create(
+    manager = Management.objects.create(
             user=user
         )
     
@@ -239,7 +240,7 @@ def create_writer(user, full_name):
             full_name=full_name,
             user=user
         )
-    writer = Designer.objects.create(
+    writer = Writer.objects.create(
             user=user
         )
     
