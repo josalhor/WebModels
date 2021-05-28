@@ -1,0 +1,20 @@
+{% extends "todo/base.html" %}
+
+{% block title %}{{ list_title }} Books management {% endblock %}
+
+{% block content %}
+
+<h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Gestión de libros</h1>
+{% for book in books %}
+    <ul class="list-group mb-4">
+      <li id="{{ book }}" class="list-group-item d-flex justify-content-between align-items-center">
+        <p>{{ book }}</p>
+      </li>
+    </ul>
+{% endfor %}
+  
+<script>
+  document.getElementById("management-books").style.borderBottom = "4px solid rgb(133, 5, 5)";
+</script>
+
+{% endblock %}
