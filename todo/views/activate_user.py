@@ -6,10 +6,8 @@ from django.shortcuts import redirect
 from django.contrib.auth import get_user_model
 
 from todo.models import UserInfo
-from todo.utils import staff_check
 
 @login_required
-@user_passes_test(staff_check)
 @user_passes_test(is_management)
 def activate_user(request):
     
