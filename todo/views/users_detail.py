@@ -4,13 +4,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from todo.models import Designer, Management, Writer, Editor
-from todo.utils import staff_check
+from todo.utils import chief_check, staff_check
 
 @login_required
 @user_passes_test(staff_check)
 @user_passes_test(is_management)
 def users_detail(request, list_slug=None) -> HttpResponse:
-
+    
     # Which users to show on this list view?
     if list_slug == "editors":
         users = Editor.objects.all()
@@ -34,7 +34,5 @@ def users_detail(request, list_slug=None) -> HttpResponse:
         "active_users": active_users,
         "unactive_users":  unactive_users,
     }
-
-    print(users)
 
     return render(request, "todo/users_detail.html", context)

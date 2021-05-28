@@ -14,7 +14,11 @@ from todo.utils import staff_check
 @user_passes_test(staff_check)
 @user_passes_test(is_management)
 def add_user(request, list_slug=None) -> HttpResponse:
-
+    if list_slug == "editors" or list_slug == "designers":
+        chief_option = True
+    else:
+        chief_option = False
+    
     if request.POST:
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -46,6 +50,7 @@ def add_user(request, list_slug=None) -> HttpResponse:
     
     context = {
         "list_slug": list_slug,
+        "chief_option": chief_option,
     }
 
     return render(request, "todo/add_user.html", context)
