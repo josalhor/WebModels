@@ -8,7 +8,7 @@
 {% for section, list_slug in section_list.items %}
     <ul class="list-group mb-4">
       <li id="{{ section }}" class="list-group-item d-flex justify-content-between align-items-center">
-        <a href="{% url 'todo:users_detail' list_slug %}">{{ section }}</a>
+        <a style="color:blue;" href="{% url 'todo:users_detail' list_slug %}">{{ section }}</a>
       </li>
     </ul>
 {% endfor %}

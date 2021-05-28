@@ -22,11 +22,12 @@ def add_user(request, list_slug=None) -> HttpResponse:
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
             full_name = form.cleaned_data.get('full_name')
+            chief = form.cleaned_data.get('chief')
             user = authenticate(email=email, password=password)
             if list_slug == "editors":
-                create_editor(user, full_name)
+                create_editor(user, full_name, chief)
             elif list_slug == "designers":
-                create_designer(user, full_name)
+                create_designer(user, full_name, chief)
             elif list_slug == "writers":
                 create_writer(user, full_name)
             elif list_slug == "management":

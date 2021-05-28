@@ -188,7 +188,7 @@ def create_reader(user):
     
     return Reader.objects.create(user=user)
 
-def create_editor(user, full_name):
+def create_editor(user, full_name, chief):
     editor = Editor.objects.filter(user=user).first()
     if editor:
         return
@@ -198,11 +198,11 @@ def create_editor(user, full_name):
     )
     editor = Editor.objects.create(
             user=user,
-            chief=False
+            chief=chief
         )
     return editor
 
-def create_designer(user, full_name):
+def create_designer(user, full_name, chief):
     designer = Designer.objects.filter(user=user).first()
     if designer:
         return
@@ -212,7 +212,7 @@ def create_designer(user, full_name):
         )
     designer = Designer.objects.create(
             user=user,
-            chief=False
+            chief=chief
         )
     
     return designer
