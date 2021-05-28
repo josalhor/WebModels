@@ -13,23 +13,6 @@ from todo.models import Attachment, Comment, Management, Reader, Task, Writer, E
 
 log = logging.getLogger(__name__)
 
-
-def staff_check(user):
-    """If TODO_STAFF_ONLY is set to True, limit view access to staff users only.
-        # FIXME: More granular access control needed - see
-        https://github.com/shacker/django-todo/issues/50
-    """
-
-    if defaults("TODO_STAFF_ONLY"):
-        return user.is_staff
-    else:
-        # If unset or False, allow all logged in users
-        return True
-
-def chief_check(user):
-    u = Editor.objects.filter().first()
-    return u.chief
-
 def is_reader(user):
     return Reader.objects.filter(user=user).first() is not None
 

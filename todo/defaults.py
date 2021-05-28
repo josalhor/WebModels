@@ -8,7 +8,6 @@ hash = {
     "TODO_LIMIT_FILE_ATTACHMENTS": [".jpg", ".gif", ".png", ".csv", ".pdf", ".zip"],
     "TODO_MAXIMUM_ATTACHMENT_SIZE": 50000000,
     "TODO_PUBLIC_SUBMIT_REDIRECT": "/",
-    "TODO_STAFF_ONLY": True,
 }
 
 # These intentionally have no defaults (user MUST set a value if their features are used):

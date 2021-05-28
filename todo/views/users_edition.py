@@ -7,10 +7,8 @@ from todo.forms import profileForm
 
 
 from todo.models import Designer, Management, Writer, Editor
-from todo.utils import staff_check
 
 @login_required
-@user_passes_test(staff_check)
 @user_passes_test(is_management)
 def users_edition(request, list_slug, email) -> HttpResponse:
 

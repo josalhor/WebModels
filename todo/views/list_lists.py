@@ -8,11 +8,9 @@ from django.shortcuts import render
 
 from todo.forms import SearchForm
 from todo.models import Task, Book, Editor, Writer
-from todo.utils import staff_check
 
 
 @login_required
-@user_passes_test(staff_check)
 def list_lists(request) -> HttpResponse:
 
     editor = Editor.objects.filter(user=request.user).first()

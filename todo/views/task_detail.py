@@ -20,7 +20,6 @@ from todo.models import Attachment, Comment, Task, Editor
 from todo.utils import (
     send_email_to_thread_participants,
     get_thread_participants,
-    staff_check,
     toggle_task_completed,
     user_can_read_task,
 )
@@ -44,7 +43,6 @@ def handle_add_comment(request, task):
 
 
 @login_required
-@user_passes_test(staff_check)
 def task_detail(request, task_id: int) -> HttpResponse:
     """View task details. Allow task details to be edited. Process new comments on task.
     """

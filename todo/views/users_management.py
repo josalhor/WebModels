@@ -3,10 +3,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from todo.utils import staff_check
 
 @login_required
-@user_passes_test(staff_check)
 @user_passes_test(is_management)
 def users_management(request) -> HttpResponse:
     section_list = {"Escritores":"writers", "Editores":"editors", "Disenyadores gràficos":"designers", "Responsables IT":"management"}

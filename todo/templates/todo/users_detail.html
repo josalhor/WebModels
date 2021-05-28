@@ -19,6 +19,7 @@
     <div><a style="margin-top: 10px;" href="{% url 'todo:add_user' list_slug %}" class="btn btn-warning">Añadir usuario</a></div>
 </div>
 
+<<<<<<< HEAD
 {% if active_users %}
     <table class="table" id="tasktable">
       <tr class="nodrop">
@@ -76,5 +77,42 @@
   }
 
 </script>
+=======
+<table class="table" id="tasktable">
+  <tr class="nodrop">
+    <th>Nombre completo</th>
+    <th>Email</th>
+    <th></th>
+  </tr>
+
+  {% for user in users %} 
+  <tr>
+    <td>
+          {{ user }}
+    </td>
+    <td>
+          {{ user.user }}
+    </td>
+    <td>
+    {% if user in active_users %} 
+      <form method="post" action="{% url "todo:deactivate_user" %}" role="form" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="reasons" value=""/>
+        <input type="hidden" name="deactivate-user" value="{{ user.user.email }}"/>
+        <button type="submit" class="btn btn-danger btn-sm"><b>DESACTIVAR</b></button>
+      </form>
+    {% elif user in unactive_users %} 
+      <form method="post" action="{% url "todo:activate_user" %}" role="form" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="reasons" value=""/>
+        <input type="hidden" name="activate-user" value="{{ user.user.email }}"/>
+        <button type="submit" class="btn btn-success btn-sm"><b>ACTIVAR</b></button>
+      </form>
+    {% endif %} 
+    </td>
+  </tr>
+  {% endfor %} 
+</table>
+>>>>>>> 4d96ec343e6a39e959685db725742ec485aa903e
 
 {% endblock %}
