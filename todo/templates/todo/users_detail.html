@@ -36,7 +36,7 @@
                 {{ user.user }}
           </td>
           <td>
-            <form method="post" action="{% url "todo:users_edition" user %}" role="form" class="d-inline">
+            <form method="post" action="{% url "todo:users_edition" list_slug user %}" role="form" class="d-inline">
               {% csrf_token %}
               <button type="submit" class="btn btn-sm"><b>EDITAR</b></button>
               <!--- <button type="submit" class="btn btn-danger btn-sm" onclick="deactivateUser(this.formToPost)"><b>DESACTIVAR</b></button> --->
