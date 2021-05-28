@@ -19,65 +19,6 @@
     <div><a style="margin-top: 10px;" href="{% url 'todo:add_user' list_slug %}" class="btn btn-warning">Añadir usuario</a></div>
 </div>
 
-<<<<<<< HEAD
-{% if active_users %}
-    <table class="table" id="tasktable">
-      <tr class="nodrop">
-        <th>Nombre completo</th>
-        <th>Email</th>
-        <th></th>
-      </tr>
-
-      {% for user in active_users %}
-        <tr>
-          <td>
-                {{ user }}
-          </td>
-          <td>
-                {{ user.user }}
-          </td>
-          <td>
-            <form method="post" action="{% url 'todo:deactivate_user' %}" role="form" class="d-inline">
-              {% csrf_token %}
-              <input type="hidden" name="reasons" value=""/>
-              <input type="hidden" name="deactivate-user" value="{{ user.user.email }}"/>
-              <button type="submit" class="btn btn-danger btn-sm"><b>DESACTIVAR</b></button>
-              <!--- <button type="submit" class="btn btn-danger btn-sm" onclick="deactivateUser(this.formToPost)"><b>DESACTIVAR</b></button> --->
-            </form>
-          </td>
-        </tr>
-      {% endfor %}
-    </table>
-{% endif %}
-
-
-<script>
-  function deactivateUser(formToPost) {
-    console.log("deactivateUser");
-    formToPost.manager.selectedIndex = 0;
-    hideOrShowBtn();
-    var minlength = 1;
-    var motivo;
-    do{
-      motivo = prompt("¿Está seguro/a que quiere desactivar este usuario? MOTIVO:");
-    } while(motivo === null || motivo === "" || motivo.length < minlength) 
-    formToPost.getElementById("motivo").value = motivo;
-    formToPost.submit();
-    console.log("submit");
-  }
-  document.getElementById("section").style.borderBottom = "4px solid rgb(133, 5, 5)";
-
-    function hideOrShowBtn() { 
-
-    if(document.getElementById("section").value >= 1){
-      document.getElementById("submitBtn").removeAttribute("hidden");
-    }else{
-      document.getElementById("submitBtn").setAttribute("hidden", true);
-    }
-  }
-
-</script>
-=======
 <table class="table" id="tasktable">
   <tr class="nodrop">
     <th>Nombre completo</th>
@@ -113,6 +54,5 @@
   </tr>
   {% endfor %} 
 </table>
->>>>>>> 4d96ec343e6a39e959685db725742ec485aa903e
 
 {% endblock %}
