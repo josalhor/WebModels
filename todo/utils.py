@@ -13,10 +13,6 @@ from todo.models import Attachment, Comment, Management, Reader, Task, Writer, E
 
 log = logging.getLogger(__name__)
 
-def chief_check(user):
-    u = Editor.objects.filter().first()
-    return u.chief
-
 def is_reader(user):
     return Reader.objects.filter(user=user).first() is not None
 
