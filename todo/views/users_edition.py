@@ -12,7 +12,7 @@ from todo.utils import staff_check
 @login_required
 @user_passes_test(staff_check)
 @user_passes_test(is_management)
-def users_edition(request, list_slug=None, user_edit=None) -> HttpResponse:
+def users_edition(request, list_slug, email) -> HttpResponse:
 
     if request.method == 'POST':
         form = profileForm(data=request.POST, instance=request.user) #should be user_edit
@@ -26,7 +26,7 @@ def users_edition(request, list_slug=None, user_edit=None) -> HttpResponse:
     
     context = {
         "user": request.user, #should be user_edit
-        "user_edit": user_edit
+        # "user_edit": user_edit
     }
 
     return render(request, "todo/users_edition.html", context)
