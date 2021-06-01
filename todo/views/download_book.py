@@ -10,7 +10,7 @@ from todo.utils import is_reader
 def download_book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     if not request.user.is_authenticated:
-        return redirect('signup')
+        return redirect('login')
     if not is_reader(request.user) and not user_can_read_book(book, request.user):
         raise PermissionDenied
     
