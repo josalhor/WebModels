@@ -3,8 +3,11 @@
 {% block title %}{{ list_title }} Todo Tasks List{% endblock %}
 
 {% block content %}
+  {% if is_chief %}
+    <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Mis libros en edición</h1>
+  {% else %}
   <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Libros en edición</h1>
-
+  {% endif %}
   <p id="task-count">{% if deleted == False %}Hay {{ task_count }} {% if task_count == 1 %} tarea pendiente {% else %} tareas pendientes {% endif %} en {{ list_count }} libro{{ list_count|pluralize }} {% endif %}</p>
 
   {% regroup lists by group as section_list %}
@@ -28,6 +31,31 @@
       {% endfor %}
     </ul>
   {% endfor %}
+
+  {% if is_chief %}
+    <h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Todos los libros en edición</h1>
+    {% regroup all_lists by group as section_list %}
+    {% for group in section_list %}
+      <!-- <h3>Group: {{ group.grouper }}</h3> -->
+      <ul class="list-group mb-4">
+        {% for task in group.list %}
+        <li id="{{ task.name }}" class="list-group-item d-flex justify-content-between align-items-center">
+          <a href="{% url 'todo:list_detail' task.id task.slug %}">{{ task.name }}</a>
+          <span class="ml-auto badge badge-primary badge-pill">{{ task.task_set.count }}</span>
+          
+          {% if editor_view %}
+            <form method="post" action="{% url "todo:accepted_petitions" %}" role="form" class="d-inline">
+              {% csrf_token %}
+              <input type="hidden" name="reasons" id="motivo" value=""/>
+              <button type="submit" class="btn btn-danger btn-sm" name="delete-book" value='{{ task.name }}' onclick="rejectPetition(this.form)"><i class="fa fa-trash"></i></button>
+            </form>
+          {% endif %}
+
+        </li>
+        {% endfor %}
+      </ul>
+    {% endfor %}
+  {% endif %}
 
   <script>
     function rejectPetition(formToPost) {

@@ -18,11 +18,16 @@ def accepted_petitions(request) -> HttpResponse:
     searchform = SearchForm(auto_id=False)
 
     editor = Editor.objects.filter(user=request.user).first()
+    is_chief = False
+    all_lists = None
 
     if editor:
         lists = Book.objects.filter(completed=False)
+        all_lists = Book.objects.filter(completed=False)
         if editor.chief:
-            lists = lists.exclude(editor=None)
+            is_chief = True
+            lists = lists.filter(editor=editor)
+            all_lists = all_lists.exclude(editor=None)
         else:
             lists = lists.filter(editor=editor)
         lists = lists.exclude(rejected=True).order_by("name")
@@ -59,6 +64,8 @@ def accepted_petitions(request) -> HttpResponse:
         "searchform": searchform,
         "list_count": list_count,
         "task_count": task_count,
+        "all_lists": all_lists,
+        "is_chief": is_chief
     }
 
     return render(request, "todo/accepted_petitions.html", context)
