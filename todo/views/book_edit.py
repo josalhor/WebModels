@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.db import DefaultConnectionProxy
 from todo.defaults import defaults
 from todo.forms import PublishedBookForm
 from todo.models import PublishedBook, Book
