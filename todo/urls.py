@@ -44,6 +44,8 @@ urlpatterns = [
     path("cancelsubscription", views.cancel_subscription, name="cancel_subscription"),
     path("deactivateuser", views.deactivate_user, name="deactivate_user"),
     path("activateuser", views.activate_user, name="activate_user"),
+    path("deactivatebook", views.deactivate_book, name="deactivate_book"),
+    path("activatebook", views.activate_book, name="activate_book"),
     path("profile/", views.profile, name="profile"),
     path("changepassword/", views.change_password, name="change_password"),
 ]

@@ -27,3 +27,5 @@ from todo.views.profile import profile
 from todo.views.main import main
 from todo.views.deactivate_user import deactivate_user
 from todo.views.activate_user import activate_user
+from todo.views.deactivate_book import deactivate_book
+from todo.views.activate_book import activate_book
