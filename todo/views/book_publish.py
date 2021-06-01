@@ -29,6 +29,9 @@ def book_publish(request, book_id: int) -> HttpResponse:
         
     if (book.editor != editor) and (not editor.chief):
         raise PermissionDenied
+    
+    if book.completed:
+        raise PermissionDenied
 
     if request.POST:
         form = PublishedBookForm(request.POST)

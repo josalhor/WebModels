@@ -16,12 +16,18 @@ def list_lists(request) -> HttpResponse:
     editor = Editor.objects.filter(user=request.user).first()
 
     if editor:
-        lists = Book.objects.filter(editor=None, rejected=False, completed=False).order_by("name")
-        list_count = lists.count()
+        if not editor.chief:
+            raise PermissionDenied
+        else:
+            lists = Book.objects.filter(editor=None, rejected=False, completed=False).order_by("name")
+            list_count = lists.count()
     else:
         author = Writer.objects.filter(user=request.user)
-        lists = Book.objects.filter(editor=None, rejected=False, author__in=author, completed=False).order_by("name")
-        list_count = lists.count()
+        if author == None:
+            raise PermissionDenied
+        else:
+            lists = Book.objects.filter(editor=None, rejected=False, author__in=author, completed=False).order_by("name")
+            list_count = lists.count()
 
     thedate = datetime.datetime.now()
     searchform = SearchForm(auto_id=False)  
