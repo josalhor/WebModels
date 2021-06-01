@@ -190,7 +190,7 @@ class Book(models.Model):
         verbose_name_plural = "Books"
 
 class PublishedBook(models.Model):
-    book = models.ForeignKey(
+    book = models.OneToOneField(
         Book,
         null=False,
         blank=False,
