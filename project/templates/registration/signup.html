@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Regístrate</h2>
+<h2 class="bar-text"></h2>Regístrate</h2>
 
 {% if messages %}
 <ul>
@@ -32,6 +32,7 @@
                 type="password" name="password2" autocomplete="new-password" required="" id="id_password2">
         </p>
     </div>
-    <button type="submit" class="btn btn-primary">Regístrate</button>
+    <button type="submit" class="btn btn-primary">Regístrate</button><hr>
+    <p>Si ya tienes cuenta, inicia sesión<a style="color:blue;" href="{% url 'login' %}" > aquí</a></p>
 </form>
 {% endblock %}
