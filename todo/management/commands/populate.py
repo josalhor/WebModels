@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from todo.models import Editor, Book, UserInfo, Writer, Designer, Task, PublishedBook, Management
+from todo.utils import create_reader
 import datetime
 from todo import static
 from shutil import copyfile
@@ -133,3 +134,6 @@ class Command(BaseCommand):
             created_by=e1,
             due_date=datetime.datetime(2022, 5, 14)
         )
+
+        u = User.objects.create_user('reader@g.com', 'pass')
+        create_reader(u)
