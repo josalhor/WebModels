@@ -58,3 +58,10 @@ def is_staff(u):
             is_editor(u) or
             is_management(u)
         )
+
+@register.filter(name='is_writer')
+def is_writer(u):
+    return u.is_authenticated and \
+        (
+            Writer.objects.filter(user=u).first() is not None
+        )
