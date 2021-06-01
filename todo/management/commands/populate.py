@@ -3,6 +3,18 @@ from django.core.management.base import BaseCommand
 from todo.models import Editor, Book, UserInfo, Writer, Designer, Task, PublishedBook, Management
 import datetime
 from todo import static
+from shutil import copyfile
+from django.conf import settings
+import os
+from pathlib import Path
+
+
+def move_to_media(path):
+    name = os.path.basename(path)
+    new_path = settings.MEDIA_ROOT + f'/default_copy_media/{name}'
+    Path(new_path).parent.mkdir(parents=True, exist_ok=True)
+    copyfile(path, new_path)
+    return os.path.relpath(new_path, settings.MEDIA_ROOT)
 
 class Command(BaseCommand):
 
@@ -54,8 +66,8 @@ class Command(BaseCommand):
             ),
             title="While Justice Sleeps",
             author_text="Stacey Abrams",
-            related_image= "static/portada_libro.jpg",
-            final_version="static/sample_book.pdf"
+            related_image=move_to_media("todo/static/portada_libro.jpg"),
+            final_version=move_to_media("todo/static/sample_book.pdf")
         )
 
         u = User.objects.create_user('balma@g.com', 'pass')
