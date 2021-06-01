@@ -15,6 +15,9 @@ def task_lists(request) -> HttpResponse:
 
     designer = Designer.objects.filter(user=request.user).first()
 
+    if not designer.chief:
+        raise PermissionDenied
+
     if designer:
         lists = Task.objects.filter(assigned_to=None, task_type='I') | Task.objects.filter(assigned_to=None, task_type='M')
         lists = lists.order_by("title")

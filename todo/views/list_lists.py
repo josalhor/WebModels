@@ -15,6 +15,9 @@ def list_lists(request) -> HttpResponse:
 
     editor = Editor.objects.filter(user=request.user).first()
 
+    if not editor.chief:
+        raise PermissionDenied
+
     if editor:
         lists = Book.objects.filter(editor=None, rejected=False, completed=False).order_by("name")
         list_count = lists.count()
