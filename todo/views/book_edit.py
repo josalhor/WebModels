@@ -1,6 +1,6 @@
-from collections import defaultdict
-
 from django.contrib import messages
+from django.db import DefaultConnectionProxy
+from todo.defaults import defaults
 from todo.forms import PublishedBookForm
 from todo.models import PublishedBook, Book
 from todo.templatetags.todo_tags import is_management
@@ -21,7 +21,7 @@ def book_edit(request, book_id: int) -> HttpResponse:
             if request.FILES.get("attachment_file_input"):
                 file = request.FILES.get("attachment_file_input")
 
-                if file.size > defaultdict("TODO_MAXIMUM_ATTACHMENT_SIZE"):
+                if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
                     messages.error(request, f"El archivo excede el tamaño máximo permitido.")
                     return redirect(request.path)
 
