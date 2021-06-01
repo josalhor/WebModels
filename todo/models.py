@@ -200,6 +200,7 @@ class PublishedBook(models.Model):
     title = models.CharField(max_length=80)
 
     publication_date = models.DateField(auto_now_add=True)
+    disabled = models.BooleanField(default=False)
     author_text = models.TextField()
     final_version = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
     related_image = models.ImageField(upload_to=get_attachment_upload_dir_book, null=True, blank=True)

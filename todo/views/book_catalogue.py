@@ -9,7 +9,7 @@ from project import templates
 from todo.models import Book, PublishedBook
 
 def book_catalogue(request) -> HttpResponse:
-    books = PublishedBook.objects.all()
+    books = PublishedBook.objects.filter(disabled=False)
     success = True
 
     context = {

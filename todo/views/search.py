@@ -4,11 +4,6 @@ from django.shortcuts import render, redirect
 from todo.models import PublishedBook, UserInfo
 
 def search(request):
-    """Filters books by category and/or date and/or name.
-    Parameters:
-    request (request): Browser request for the view.
-    """
-    
     success = True
     books = []
     words = request.GET.get('w')
@@ -17,15 +12,15 @@ def search(request):
         return redirect('/')
     else:
         # By title
-        books_bytitle = PublishedBook.objects.filter(title__icontains=words)
+        books_bytitle = PublishedBook.objects.filter(disabled=False, title__icontains=words)
         # By author's name
-        books_byauthor = PublishedBook.objects.filter(author_text__icontains=words)
+        books_byauthor = PublishedBook.objects.filter(disabled=False, author_text__icontains=words)
         books = books_bytitle.union(books_byauthor)
         number_of_results = books.count
 
     if not books:
         success = False
-        books = PublishedBook.objects.all()
+        books = PublishedBook.objects.filter(disabled=False)
     
     context = {
         "words": words,

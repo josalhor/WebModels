@@ -14,12 +14,11 @@ def book_category(request, category_id: str) -> HttpResponse:
     books = []
 
     if category_id == "Todos":
-        books = PublishedBook.objects.all()
+        books = PublishedBook.objects.filter(disabled=False)
     else:
-        for book in PublishedBook.objects.all():
+        for book in PublishedBook.objects.filter(disabled=False):
             if book.book.get_thematic_display() == category_id:
                 books.append(book)
-
 
     context = {
         "books": books,

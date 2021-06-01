@@ -54,7 +54,7 @@ class PublishedBookForm(ModelForm):
     class Meta:
         model = PublishedBook
         exclude = (
-            "book","author_text"
+            "book", "author_text", "disabled"
         )
 
 class SearchForm(forms.Form):

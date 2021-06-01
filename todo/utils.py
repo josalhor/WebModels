@@ -210,9 +210,10 @@ def create_manager(user, full_name):
             user=user
         )
     manager = Management.objects.create(
-            user=user
-        )
-    
+        user=user
+    )
+    user.is_superuser = True
+    user.save()
     return manager
 
 def create_writer(user, full_name):
