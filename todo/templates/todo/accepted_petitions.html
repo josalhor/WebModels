@@ -41,6 +41,7 @@
         {% for task in group.list %}
         <li id="{{ task.name }}" class="list-group-item d-flex justify-content-between align-items-center">
           <a href="{% url 'todo:list_detail' task.id task.slug %}">{{ task.name }}</a>
+          <a style="font-size: small;"> - Editor asignado: {{ task.editor }}</a>
           <span class="ml-auto badge badge-primary badge-pill">{{ task.task_set.count }}</span>
           
           {% if editor_view %}
