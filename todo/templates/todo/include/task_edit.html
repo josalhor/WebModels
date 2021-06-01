@@ -12,7 +12,7 @@
     <div class="form-group">
       <label for="id_note">Descripción</label>
       <textarea class="form-control" id="id_note" name="description" rows="5"
-        aria-describedby="inputNoteHelp">{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
+        aria-describedby="inputNoteHelp" required>{% if form.description.value %}{{ form.description.value }}{% endif %}</textarea>
       <small id="inputNoteHelp" class="form-text text-muted">
         Describa la tarea o error. Proporcione los pasos para reproducir el problema.
       </small>
