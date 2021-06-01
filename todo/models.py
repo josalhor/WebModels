@@ -196,6 +196,7 @@ class PublishedBook(models.Model):
     disabled = models.BooleanField(default=False)
     author_text = models.TextField()
     final_version = models.FileField(upload_to="books/attachments", max_length=255, null=True, blank=True)
+    final_version_epub = models.FileField(upload_to="books/attachments", max_length=255, null=True, blank=True)
     related_image = models.ImageField(upload_to="books/attachments", null=True, blank=True)
 
 class Task(models.Model):

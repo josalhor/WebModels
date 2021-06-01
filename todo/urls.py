@@ -30,7 +30,7 @@ urlpatterns = [
     ),
     path("<int:list_id>/<str:list_slug>/", views.list_detail, name="list_detail"),
     path("book/<int:book_id>/assign", views.book_assign, name="book_assign"),
-    path("book/<int:book_id>/download", views.download_book, name="download_book"),
+    path("book/<int:book_id>/<str:format>/download", views.download_book, name="download_book"),
     path("task/<int:task_id>/assign", views.designer_assign, name="designer_assign"),
     path("book/<int:book_id>/publish", views.book_publish, name="book_publish"),
     path("book/<int:book_id>/detail", views.book_detail, name="book_detail"),

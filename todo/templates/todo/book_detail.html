@@ -16,8 +16,10 @@
                         <img class="card-img-top" style="height:420px;object-fit: contain"  id="book-img" src="{% static '/images/no_image.jpg' %}"/>
                     {% endif %}
                     <h5 class="card-text bar-text-d">  Publicado: {{ published_book.publication_date|date:'d/m/Y'  }}</h5>
-                    <a href="{% url 'todo:download_book' published_book.book.pk %}"><i class="fa fa-download"></i>   Descargar PDF</a><br>
-                    <a href="" download><i class="fa fa-download"></i>   Descargar EPUB</a>
+                    <a href="{% url 'todo:download_book' published_book.book.pk 'pdf' %}"><i class="fa fa-download"></i>   Descargar PDF</a><br>
+                    {% if published_book.final_version_epub %}
+                        <a href="{% url 'todo:download_book' published_book.book.pk 'epub' %}"><i class="fa fa-download"></i>   Descargar EPUB</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

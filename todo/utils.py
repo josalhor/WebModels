@@ -229,3 +229,14 @@ def create_writer(user, full_name):
         )
     
     return writer
+
+def can_covert_to_epub():
+    from shutil import which
+    return which("ebook-convert") is not None
+
+def convert_to_epub(path):
+    import subprocess
+    new_path = path + ".epub"
+    subprocess.run(["ebook-convert", path, new_path])
+    return os.path.relpath(new_path, settings.MEDIA_ROOT)
+    

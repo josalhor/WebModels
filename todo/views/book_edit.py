@@ -1,3 +1,4 @@
+from todo.utils import can_covert_to_epub, convert_to_epub
 from django.contrib import messages
 from todo.defaults import defaults
 from todo.forms import PublishedBookForm
@@ -35,6 +36,9 @@ def book_edit(request, book_id: int) -> HttpResponse:
             published_book.book.completed = True
             published_book.book.save()
             published_book.save()
+            if can_covert_to_epub():
+                published_book.final_version_epub = convert_to_epub(published_book.final_version.path)
+                published_book.save()
 
             messages.success(request, "¡Perfecto! Los parámetros se han modificado correctamente.")
             
