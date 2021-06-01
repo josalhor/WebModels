@@ -24,9 +24,10 @@ def book_publish(request, book_id: int) -> HttpResponse:
     user_email = request.user
     editor = Editor.objects.filter(user=user_email).first()
 
-    if (book.editor != editor) or \
-        (editor != None and editor.chief) or \
-        (book.editor == None):
+    if editor == None:
+        raise PermissionDenied
+        
+    if (book.editor != editor) and (not editor.chief):
         raise PermissionDenied
 
     if request.POST:
