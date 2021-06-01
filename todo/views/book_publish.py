@@ -41,7 +41,6 @@ def book_publish(request, book_id: int) -> HttpResponse:
             published_book.book = book
 
             # Handle uploaded files
-            print(request.FILES, request.POST)
             if request.FILES.get("attachment_file_input"):
                 file = request.FILES.get("attachment_file_input")
 
