@@ -16,4 +16,8 @@ def book_detail(request, book_id: int) -> HttpResponse:
         'published_book' : published_book,
         'book': book
     }
+    print('a')
+    print(published_book.related_image)
+    print(published_book.related_image.url)
+    print('b')
     return render(request, "todo/book_detail.html", context)
