@@ -12,6 +12,7 @@ urlpatterns = [
     path("accepted_petitions/", views.accepted_petitions, name="accepted_petitions"),
     path("users_management/", views.users_management, name="users_management"),
     path("books_management/", views.books_management, name="books_management"),
+    path("books_management/<int:book_id>/edit", views.book_edit, name="book_edit"),
     path("users_management/<str:list_slug>/", views.users_detail, name="users_detail"),
     path("users_management/<str:list_slug>/add", views.add_user, name="add_user"),
     path("reorder_tasks/", views.reorder_tasks, name="reorder_tasks"),

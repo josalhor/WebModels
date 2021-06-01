@@ -184,7 +184,7 @@ class Book(models.Model):
         if not self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
         super(Book, self).save(*args, **kwargs)
-
+    
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "Books"

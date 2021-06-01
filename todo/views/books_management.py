@@ -11,7 +11,6 @@ def books_management(request) -> HttpResponse:
     active_books = PublishedBook.objects.filter(disabled = False)
     unactive_books = PublishedBook.objects.filter(disabled = True)
 
-
     context = {
         "books": books,
         "active_books": active_books,
