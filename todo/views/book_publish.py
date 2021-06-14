@@ -1,6 +1,6 @@
 import datetime
 import os
-from todo.utils import can_covert_to_epub, convert_to_epub
+from todo.utils import try_add_epub_version
 
 import bleach
 from django import forms
@@ -64,9 +64,7 @@ def book_publish(request, book_id: int) -> HttpResponse:
             published_book.book.completed = True
             published_book.book.save()
             published_book.save()
-            if can_covert_to_epub():
-                published_book.final_version_epub = convert_to_epub(published_book.final_version.path)
-                published_book.save()
+            try_add_epub_version(published_book)
 
             messages.success(request, "¡Enhorabuena! El libro ha sido publicado correctamente.")
             

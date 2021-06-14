@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from todo.models import Editor, Book, UserInfo, Writer, Designer, Task, PublishedBook, Management
-from todo.utils import create_reader
+from todo.utils import create_reader, try_add_epub_version
 import datetime
 from todo import static
 from shutil import copyfile
@@ -61,9 +61,9 @@ class Command(BaseCommand):
                 name="Published Book",
                 author=w,
                 editor=e,
-                thematic='S',
                 completed=True,
-                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case."
+                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case.",
+                thematic=Book.TYPE_SCARE
             ),
             title="While Justice Sleeps",
             author_text="Stacey Abrams",
@@ -71,14 +71,16 @@ class Command(BaseCommand):
             final_version=move_to_media("todo/static/sample_book.pdf")
         )
 
+        try_add_epub_version(pb)
+
         pb = PublishedBook.objects.create(
             book= Book.objects.create(
                 name="The abandoned clunker",
                 author=w,
                 editor=e,
-                thematic='S',
                 completed=True,
-                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case."
+                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case.",
+                thematic=Book.TYPE_ADVENTURE
             ),
             title="The abandoned clunker",
             author_text="THEODORE ASH",
@@ -86,20 +88,24 @@ class Command(BaseCommand):
             final_version=move_to_media("todo/static/sample_book.pdf")
         )
 
+        try_add_epub_version(pb)
+
         pb = PublishedBook.objects.create(
             book= Book.objects.create(
                 name="El mundo contra el más allá",
                 author=w,
                 editor=e,
-                thematic='S',
                 completed=True,
-                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case."
+                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case.",
+                thematic=Book.TYPE_FANTASY
             ),
             title="El mundo contra el más allá",
             author_text="Juan Ponce",
             related_image=move_to_media("todo/static/portada_libro3.jpg"),
             final_version=move_to_media("todo/static/sample_book.pdf")
         )
+
+        try_add_epub_version(pb)
 
         u = User.objects.create_user('balma@g.com', 'pass')
         UserInfo.objects.create(

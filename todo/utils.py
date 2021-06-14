@@ -239,4 +239,8 @@ def convert_to_epub(path):
     new_path = path + ".epub"
     subprocess.run(["ebook-convert", path, new_path])
     return os.path.relpath(new_path, settings.MEDIA_ROOT)
-    
+
+def try_add_epub_version(pb):
+    if can_covert_to_epub():
+        pb.final_version_epub = convert_to_epub(pb.final_version.path)
+        pb.save()
