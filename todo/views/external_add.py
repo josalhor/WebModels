@@ -12,10 +12,8 @@ from django.contrib.auth import get_user_model
 from todo.defaults import defaults
 from todo.forms import AddExternalBookForm, AddBookForm
 from todo.models import Book, Editor, Writer, UserInfo
-from todo.utils import staff_check
 import os
 
-@user_passes_test(staff_check)
 def external_add(request) -> HttpResponse:
 
     if request.POST:
@@ -69,54 +67,9 @@ def external_add(request) -> HttpResponse:
                 request, "Su libro se ha enviado. Nos pondremos en contacto con usted pronto."
             )
 
+            send_emails(book, user_info, created_writer, email)
 
-            chief_editors = Editor.objects.filter(chief=True).all()
-            mails = [e.user.email for e in chief_editors]
-
-            email_subject = render_to_string(
-                "todo/email/assigned_subject.txt", {"title": book.name}
-            )
-            email_body = render_to_string(
-                "todo/email/assigned_body.txt", {"site": current_site.domain, "book": book, "from_name": user_info.full_name}
-            )
-            uid = user_info.reset_unique_id
-
-            if created_writer:
-                writer_body = render_to_string(
-                    "todo/email/setpassword.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
-                )
-                writer_subject = "Set Password"
-            else:
-                writer_body = render_to_string(
-                    "todo/email/new_book_no_password.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
-                )
-                writer_subject = "Libro recibido"
-
-            try:
-                ######### Send email to editors
-                send_mail(
-                    email_subject,
-                    email_body,
-                    None,
-                    mails,
-                    fail_silently=False,
-                )
-                ######### Send email to author
-
-                send_mail(
-                    writer_subject,
-                    writer_body,
-                    None,
-                    [email],
-                    fail_silently=False,
-                )
-            except ConnectionRefusedError:
-                messages.warning(
-                    request, "Error en gestión del libro. Contacte con el administrador."
-                )
-            
             return redirect(defaults("TODO_PUBLIC_SUBMIT_REDIRECT"))
-
 
 
     else:
@@ -126,3 +79,53 @@ def external_add(request) -> HttpResponse:
     context = {"form": form, "form_book": form_book}
 
     return render(request, "todo/add_task_external.html", context)
+
+
+def send_emails(book, user_info, created_writer, email):
+    current_site = Site.objects.get_current()
+    chief_editors = Editor.objects.filter(chief=True).all()
+    mails = [e.user.email for e in chief_editors]
+
+    email_subject = render_to_string(
+        "todo/email/assigned_subject.txt", {"title": book.name}
+    )
+    email_body = render_to_string(
+        "todo/email/assigned_body.txt", {"site": current_site.domain, "book": book, "from_name": user_info.full_name}
+    )
+    uid = user_info.reset_unique_id
+
+    if created_writer:
+        writer_body = render_to_string(
+            "todo/email/setpassword.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
+        )
+        writer_subject = "Set Password"
+    else:
+        writer_body = render_to_string(
+            "todo/email/new_book_no_password.txt", {"site": current_site.domain, "user": user_info, "reset_uid": str(uid)}
+        )
+        writer_subject = "Libro recibido"
+
+    try:
+        ######### Send email to editors
+        send_mail(
+            email_subject,
+            email_body,
+            None,
+            mails,
+            fail_silently=False,
+        )
+        ######### Send email to author
+
+        send_mail(
+            writer_subject,
+            writer_body,
+            None,
+            [email],
+            fail_silently=False,
+        )
+    except ConnectionRefusedError:
+        messages.warning(
+            request, "Error en gestión del libro. Contacte con el administrador."
+        )
+    
+

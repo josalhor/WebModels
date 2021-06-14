@@ -1,0 +1,82 @@
+{% extends "todo/main.html" %}
+{% block page_heading %}{% endblock %}
+{% block title %}Creación subscripción{% endblock %}
+
+{% block content %}
+
+  <h3 class="bar-text">RELLENE EL SIGUIENTE FORMULARIO PARA SUBSCRIBIRSE A BOOKIERNES, S.A.</h3>
+  <hr>
+
+  {% if form.errors %}
+    {% for error in form.errors %}
+      <ul class="errorlist">
+        <li>
+          <strong>El campo {{ error|escape }} debe rellenarse obligatoriamente.</strong>
+        </li>
+      </ul>
+    {% endfor %}
+  {% endif %}
+
+  <form action="" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <div class="mt-3">
+      <div class="form-group">
+        <label for="card_holder" name="card_holder">TITULAR DE LA TARJETA</label>
+        <input required type="text" class="form-control" id="card_holder" name="card_holder" placeholder="{% if reader.card_holder is null or blank %} Indique el nombre del titular de la trajeta {% endif %}"
+          value="{% if reader.card_holder %}{{ reader.card_holder }}{% endif %}">
+      </div>
+    </div>
+
+    <div class="mt-3">
+      <div class="form-group">
+        <label for="card_number" name="card_number">NÚMERO DE TARJETA</label>
+        <input required type="number" min="1000000000000000" max="9999999999999999" class="form-control" id="card_number" name="card_number" placeholder="{% if reader.card_number is null or blank %} Indique el número de tarjeta {% endif %}"
+          value="{% if reader.card_number %}{{ reader.card_number }}{% endif %}">
+      </div>
+    </div>
+
+    <div class="mt-3"></div>
+        <div class="form-group">
+            <label for="id_expiration_date">FECHA DE CADUCIDAD</label>
+            <input id="datefield" type="date" class="form-control" id="id_expiration_date" name="expiration_date" min='2021-01-01'
+            value="{% if form.expiration_date.value %}{{ form.expiration_date.value|date:'Y-m-d' }}{% endif %}">
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <div class="form-group">
+          <label for="card_cvv" name="card_cvv">CVV</label>
+          <input required type="number" min="100" max="999" class="form-control" id="card_cvv" name="card_cvv" placeholder="{% if reader.card_number is null or blank %} Indique el CVV de tarjeta {% endif %}"
+            value="{% if reader.card_cvv %}{{ reader.card_cvv }}{% endif %}">
+        </div>
+    </div>
+    
+    <div class="form-task-type">
+        <input type="checkbox" name="policy" value="Accepted" required>
+        <label style="display: inline;" for="policy"> Al enviar este formulario acepto la <a href="/">Política de privacidad</a> y las <a href="/">Condiciones de uso</a> </label><br><br>
+    </div>
+
+    <br/>
+    <input id="submitBtn" type="submit" class="btn btn-primary pull-right" name="subscribe" value="CONFIRMAR SUBSCRIPCIÓN">
+    <br/>
+    <br/>
+    <br/>
+  </form>
+
+  <script>
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    if(dd<10){
+            dd='0'+dd
+        } 
+        if(mm<10){
+            mm='0'+mm
+        } 
+  
+    today = yyyy+'-'+mm+'-'+dd;
+    document.getElementById("datefield").setAttribute("min", today);
+  </script>
+
+{% endblock %}

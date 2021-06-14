@@ -9,27 +9,12 @@ from django.core import mail
 from django.template.loader import render_to_string
 
 from todo.defaults import defaults
-from todo.models import Attachment, Comment, Task, Writer, Editor, UserInfo, Designer
+from todo.models import Attachment, Comment, Management, Reader, Task, Writer, Editor, UserInfo, Designer
 
 log = logging.getLogger(__name__)
 
-
-def staff_check(user):
-    """If TODO_STAFF_ONLY is set to True, limit view access to staff users only.
-        # FIXME: More granular access control needed - see
-        https://github.com/shacker/django-todo/issues/50
-    """
-
-    if defaults("TODO_STAFF_ONLY"):
-        return user.is_staff
-    else:
-        # If unset or False, allow all logged in users
-        return True
-
-def chief_check(user):
-    u = Editor.objects.filter().first()
-    return u.chief
-
+def is_reader(user):
+    return Reader.objects.filter(user=user).first() is not None
 
 def user_can_read_book(book, user):
     author = Writer.objects.filter(user=user).first()
@@ -178,3 +163,84 @@ def remove_attachment_file(attachment_id: int) -> bool:
     except Attachment.DoesNotExist:
         log.info(f"Attachment {attachment_id} not found.")
         return False
+
+def create_reader(user):
+    reader = Reader.objects.filter(user=user).first()
+    if reader:
+        return
+    
+    return Reader.objects.create(user=user)
+
+def create_editor(user, full_name, chief):
+    editor = Editor.objects.filter(user=user).first()
+    if editor:
+        return
+    UserInfo.objects.create(
+        full_name=full_name,
+        user=user,
+    )
+    editor = Editor.objects.create(
+            user=user,
+            chief=chief
+        )
+    print(editor)
+    return editor
+
+def create_designer(user, full_name, chief):
+    designer = Designer.objects.filter(user=user).first()
+    if designer:
+        return
+    UserInfo.objects.create(
+            full_name=full_name,
+            user=user
+        )
+    designer = Designer.objects.create(
+            user=user,
+            chief=chief
+        )
+    
+    return designer
+
+def create_manager(user, full_name):
+    manager = Management.objects.filter(user=user).first()
+    if manager:
+        return
+    UserInfo.objects.create(
+            full_name=full_name,
+            user=user
+        )
+    manager = Management.objects.create(
+        user=user
+    )
+    user.is_superuser = True
+    user.save()
+    return manager
+
+def create_writer(user, full_name):
+    writer = Writer.objects.filter(user=user).first()
+    if writer:
+        return
+    UserInfo.objects.create(
+            full_name=full_name,
+            user=user
+        )
+    writer = Writer.objects.create(
+            user=user
+        )
+    
+    return writer
+
+def can_covert_to_epub():
+    from shutil import which
+    return which("ebook-convert") is not None
+
+def convert_to_epub(path):
+    import subprocess
+    new_path = path + ".epub"
+    subprocess.run(["ebook-convert", path, new_path])
+    return os.path.relpath(new_path, settings.MEDIA_ROOT)
+
+def try_add_epub_version(pb):
+    if can_covert_to_epub():
+        pb.final_version_epub = convert_to_epub(pb.final_version.path)
+        pb.save()

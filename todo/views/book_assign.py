@@ -17,12 +17,6 @@ from django.template.loader import render_to_string
 from todo.defaults import defaults
 from todo.models import Attachment, Comment, Book, Editor, UserInfo
 from todo.forms import AssignForm
-from todo.utils import (
-    send_email_to_thread_participants,
-    staff_check,
-    toggle_task_completed,
-    user_can_read_task,
-)
 
 def send_email_reject_book(book, reasons):
     email_body = render_to_string(

@@ -1,0 +1,65 @@
+{% extends "todo/base.html" %}
+{% block page_heading %}{% endblock %}
+{% block title %}Cuenta{% endblock %}
+
+{% block content %}
+
+<div class="container bootstrap snippet">
+    <div class="row">
+  	    <div class="col-sm-3">
+            <div class="text-center">
+                <img src="/static/images/avatar.png" style="width:60%;" class="rounded-circle img-thumbnail">
+            </div>
+        </div>
+    	<div class="col-sm-8">
+            <div class="text-center">
+                <h2 style="text-align:left;font-family:'BebasNeueRegular';">CUENTA</h2>
+                <hr>
+                {% if reader is not None %}
+                    <div class="row">
+                        <div class="col-sm-5">
+                        <div class="text-center">
+                            <h3 style="text-align:left;font-family: 'BebasNeueRegular';color: gray; margin-top: 0%;">SUBSCRIPCIÓN Y FACTURACIÓN</h3>
+                            {% if reader.subscribed %}
+                                <a href="{% url 'todo:cancel_subscription' %}"><button class="w3-button w3-black w3-border w3-border-black w3-round-large">CANCELAR SUBSCRIPCIÓN</button></a>
+                            {% else %}
+                                <a href="{% url 'todo:create_subscription' %}"><button class="w3-button w3-black w3-border w3-border-black w3-round-large">ACTIVAR SUBSCRIPCIÓN</button></a>
+                            {% endif %}
+                        </div>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col" style="text-align: left;">
+                                        <p>{{ reader.user }}</p>
+                                    </div>
+                                    <div class="col" style="align-content: right;">
+                                        <a style="color:blue;" href="{% url 'todo:change_password' %}">Cambiar contraseña</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                {% else %}
+                    <table style="width: 100%;">
+                        <tr nowrap="nowrap">
+                            <td style="text-align: left;">
+                                <p>{{ user_info.full_name }}</p>
+                            </td>
+                            <td style="text-align: right;">
+                                <a style="color:blue;" href="{% url 'todo:change_password' %}">Cambiar contraseña</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;">
+                                {{ user_info.user }}
+                            </td>
+                        </tr>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>  
+</div>
+                                                      
+{% endblock %}

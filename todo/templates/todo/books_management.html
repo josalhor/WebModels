@@ -1,0 +1,52 @@
+{% extends "todo/base.html" %}
+
+{% block title %}{{ list_title }} Books management {% endblock %}
+
+{% block content %}
+
+<h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Gestión de libros</h1>
+
+<table class="table" id="tasktable">
+  <tr class="nodrop">
+    <th>Título</th>
+    <th>Autor</th>
+    <th></th>
+  </tr>
+  
+  {% for book in books %} 
+  <tr>
+    <td>
+          {{ book.title }}
+    </td>
+    <td>
+          {{ book.author_text }}
+    </td>
+    <td>
+    {% if book in active_books %}
+      <form method="post" action="{% url "todo:deactivate_book" %}" role="form" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="reasons" value=""/>
+        <input type="hidden" name="deactivate-book" value="{{ book.pk }}"/>
+        <button type="submit" class="btn btn-danger btn-sm"><b>DESACTIVAR</b></button>
+      </form>
+    {% elif book in unactive_books %} 
+      <form method="post" action="{% url "todo:activate_book" %}" role="form" class="d-inline">
+        {% csrf_token %}
+        <input type="hidden" name="reasons" value=""/>
+        <input type="hidden" name="activate-book" value="{{ book.pk }}"/>
+        <button type="submit" class="btn btn-success btn-sm"><b>ACTIVAR</b></button>
+      </form>
+    {% endif %}
+    <form style="display: inline-block" action="{% url 'todo:book_edit' book.id %}" method="get">
+      <button class="btn btn-secondary btn-sm"><b>EDITAR</b></button>
+    </form>
+    </td>
+  </tr>
+  {% endfor %} 
+  </table>
+  
+<script>
+  document.getElementById("management-books").style.borderBottom = "4px solid rgb(133, 5, 5)";
+</script>
+
+{% endblock %}

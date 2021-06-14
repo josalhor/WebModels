@@ -8,23 +8,27 @@ from django.shortcuts import render
 
 from todo.forms import SearchForm
 from todo.models import Task, Book, Editor, Writer, Designer
-from todo.utils import staff_check
 
 
 @login_required
-@user_passes_test(staff_check)
 def task_lists(request) -> HttpResponse:
 
     designer = Designer.objects.filter(user=request.user).first()
 
     if designer:
-        lists = Task.objects.filter(assigned_to=None, task_type='I') | Task.objects.filter(assigned_to=None, task_type='M')
-        lists = lists.order_by("title")
-        list_count = lists.count()
+        if not designer.chief:
+            raise PermissionDenied
+        else:
+            lists = Task.objects.filter(assigned_to=None, task_type='I') | Task.objects.filter(assigned_to=None, task_type='M')
+            lists = lists.order_by("title")
+            list_count = lists.count()
     else:
         author = Writer.objects.filter(user=request.user)
-        lists = Book.objects.filter(editor=None, rejected=False, author__in=author).order_by("name")
-        list_count = lists.count()
+        if(author == None):
+            raise PermissionDenied
+        else:
+            lists = Book.objects.filter(editor=None, rejected=False, author__in=author).order_by("name")
+            list_count = lists.count()
 
     thedate = datetime.datetime.now()
     searchform = SearchForm(auto_id=False)  

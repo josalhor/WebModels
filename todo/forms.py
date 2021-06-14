@@ -1,9 +1,8 @@
 from django import forms
 from django.contrib.auth.models import Group
+from django.contrib.auth import forms as auth_forms
 from django.forms import ModelForm
-from todo.models import Task, Book, UserInfo, Editor, Designer, PublishedBook
-from django.contrib.auth import password_validation
-from django.core.exceptions import ValidationError
+from todo.models import CreditCardInfo, Task, Book, UserInfo, Editor, Designer, PublishedBook, Reader 
 
 
 class AddBookForm(ModelForm):
@@ -55,7 +54,7 @@ class PublishedBookForm(ModelForm):
     class Meta:
         model = PublishedBook
         exclude = (
-            "book","author_text"
+            "book", "author_text", "disabled"
         )
 
 class SearchForm(forms.Form):
@@ -84,3 +83,18 @@ class AssignFormDesigner(forms.Form):
         self.fields["designer"].label = ""
 
     designer = forms.ModelChoiceField(queryset=Designer.objects.all())
+
+class PaymentSubscriptionForm(ModelForm):
+    class Meta:
+        model = CreditCardInfo
+        exclude = []
+
+
+
+class profileForm(auth_forms.UserChangeForm):
+    class Meta:
+        model = UserInfo
+        fields = (
+            'full_name',
+            'user',
+            )

@@ -1,0 +1,19 @@
+{% extends "todo/main.html" %}
+{% block page_heading %}{% endblock %}
+{% block title %}Cancelar subscripción{% endblock %}
+
+{% block content %}
+
+<h3 class="bar-text">¿QUIERES CANCELAR LA SUBSCRIPCIÓN?</h3>
+<hr>
+<h5>Haz clic en Cancelar subscripción a continuación para cancelar tu suscripción.</h5>
+<ul>
+    <li>La cancelación se hará efectiva al finalizar el período de facturación actual.</li>
+</ul>
+<form action="{% url 'todo:cancel_subscription' %}" method="POST">
+    {% csrf_token %}
+    <input onclick="return confirm('¿Está seguro/a que desea cancelar la subscripción?');" type="submit" name="cancel" value="CANCELAR SUBSCRIPCIÓN" class="btn btn-danger">
+    <input type="submit" class="btn btn-secondary" name="back" value="VOLVER"></input>
+</form>
+
+{% endblock %}

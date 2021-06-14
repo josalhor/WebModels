@@ -4,7 +4,7 @@ import datetime
 from django.contrib import admin
 from django.http import HttpResponse
 
-from todo.models import Attachment, Comment, Task, Book, Designer, Editor, Writer, Reader, UserInfo, PublishedBook
+from todo.models import Attachment, Comment, Management, Task, Book, Designer, Editor, Writer, Reader, UserInfo, PublishedBook
 
 
 def export_to_csv(modeladmin, request, queryset):
@@ -63,4 +63,5 @@ admin.site.register(Designer)
 admin.site.register(Editor)
 admin.site.register(Writer)
 admin.site.register(Reader)
+admin.site.register(Management)
 admin.site.register(PublishedBook)

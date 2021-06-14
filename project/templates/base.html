@@ -3,16 +3,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3237744-5"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-3237744-5');
-    </script>
-
     <link rel="shortcut icon" type="image/png" href="{% static '/images/logo_small_icon_only.png' %}"/>
     <link rel="icon" type="image/png" href="{% static '/images/logo_small_icon_only.png' %}"/>
     <meta charset="utf-8">
@@ -58,7 +48,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
-            {% if user.is_authenticated %}
+            {% if user|is_staff %}
               {% if user|can_see_not_accepted %} 
               <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones de edición</a></li>
               {% endif %}
@@ -68,16 +58,26 @@
                 {% endif %}
                 <li id="tareas-personales" class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
               {% else %}
+                {% if user|is_management %}
+                <li id="management-users" class="nav-item"><a href="{% url 'todo:users_management' %}" class="nav-link">Gestión de usuarios</a></li>
+                <li id="management-books" class="nav-item"><a href="{% url 'todo:books_management' %}" class="nav-link">Gestión de libros</a></li>
+                {% else %}
                 <li id="peticiones-acc" class="nav-item"><a href="{% url 'todo:accepted_petitions' %}" class="nav-link">Libros en edición</a></li>
+                {% endif %}
               {% endif %}
+            {% endif %}
+            {% if user|is_writer %} 
+              <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones de edición</a></li>
+              <li id="tareas-personales" class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
             {% endif %}
           </ul>
           <ul class="navbar-nav">
             {% if user.is_authenticated %}
-            <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a></li>
+            <li style="display: flex;" class="nav-item"><a href="{% url 'logout' %}" class="nav-link">Cerrar sesión</a>&nbsp&nbsp<a href="{% url 'todo:profile' %}"><img src="/static/images/avatar.png" style="height: 40px;" class="rounded-circle"></a></li>
             {% else %}
-            <li style="padding: 10px" button class="w3-btn w3-round w3-medium"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></button></li>
-            <li button class="btn btn-outline-secondary btn-md"><a href="{% url 'todo:external_add' %}" class="nav-link"><b>¿Eres escritor? Envíanos tu obra</b></a></button></li>
+              <li style="padding: 10px" button class="w3-btn w3-round w3-medium"><a href="{% url 'login' %}" class="nav-link">Iniciar sesión</a></button></li>
+              <li style="padding: 10px" button class="btn btn-outline-secondary btn-md"><a href="{% url 'signup' %}" class="nav-link"><b>¿Quieres leer? Regístrate</b></a></button></li>&nbsp
+              <li style="padding: 10px" button class="btn btn-outline-secondary btn-md"><a href="{% url 'todo:external_add' %}" class="nav-link"><b>¿Eres escritor? Envíanos tu obra</b></a></button></li>
             {% endif %}
           </ul>
 
@@ -92,8 +92,56 @@
 
         </div>
       </nav>
-    </header>
-    <br>
+      <br><br><br><br>
+      
+      {% if user|is_staff %}
+      {% else %}
+        {% if request.get_full_path == "/" or request.get_full_path == "/home" or "categories" in request.path or "search" in request.path or request.get_full_path == "/book_catalogue" or "/todo/book" in request.path %}
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white" style="width: 100%; text-align: center; margin-top: 75px;" id="submenu">
+          <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item" style="margin-top: 3.5%;">
+                  {% if request.get_full_path == "/book_catalogue" %}
+                    <a href="/" class="w3-bar-item w3-button w3-mobile w3-dark-grey">INICIO</a>
+                  {% else %}
+                    <a href="/" class="w3-bar-item w3-button w3-mobile w3-light-grey">INICIO</a>
+                  {% endif %}
+                </li>
+                <li class="nav-item">
+                  {% if request.get_full_path == "/home" %}
+                    <a href="{% url 'home' %}" class="w3-bar-item w3-button w3-mobile w3-dark-grey" style="margin-left: 8%; margin-top: 7.5%;">¿QUÉ ES BOOKIERNES?</a>
+                  {% else %}
+                  <a href="{% url 'home' %}" class="w3-bar-item w3-button w3-mobile w3-light-grey" style="margin-left: 8%; margin-top: 7.5%;">¿QUÉ ES BOOKIERNES?</a>
+                  {% endif %}
+                </li>
+                <div class="w3-dropdown-hover w3-mobile" style="margin-left: 7.5%; margin-top: 3.5%;">
+                  {% if "categories" in request.path %}
+                    <button class="w3-button w3-dark-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
+                  {% else %}
+                  <button class="w3-button w3-light-grey">CATEGORIAS <i class="fa fa-caret-down"></i></button>
+                  {% endif %}
+                  <div class="w3-dropdown-content w3-bar-block w3-dark-grey">
+                    <a href="{% url 'todo:book_category' 'Todos' %}" class="w3-bar-item w3-button w3-mobile">TODOS LOS LIBROS</a>
+                    {% for cat in None|get_book_categories %}
+                      <a href="{% url 'todo:book_category' cat %}" class="w3-bar-item w3-button w3-mobile">{{cat}}</a>
+                    {% endfor %}
+                  </div>
+              </ul>
+              <form method="get" action="{% url 'todo:search'  %}" class="d-flex" style="margin-left: 35%; margin-top: 1.5%;">
+                <input class="form-control me-2" name="w" type="text" placeholder="Título o autor del libro..." aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Buscar libro</button>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </header>
+      {% endif %}
+    {% endif %}
+
 
     <!-- Begin page content -->
     <main role="main" class="container" style="min-height: calc(100vh - 170px);">
@@ -153,3 +201,5 @@
 
   </body>
 </html>
+
+

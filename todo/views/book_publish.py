@@ -1,5 +1,6 @@
 import datetime
 import os
+from todo.utils import try_add_epub_version
 
 import bleach
 from django import forms
@@ -17,12 +18,6 @@ from django.template.loader import render_to_string
 from todo.defaults import defaults
 from todo.models import Attachment, Comment, Book, Editor, UserInfo
 from todo.forms import PublishedBookForm
-from todo.utils import (
-    send_email_to_thread_participants,
-    staff_check,
-    toggle_task_completed,
-    user_can_read_task,
-)
 
 @login_required
 def book_publish(request, book_id: int) -> HttpResponse:
@@ -30,9 +25,13 @@ def book_publish(request, book_id: int) -> HttpResponse:
     user_email = request.user
     editor = Editor.objects.filter(user=user_email).first()
 
-    editor_view = editor != None
-
-    if book.editor == None or (editor_view and not editor.chief):
+    if editor == None:
+        raise PermissionDenied
+        
+    if (book.editor != editor) and (not editor.chief):
+        raise PermissionDenied
+    
+    if book.completed:
         raise PermissionDenied
 
     if request.POST:
@@ -43,15 +42,12 @@ def book_publish(request, book_id: int) -> HttpResponse:
             published_book.book = book
 
             # Handle uploaded files
-            print(request.FILES, request.POST)
             if request.FILES.get("attachment_file_input"):
                 file = request.FILES.get("attachment_file_input")
 
                 if file.size > defaults("TODO_MAXIMUM_ATTACHMENT_SIZE"):
                     messages.error(request, f"El archivo excede el tamaño máximo permitido.")
                     return redirect(request.path)
-
-                name, extension = os.path.splitext(file.name)
 
                 published_book.final_version = file
 
@@ -62,12 +58,13 @@ def book_publish(request, book_id: int) -> HttpResponse:
             if request.FILES.get("attachment_image_input"):
                 published_book.related_image = request.FILES.get("attachment_image_input")
 
-            published_book.book.title = request.POST.get("title")
+            published_book.title = request.POST.get("title")
             published_book.book.description = request.POST.get("description")
             published_book.author_text = request.POST.get("author")
             published_book.book.completed = True
             published_book.book.save()
             published_book.save()
+            try_add_epub_version(published_book)
 
             messages.success(request, "¡Enhorabuena! El libro ha sido publicado correctamente.")
             

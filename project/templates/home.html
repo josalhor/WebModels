@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<body class="w3-content w3-black" style="max-width:1500px;">
 <!-- Header -->
 <header class="w3-display-container w3-center">
   <button class="w3-button w3-block w3-green w3-hide-large w3-hide-medium" onclick="document.getElementById('download').style.display='block'">Download <i class="fa fa-android"></i> <i class="fa fa-apple"></i> <i class="fa fa-windows"></i></button>
@@ -21,7 +20,6 @@
   </div>
   <div class="w3-button w3-block w3-black w3-hide-large w3-hide-medium"></div>
     {% if user.is_authenticated %}
-      <!--You are already logged in.-->
     {% else %}
     <a class="w3-button w3-black w3-display-right w3-margin-right w3-round w3-hide-small w3-hover-light-grey" href="{% url 'login' %}">ACCEDE <i class="fa fa-angle-right"></i></a>
     {% endif %}

@@ -20,6 +20,7 @@ reset_migrations:
 	make clean_all
 	make all_migrations
 	make populate
+	python manage.py collectstatic --noinput --clear
 
 install_dependencies:
 	pipenv --python 3.9

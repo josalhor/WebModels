@@ -6,11 +6,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 
 from todo.models import Task
-from todo.utils import staff_check
 
 
 @login_required
-@user_passes_test(staff_check)
 def delete_task(request, task_id: int) -> HttpResponse:
     if request.method == "POST":
         task = get_object_or_404(Task, pk=task_id)

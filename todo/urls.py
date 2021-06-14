@@ -10,6 +10,11 @@ urlpatterns = [
     path("illustration_petitions/", views.task_lists, name="task_lists"),
     # View reorder_tasks is only called by JQuery for drag/drop task ordering.
     path("accepted_petitions/", views.accepted_petitions, name="accepted_petitions"),
+    path("users_management/", views.users_management, name="users_management"),
+    path("books_management/", views.books_management, name="books_management"),
+    path("books_management/<int:book_id>/edit", views.book_edit, name="book_edit"),
+    path("users_management/<str:list_slug>/", views.users_detail, name="users_detail"),
+    path("users_management/<str:list_slug>/add", views.add_user, name="add_user"),
     path("reorder_tasks/", views.reorder_tasks, name="reorder_tasks"),
     path("set_firstime_password/<str:uuid>/", views.set_ft_pass, name="set_ft_pass"),
     # Allow users to post tasks from outside django-todo (e.g. for filing tickets - see docs)
@@ -25,6 +30,7 @@ urlpatterns = [
     ),
     path("<int:list_id>/<str:list_slug>/", views.list_detail, name="list_detail"),
     path("book/<int:book_id>/assign", views.book_assign, name="book_assign"),
+    path("book/<int:book_id>/<str:format>/download", views.download_book, name="download_book"),
     path("task/<int:task_id>/assign", views.designer_assign, name="designer_assign"),
     path("book/<int:book_id>/publish", views.book_publish, name="book_publish"),
     path("book/<int:book_id>/detail", views.book_detail, name="book_detail"),
@@ -35,5 +41,14 @@ urlpatterns = [
     path("toggle_done/<int:task_id>/", views.toggle_done, name="task_toggle_done"),
     path("delete/<int:task_id>/", views.delete_task, name="delete_task"),
     path("search/", views.search, name="search"),
+    path("categories/<str:category_id>/", views.book_category, name="book_category"),
+    path("createsubscription", views.create_subscription, name="create_subscription"),
+    path("cancelsubscription", views.cancel_subscription, name="cancel_subscription"),
+    path("deactivateuser", views.deactivate_user, name="deactivate_user"),
+    path("activateuser", views.activate_user, name="activate_user"),
+    path("deactivatebook", views.deactivate_book, name="deactivate_book"),
+    path("activatebook", views.activate_book, name="activate_book"),
+    path("profile/", views.profile, name="profile"),
+    path("changepassword/", views.change_password, name="change_password"),
 ]
 

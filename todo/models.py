@@ -19,15 +19,6 @@ from django.utils.text import slugify
 from abc import ABC
 import uuid
 
-def get_attachment_upload_dir(instance, filename):
-    return "/".join(["tasks", "attachments", str(instance.task.id), filename])
-
-
-def get_attachment_upload_dir_book(instance, filename):
-    return "/".join(["books", "attachments", str(instance.id), filename])
-
-
-
 class LockedAtomicTransaction(Atomic):
     """
     modified from https://stackoverflow.com/a/41831049
@@ -118,6 +109,20 @@ class Designer(UserRole):
     )
     chief = models.BooleanField(default=False)
 
+class Management(UserRole):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        primary_key=True,
+        null=False,
+        on_delete=models.CASCADE
+    )
+
+class CreditCardInfo(models.Model):
+    card_number = models.PositiveIntegerField(blank=False)
+    card_holder = models.TextField(blank=False)
+    expiration_date = models.DateField(blank=False)
+    card_cvv = models.PositiveIntegerField(blank=False)
+
 class Reader(UserRole):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
@@ -125,6 +130,16 @@ class Reader(UserRole):
         null=False,
         on_delete=models.CASCADE
     )
+    subscribed = models.BooleanField(default=False)
+    credit_card = models.OneToOneField(
+        CreditCardInfo,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return f'Reader {self.pk}'
 
 class Book(models.Model):
     name = models.CharField(max_length=80)
@@ -138,7 +153,7 @@ class Book(models.Model):
     rejected = models.BooleanField(default=False)
     description = models.TextField(blank=True)
     # file can bee null for debugging purposes
-    file = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
+    file = models.FileField(upload_to="books/attachments", max_length=255, null=True, blank=True)
 
     TYPE_SCARE = 'S'
     TYPE_ADVENTURE = 'A'
@@ -162,13 +177,13 @@ class Book(models.Model):
         if not self.slug:
             self.slug = slugify(self.name, allow_unicode=True)
         super(Book, self).save(*args, **kwargs)
-
+    
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "Books"
 
 class PublishedBook(models.Model):
-    book = models.ForeignKey(
+    book = models.OneToOneField(
         Book,
         null=False,
         blank=False,
@@ -178,9 +193,11 @@ class PublishedBook(models.Model):
     title = models.CharField(max_length=80)
 
     publication_date = models.DateField(auto_now_add=True)
+    disabled = models.BooleanField(default=False)
     author_text = models.TextField()
-    final_version = models.FileField(upload_to=get_attachment_upload_dir_book, max_length=255, null=True, blank=True)
-    related_image = models.ImageField(upload_to=get_attachment_upload_dir_book, null=True, blank=True)
+    final_version = models.FileField(upload_to="books/attachments", max_length=255, null=True, blank=True)
+    final_version_epub = models.FileField(upload_to="books/attachments", max_length=255, null=True, blank=True)
+    related_image = models.ImageField(upload_to="books/attachments", null=True, blank=True)
 
 class Task(models.Model):
 
@@ -283,7 +300,7 @@ class Attachment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     added_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    file = models.FileField(upload_to=get_attachment_upload_dir, max_length=255)
+    file = models.FileField(upload_to="tasks/attachments", max_length=255)
 
     def filename(self):
         return os.path.basename(self.file.name)
