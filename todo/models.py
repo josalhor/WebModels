@@ -160,7 +160,7 @@ class Book(models.Model):
     TYPE_FANTASY = 'F'
 
     THEMATIC = [
-        (TYPE_SCARE, 'Miedo'),
+        (TYPE_SCARE, 'Terror'),
         (TYPE_ADVENTURE, 'Aventura'),
         (TYPE_FANTASY, 'Fantasía'),
     ]
