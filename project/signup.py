@@ -14,7 +14,7 @@ def signup(request):
             user = authenticate(email=email, password=raw_password)
             login(request, user)
             create_reader(user)
-            return redirect('home')
+            return redirect('todo:create_subscription')
         else:
             print(form.errors)
     return render(request, 'registration/signup.html')
