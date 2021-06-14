@@ -71,6 +71,36 @@ class Command(BaseCommand):
             final_version=move_to_media("todo/static/sample_book.pdf")
         )
 
+        pb = PublishedBook.objects.create(
+            book= Book.objects.create(
+                name="The abandoned clunker",
+                author=w,
+                editor=e,
+                thematic='S',
+                completed=True,
+                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case."
+            ),
+            title="The abandoned clunker",
+            author_text="THEODORE ASH",
+            related_image=move_to_media("todo/static/portada_libro2.jpg"),
+            final_version=move_to_media("todo/static/sample_book.pdf")
+        )
+
+        pb = PublishedBook.objects.create(
+            book= Book.objects.create(
+                name="El mundo contra el más allá",
+                author=w,
+                editor=e,
+                thematic='S',
+                completed=True,
+                description="When Justice Wynn slips into a coma, his law clerk, Avery Keene, must unravel the clues of a controversial case."
+            ),
+            title="El mundo contra el más allá",
+            author_text="Juan Ponce",
+            related_image=move_to_media("todo/static/portada_libro3.jpg"),
+            final_version=move_to_media("todo/static/sample_book.pdf")
+        )
+
         u = User.objects.create_user('balma@g.com', 'pass')
         UserInfo.objects.create(
             full_name="BalmaChiefEditor",

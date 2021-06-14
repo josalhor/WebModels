@@ -52,7 +52,7 @@ def create_subscription(request) -> HttpResponse:
                 fail_silently=False,
             )
 
-            return redirect("home")
+            return redirect("todo:book_catalogue")
             #TODO: should redirect to the reader's profile once we created
 
         else:
