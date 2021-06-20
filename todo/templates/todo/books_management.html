@@ -16,7 +16,9 @@
   {% for book in books %} 
   <tr>
     <td>
+      <a style="color:blue" href="{% url 'todo:book_statistics' book.book.pk %}" >
           {{ book.title }}
+      </a>
     </td>
     <td>
           {{ book.author_text }}

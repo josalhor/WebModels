@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+from __future__ import barry_as_FLUFL, unicode_literals
 
 import datetime
 import os
@@ -198,6 +198,34 @@ class PublishedBook(models.Model):
     final_version = models.FileField(upload_to="books/attachments", max_length=255, null=True, blank=True)
     final_version_epub = models.FileField(upload_to="books/attachments", max_length=255, null=True, blank=True)
     related_image = models.ImageField(upload_to="books/attachments", null=True, blank=True)
+
+class RecordedDownload(models.Model):
+    book = models.ForeignKey(
+        Book,
+        null=False,
+        blank=False,
+        on_delete=models.CASCADE
+    )
+    download_date = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+      settings.AUTH_USER_MODEL,
+      null=False,
+      blank=False,
+      on_delete=models.CASCADE  
+    )
+    
+    PDF = 'P'
+    EPUB = 'E'
+
+    TYPES_OF_DOWNLOAD_CHOICES = [
+        (PDF, 'PDF'),
+        (EPUB, 'EPUB'),
+    ]
+    download_type = models.CharField(
+        max_length=2,
+        choices=TYPES_OF_DOWNLOAD_CHOICES,
+        default=PDF,
+    )
 
 class Task(models.Model):
 

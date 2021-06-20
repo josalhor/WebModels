@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
-from todo.models import Book, PublishedBook, Reader
+from todo.models import Book, PublishedBook, Reader, RecordedDownload
 from todo.utils import user_can_read_book
 
 from todo.models import UserInfo
@@ -20,7 +20,16 @@ def download_book(request, book_id, format):
 
     pb = PublishedBook.objects.filter(book=book).first()
 
+
     if format == "epub":
-        return redirect(pb.final_version_epub.url)
+        redirect_url = pb.final_version_epub.url
+        download_type = RecordedDownload.EPUB
     else:
-        return redirect(pb.final_version.url)
+        redirect_url = pb.final_version.url
+        download_type = RecordedDownload.PDF
+    RecordedDownload.objects.create(
+        book=book,
+        user=request.user,
+        download_type=download_type
+    )
+    return redirect(redirect_url)

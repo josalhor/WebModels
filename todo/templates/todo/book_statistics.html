@@ -1,0 +1,40 @@
+{% extends "todo/base.html" %}
+
+{% block title %}{{ list_title }} Book Statistics {% endblock %}
+
+{% block content %}
+
+<h1 style="font-family: 'BebasNeueRegular'; margin-top: 40px;">Estadísticas del libro: {{ book.name }}</h1>
+
+Descargas PDF: {{ pdf_downloads }} <br>
+
+Descargas EPUB: {{ epub_downloads }}
+
+
+<table class="table" id="tasktable">
+  <tr class="nodrop">
+    <th>Usuario</th>
+    <th>Tipo de descarga</th>
+    <th>Hora y día</th>
+  </tr>
+  
+  {% for recording in recordings %} 
+  <tr>
+    <td>
+      {{ recording.user }}
+    </td>
+    <td>
+      {{ recording.get_download_type_display }}
+    </td>
+    <td>
+      {{ recording.download_date }}
+    </td>
+  </tr>
+  {% endfor %} 
+</table>
+
+<script>
+  document.getElementById("management-books").style.borderBottom = "4px solid rgb(133, 5, 5)";
+</script>
+
+{% endblock %}
