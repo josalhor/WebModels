@@ -67,7 +67,7 @@ def external_add(request) -> HttpResponse:
                 request, "Su libro se ha enviado. Nos pondremos en contacto con usted pronto."
             )
 
-            send_emails(book, user_info, created_writer, email)
+            send_emails(book, user_info, created_writer, email, request)
 
             return redirect(defaults("TODO_PUBLIC_SUBMIT_REDIRECT"))
 
@@ -76,12 +76,16 @@ def external_add(request) -> HttpResponse:
         form = AddExternalBookForm(initial={"priority": 999})
         form_book = AddBookForm()
 
-    context = {"form": form, "form_book": form_book}
+    context = {
+        "user": request.user,
+        "form": form,
+        "form_book": form_book
+    }
 
     return render(request, "todo/add_task_external.html", context)
 
 
-def send_emails(book, user_info, created_writer, email):
+def send_emails(book, user_info, created_writer, email, request):
     current_site = Site.objects.get_current()
     chief_editors = Editor.objects.filter(chief=True).all()
     mails = [e.user.email for e in chief_editors]

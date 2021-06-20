@@ -69,6 +69,7 @@
             {% if user|is_writer %} 
               <li id="peticiones" class="nav-item"><a href="{% url 'todo:lists' %}" class="nav-link">Peticiones de edición</a></li>
               <li id="tareas-personales" class="nav-item"><a href="{% url 'todo:mine' %}" class="nav-link">Tareas personales</a></li>
+              <li id="tareas-personales" class="nav-item"><a href="{% url 'todo:external_add' %}" class="nav-link">Envíanos una nueva obra</a></li>
             {% endif %}
           </ul>
           <ul class="navbar-nav">
